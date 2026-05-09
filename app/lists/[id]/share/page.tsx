@@ -71,7 +71,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
               <label className="text-zinc-400 text-sm mb-2 block">Recipient type</label>
               <div className="flex gap-2">
                 {['rental', 'ac', 'production'].map(r => (
-                  <button key={r} onClick={() => { setNewRole(r); if (r === 'production') setNewMode('production_clean') else setNewMode('full') }}
+                  <button key={r} onClick={() => { setNewRole(r); if (r === 'production') { setNewMode('production_clean') } else { setNewMode('full') } }}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${ newRole === r ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' }`}>
                     {r === 'ac' ? 'Focus puller / AC' : r === 'rental' ? 'Rental house' : 'Production'}
                   </button>
