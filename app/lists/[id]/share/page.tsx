@@ -107,7 +107,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
           <div className="space-y-3">
             <h3 className="text-zinc-400 text-xs uppercase tracking-widest">Active share links</h3>
             {shares.map(share => (
-              <div key={share.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center justify-between gap-4">
+              <div key={share.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center justify-between gap-4 cursor-pointer hover:border-zinc-600 transition-colors" onClick={() => window.open(`/share/${share.token}`, '_blank')}>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ share.role === 'production' ? 'bg-blue-900 text-blue-400' : share.role === 'rental' ? 'bg-green-900 text-green-400' : 'bg-zinc-800 text-zinc-400' }`}>
@@ -122,7 +122,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
                     className="bg-zinc-800 hover:bg-zinc-700 text-white text-xs px-3 py-1.5 rounded-lg transition-colors">
                     {copied === share.token ? 'Copied!' : 'Copy link'}
                   </button>
-                  <button onClick={() => deleteShare(share.id)}
+                  <button onClick={e => { e.stopPropagation(); deleteShare(share.id) }}
                     className="text-zinc-600 hover:text-red-400 text-xs px-2 py-1.5 transition-colors">
                     Remove
                   </button>
