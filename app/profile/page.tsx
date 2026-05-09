@@ -13,6 +13,7 @@ export default function ProfilePage() {
   const logoInputRef = useRef<HTMLInputElement>(null)
   const lutInputRef = useRef<HTMLInputElement>(null)
 
+  const userIdRef = useRef<string>('')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [userId, setUserId] = useState('')
@@ -40,10 +41,11 @@ export default function ProfilePage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
     setUserId(user.id)
+    userIdRef.current = user.id
     setEmail(user.email || '')
     const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
     if (profile) {
-      setFullName(profile.full_name || '')
+      setFullName(profile.full_name && profile.full_name !== user.email ? profile.full_name : '')
       setPhone(profile.phone || '')
       setCompanyName(profile.company_name || '')
       if (profile.camera_preferences) setCamPrefs({ ...camPrefs, ...profile.camera_preferences })
@@ -60,18 +62,22 @@ export default function ProfilePage() {
 
   const saveProfile = async () => {
     setSaving(true)
-    await supabase.from('profiles').update({ full_name: fullName, phone, company_name: companyName, camera_preferences: camPrefs }).eq('id', userId)
+    const uid = userIdRef.current || userId
+    console.log('Saving profile, uid:', uid, 'fullName:', fullName)
+    const { error } = await supabase.from('profiles').update({ full_name: fullName, phone, company_name: companyName, camera_preferences: camPrefs }).eq('id', uid)
+    console.log('Save result error:', error)
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
   const uploadLogo = async (file: File) => {
-    if (!file || !userId) return
+    const uid = userIdRef.current || userId
+    if (!file || !uid) return
     setLogoUploading(true)
     const ext = file.name.split('.').pop()
-    const path = userId + '/logo.' + ext
+    const path = uid + '/logo.' + ext
     const { error } = await supabase.storage.from('logos').upload(path, file, { upsert: true })
     if (!error) {
-      await supabase.from('profiles').update({ company_logo_url: path }).eq('id', userId)
+      await supabase.from('profiles').update({ company_logo_url: path }).eq('id', uid)
       const { data: signedUrl } = await supabase.storage.from('logos').createSignedUrl(path, 3600)
       if (signedUrl) setLogoUrl(signedUrl.signedUrl)
     }
@@ -79,13 +85,14 @@ export default function ProfilePage() {
   }
 
   const uploadLut = async (file: File) => {
-    if (!file || !userId || !newLutName.trim()) return
+    const uid = userIdRef.current || userId
+    if (!file || !uid || !newLutName.trim()) return
     setLutUploading(true)
     const ext = file.name.split('.').pop()
-    const path = userId + '/' + Date.now() + '.' + ext
+    const path = uid + '/' + Date.now() + '.' + ext
     const { error } = await supabase.storage.from('luts').upload(path, file)
     if (!error) {
-      const { data } = await supabase.from('user_luts').insert({ owner_id: userId, name: newLutName.trim(), file_url: path, notes: newLutNotes.trim() }).select().single()
+      const { data } = await supabase.from('user_luts').insert({ owner_id: uid, name: newLutName.trim(), file_url: path, notes: newLutNotes.trim() }).select().single()
       if (data) setLuts(prev => [...prev, data])
       setNewLutName('')
       setNewLutNotes('')
@@ -102,7 +109,8 @@ export default function ProfilePage() {
   const saveContact = async () => {
     if (!newContact.full_name.trim()) return
     setSavingContact(true)
-    const { data } = await supabase.from('contacts').insert({ ...newContact, owner_id: userId }).select().single()
+    const uid = userIdRef.current || userId
+    const { data } = await supabase.from('contacts').insert({ ...newContact, owner_id: uid }).select().single()
     if (data) setContacts(prev => [...prev, data])
     setNewContact({ full_name: '', email: '', phone: '', role: 'Focus Puller' })
     setAddingContact(false)
@@ -114,13 +122,7 @@ export default function ProfilePage() {
     setContacts(prev => prev.filter(c => c.id !== id))
   }
 
-  const Field = ({ label, value, onChange, placeholder, type = 'text' }: any) => (
-    <div>
-      <label className="text-zinc-400 text-sm mb-1.5 block">{label}</label>
-      <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
-    </div>
-  )
+
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -144,8 +146,14 @@ export default function ProfilePage() {
               {logoUrl && <button onClick={() => logoInputRef.current?.click()} className="text-xs text-zinc-600 hover:text-zinc-400 mt-1 block">Change</button>}
             </div>
             <div className="flex-1 space-y-3">
-              <Field label="Full name" value={fullName} onChange={setFullName} placeholder="e.g. Lee Whitaker" />
-              <Field label="Company name" value={companyName} onChange={setCompanyName} placeholder="e.g. Hyper Automate" />
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Full name</label>
+                <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. Lee Whitaker" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              </div>
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Company name</label>
+                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Hyper Automate" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              </div>
             </div>
           </div>
           <div className="space-y-4">
@@ -153,7 +161,10 @@ export default function ProfilePage() {
               <label className="text-zinc-400 text-sm mb-1.5 block">Email</label>
               <input type="email" value={email} disabled className="w-full bg-zinc-800 border border-zinc-700 text-zinc-500 rounded-lg px-4 py-3 text-sm cursor-not-allowed" />
             </div>
-            <Field label="Phone" value={phone} onChange={setPhone} placeholder="e.g. 0400 000 000" type="tel" />
+            <div>
+              <label className="text-zinc-400 text-sm mb-1.5 block">Phone</label>
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. 0400 000 000" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+            </div>
           </div>
           <div className="flex items-center gap-3 mt-5">
             <button onClick={saveProfile} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save profile'}</button>

@@ -7,14 +7,21 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
 
   const { data: share } = await supabase
     .from('list_shares')
-    .select('*, gear_lists(*, rental_houses(name))')
+    .select('*, gear_lists(*, rental_houses(name), profiles(full_name, company_name, phone, company_logo_url))')
     .eq('token', token)
     .single()
 
   if (!share) notFound()
 
   const list = share.gear_lists as any
+  const dop = list.profiles as any
   const isProduction = share.view_mode === 'production_clean'
+
+  let logoUrl = null
+  if (dop?.company_logo_url) {
+    const { data: signed } = await supabase.storage.from('logos').createSignedUrl(dop.company_logo_url, 3600)
+    if (signed) logoUrl = signed.signedUrl
+  }
 
   const { data: cameras } = await supabase
     .from('camera_pages')
@@ -23,10 +30,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
     .order('sort_order')
 
   const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
-    const { data: items } = await supabase
-      .from('camera_page_items')
-      .select('*, equipment_items(name)')
-      .eq('page_id', cam.id)
+    const { data: items } = await supabase.from('camera_page_items').select('*, equipment_items(name)').eq('page_id', cam.id)
     return { ...cam, items: items || [] }
   }))
 
@@ -36,16 +40,8 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
     .eq('list_id', list.id)
     .maybeSingle()
 
-  const { data: misc } = await supabase
-    .from('list_misc_items')
-    .select('*, equipment_items(name)')
-    .eq('list_id', list.id)
-
-  const { data: specs } = await supabase
-    .from('shoot_specs')
-    .select('*')
-    .eq('list_id', list.id)
-    .maybeSingle()
+  const { data: misc } = await supabase.from('list_misc_items').select('*, equipment_items(name)').eq('list_id', list.id)
+  const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -57,6 +53,18 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
       </nav>
 
       <main className="max-w-3xl mx-auto px-6 py-10">
+
+        {dop && (
+          <div className="flex items-center gap-4 mb-8 pb-8 border-b border-zinc-800">
+            {logoUrl && <img src={logoUrl} alt="Logo" className="w-14 h-14 rounded-xl object-contain bg-zinc-900 p-1 border border-zinc-800" />}
+            <div>
+              {dop.full_name && <p className="text-white font-semibold">{dop.full_name}</p>}
+              {dop.company_name && <p className="text-zinc-500 text-sm">{dop.company_name}</p>}
+              {dop.phone && <p className="text-zinc-600 text-xs mt-0.5">{dop.phone}</p>}
+            </div>
+          </div>
+        )}
+
         <div className="mb-8">
           <h2 className="text-2xl font-bold">{list.project_name}</h2>
           <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
@@ -70,7 +78,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
         {specs && (
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-4">
             <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Shoot specs</h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {specs.format && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.format}</span>}
               {specs.resolution && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.resolution}</span>}
               {specs.fps && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.fps}</span>}
@@ -106,7 +114,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                     <div>
                       <span className="text-zinc-600 text-xs uppercase tracking-wider">Power</span>
                       {powerItems.map((i: any) => (
-                        <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}</p>
+                        <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</p>
                       ))}
                     </div>
                   )}
@@ -114,7 +122,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                     <div>
                       <span className="text-zinc-600 text-xs uppercase tracking-wider">AKS</span>
                       {aksItems.map((i: any) => (
-                        <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}</p>
+                        <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</p>
                       ))}
                     </div>
                   )}
@@ -122,7 +130,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                     <div className="mt-2">
                       <span className="text-zinc-600 text-xs uppercase tracking-wider">Grip</span>
                       {gripItems.map((i: any) => (
-                        <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}</p>
+                        <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</p>
                       ))}
                     </div>
                   )}
@@ -176,7 +184,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-4">Misc AKS</h3>
               <div className="space-y-2">
-                {misc.filter((i: any) => !isProduction || i.source !== 'dop_owned' || true).map((i: any) => (
+                {misc.map((i: any) => (
                   <div key={i.id} className="flex items-center justify-between">
                     <div>
                       <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}</span>
@@ -194,6 +202,20 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             </div>
           )}
         </div>
+
+        <div className="mt-10 pt-6 border-t border-zinc-800 flex items-center justify-between">
+          {dop && (
+            <div className="flex items-center gap-3">
+              {logoUrl && <img src={logoUrl} alt="Logo" className="w-8 h-8 rounded-lg object-contain bg-zinc-900 p-0.5 border border-zinc-800" />}
+              <div>
+                {dop.full_name && <p className="text-zinc-500 text-xs">{dop.full_name}</p>}
+                {dop.company_name && <p className="text-zinc-600 text-xs">{dop.company_name}</p>}
+              </div>
+            </div>
+          )}
+          <p className="text-zinc-700 text-xs">Powered by KitList</p>
+        </div>
+
       </main>
     </div>
   )
