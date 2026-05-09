@@ -172,25 +172,14 @@ export default function ProfilePage() {
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-5">Default camera preferences</h3>
-          <p className="text-zinc-600 text-xs mb-4">These pre-fill the shoot specs on new lists</p>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: 'Format', key: 'format', placeholder: 'e.g. ARRIRAW' },
-              { label: 'Resolution', key: 'resolution', placeholder: 'e.g. 4.6K' },
-              { label: 'Frame rate', key: 'fps', placeholder: 'e.g. 25fps' },
-              { label: 'LUT', key: 'lut', placeholder: 'e.g. ARRI LogC3' },
-              { label: 'Aspect ratio', key: 'aspect_ratio', placeholder: 'e.g. 2.39:1' },
-            ].map(f => (
-              <div key={f.key}>
-                <label className="text-zinc-500 text-xs mb-1 block">{f.label}</label>
-                <input type="text" value={(camPrefs as any)[f.key]} onChange={e => setCamPrefs(p => ({ ...p, [f.key]: e.target.value }))}
-                  placeholder={f.placeholder}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400" />
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center gap-3 mt-5">
+          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-5">User preferences</h3>
+          <textarea
+            value={(camPrefs as any).notes || ''}
+            onChange={e => setCamPrefs((p: any) => ({ ...p, notes: e.target.value }))}
+            placeholder="Add any personal preferences, notes or defaults you want to remember across jobs..."
+            rows={4}
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+          <div className="flex items-center gap-3 mt-4">
             <button onClick={saveProfile} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save preferences'}</button>
             {saved && <span className="text-green-400 text-sm">Saved</span>}
           </div>
@@ -212,7 +201,7 @@ export default function ProfilePage() {
           </div>
           <div className="border border-zinc-700 rounded-xl p-4">
             <label className="text-zinc-500 text-xs mb-2 block">Upload LUT file (.cube, .3dl, .lut) — filename becomes the LUT name</label>
-            <input ref={lutInputRef} type="file" accept=".cube,.3dl,.lut,.clf"
+            <input ref={lutInputRef} type="file" accept=".cube,.3dl,.lut,.clf,.aml,.alf4"
               onChange={e => e.target.files?.[0] && uploadLut(e.target.files[0])}
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm file:mr-3 file:bg-orange-400 file:text-black file:border-0 file:rounded file:px-3 file:py-1 file:text-xs file:font-medium" />
             {lutUploading && <p className="text-zinc-500 text-xs mt-2">Uploading...</p>}

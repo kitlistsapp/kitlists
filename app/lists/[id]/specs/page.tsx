@@ -169,7 +169,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
                 className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-2 rounded-lg transition-colors">
                 {lutUploading ? 'Uploading...' : '+ Upload LUT file'}
               </button>
-              <input ref={lutFileRef} type="file" accept=".cube,.3dl,.lut,.clf" className="hidden"
+              <input ref={lutFileRef} type="file" accept=".cube,.3dl,.lut,.clf,.aml,.alf4" className="hidden"
                 onChange={e => e.target.files?.[0] && uploadLutFile(e.target.files[0])} />
             </div>
             {showLutPicker && profileLuts.length > 0 && (
