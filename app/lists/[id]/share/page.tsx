@@ -12,14 +12,42 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
   const [newRole, setNewRole] = useState('rental')
   const [newMode, setNewMode] = useState('full')
   const [copied, setCopied] = useState<string | null>(null)
+  const [sending, setSending] = useState<string | null>(null)
+  const [sent, setSent] = useState<string | null>(null)
+  const [listName, setListName] = useState('')
+  const [dopName, setDopName] = useState('')
+  const [companyName, setCompanyName] = useState('')
 
   useEffect(() => {
-    params.then(p => { setListId(p.id); loadShares(p.id) })
+    params.then(p => { setListId(p.id); loadShares(p.id); loadListInfo(p.id) })
   }, [])
 
   const loadShares = async (lid: string) => {
     const { data } = await supabase.from('list_shares').select('*').eq('list_id', lid).order('created_at')
     if (data) setShares(data)
+  }
+
+  const loadListInfo = async (lid: string) => {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+    const [{ data: list }, { data: profile }] = await Promise.all([
+      supabase.from('gear_lists').select('project_name').eq('id', lid).single(),
+      supabase.from('profiles').select('full_name, company_name').eq('id', user.id).single()
+    ])
+    if (list) setListName(list.project_name)
+    if (profile) { setDopName(profile.full_name || ''); setCompanyName(profile.company_name || '') }
+  }
+
+  const sendEmail = async (share: any) => {
+    if (!share.recipient_email) return
+    setSending(share.id)
+    const res = await fetch('/api/send-share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shareId: share.id, recipientEmail: share.recipient_email, listName, dopName, companyName, token: share.token })
+    })
+    setSending(null)
+    if (res.ok) { setSent(share.id); setTimeout(() => setSent(null), 3000) }
   }
 
   const createShare = async () => {
@@ -118,6 +146,12 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
                   {share.recipient_email && <p className="text-zinc-500 text-xs mt-1">{share.recipient_email}</p>}
                 </div>
                 <div className="flex items-center gap-2">
+                  {share.recipient_email && (
+                    <button onClick={e => { e.stopPropagation(); sendEmail(share) }} disabled={sending === share.id}
+                      className="bg-orange-400 hover:bg-orange-300 text-black text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50">
+                      {sending === share.id ? 'Sending...' : sent === share.id ? 'Sent!' : 'Send email'}
+                    </button>
+                  )}
                   <button onClick={() => copyLink(share.token)}
                     className="bg-zinc-800 hover:bg-zinc-700 text-white text-xs px-3 py-1.5 rounded-lg transition-colors">
                     {copied === share.token ? 'Copied!' : 'Copy link'}
