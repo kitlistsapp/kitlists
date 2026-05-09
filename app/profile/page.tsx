@@ -28,8 +28,8 @@ export default function ProfilePage() {
   const [newContact, setNewContact] = useState({ full_name: '', email: '', phone: '', role: 'Focus Puller' })
   const [addingContact, setAddingContact] = useState(false)
   const [savingContact, setSavingContact] = useState(false)
-  const [newLutName, setNewLutName] = useState('')
-  const [newLutNotes, setNewLutNotes] = useState('')
+
+
   const [lutUploading, setLutUploading] = useState(false)
   const [camPrefs, setCamPrefs] = useState({ format: '', resolution: '', fps: '', lut: '', aspect_ratio: '' })
 
@@ -88,14 +88,13 @@ export default function ProfilePage() {
     const uid = userIdRef.current || userId
     if (!file || !uid || !newLutName.trim()) return
     setLutUploading(true)
+    const lutName = file.name.replace(/\.[^.]+$/, '')
     const ext = file.name.split('.').pop()
     const path = uid + '/' + Date.now() + '.' + ext
     const { error } = await supabase.storage.from('luts').upload(path, file)
     if (!error) {
-      const { data } = await supabase.from('user_luts').insert({ owner_id: uid, name: newLutName.trim(), file_url: path, notes: newLutNotes.trim() }).select().single()
+      const { data } = await supabase.from('user_luts').insert({ owner_id: uid, name: lutName, file_url: path, notes: '' }).select().single()
       if (data) setLuts(prev => [...prev, data])
-      setNewLutName('')
-      setNewLutNotes('')
     }
     setLutUploading(false)
   }
@@ -211,26 +210,12 @@ export default function ProfilePage() {
               </div>
             ))}
           </div>
-          <div className="border border-zinc-700 rounded-xl p-4 space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-zinc-500 text-xs mb-1 block">LUT name *</label>
-                <input type="text" value={newLutName} onChange={e => setNewLutName(e.target.value)} placeholder="e.g. My Show LUT"
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400" />
-              </div>
-              <div>
-                <label className="text-zinc-500 text-xs mb-1 block">Notes</label>
-                <input type="text" value={newLutNotes} onChange={e => setNewLutNotes(e.target.value)} placeholder="e.g. Drama look, ARRI base"
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400" />
-              </div>
-            </div>
-            <div>
-              <label className="text-zinc-500 text-xs mb-1 block">LUT file (.cube, .3dl, .lut)</label>
-              <input ref={lutInputRef} type="file" accept=".cube,.3dl,.lut,.clf"
-                onChange={e => e.target.files?.[0] && uploadLut(e.target.files[0])}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm file:mr-3 file:bg-orange-400 file:text-black file:border-0 file:rounded file:px-3 file:py-1 file:text-xs file:font-medium" />
-            </div>
-            {lutUploading && <p className="text-zinc-500 text-xs">Uploading...</p>}
+          <div className="border border-zinc-700 rounded-xl p-4">
+            <label className="text-zinc-500 text-xs mb-2 block">Upload LUT file (.cube, .3dl, .lut) — filename becomes the LUT name</label>
+            <input ref={lutInputRef} type="file" accept=".cube,.3dl,.lut,.clf"
+              onChange={e => e.target.files?.[0] && uploadLut(e.target.files[0])}
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm file:mr-3 file:bg-orange-400 file:text-black file:border-0 file:rounded file:px-3 file:py-1 file:text-xs file:font-medium" />
+            {lutUploading && <p className="text-zinc-500 text-xs mt-2">Uploading...</p>}
           </div>
         </div>
 
