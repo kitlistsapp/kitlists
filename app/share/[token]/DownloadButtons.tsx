@@ -1,0 +1,215 @@
+'use client'
+
+import { useEffect, useRef } from "react"
+
+interface Props {
+  listData: any
+  dopName: string
+  companyName: string
+}
+
+export default function DownloadButtons({ listData, dopName, companyName }: Props) {
+  const handlePDF = async () => {
+    const { default: jsPDF } = await import('jspdf')
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+    const list = listData.list
+    const cameras = listData.cameras
+    const lenses = listData.lenses
+    const misc = listData.misc
+    const specs = listData.specs
+    const pageW = 210
+    const margin = 16
+    let y = 20
+
+    const addText = (text: string, x: number, size = 10, bold = false, color = [30, 30, 30]) => {
+      doc.setFontSize(size)
+      doc.setFont('helvetica', bold ? 'bold' : 'normal')
+      doc.setTextColor(color[0], color[1], color[2])
+      doc.text(text, x, y)
+    }
+
+    const newLine = (h = 6) => { y += h }
+    const checkPage = () => { if (y > 270) { doc.addPage(); y = 20 } }
+
+    addText('KitList', margin, 18, true, [230, 100, 0])
+    newLine(8)
+    if (dopName) { addText(dopName, margin, 10, true); newLine(5) }
+    if (companyName) { addText(companyName, margin, 9, false, [120, 120, 120]); newLine(5) }
+    doc.setDrawColor(220, 220, 220)
+    doc.line(margin, y, pageW - margin, y)
+    newLine(8)
+
+    addText(list.project_name, margin, 16, true)
+    newLine(7)
+    if (list.production_co) { addText(list.production_co, margin, 10, false, [100, 100, 100]); newLine(5) }
+    const meta = [list.shoot_start && new Date(list.shoot_start).toLocaleDateString('en-AU'), list.shoot_days && list.shoot_days + ' days'].filter(Boolean).join('  ·  ')
+    if (meta) { addText(meta, margin, 9, false, [140, 140, 140]); newLine(6) }
+
+    if (specs) {
+      newLine(2)
+      addText('SHOOT SPECS', margin, 8, true, [150, 150, 150])
+      newLine(5)
+      const specLine = [specs.format, specs.resolution, specs.fps, specs.lut, specs.aspect_ratio].filter(Boolean).join('  ·  ')
+      if (specLine) { addText(specLine, margin, 9); newLine(5) }
+      if (specs.job_notes) { addText(specs.job_notes, margin, 9, false, [100, 100, 100]); newLine(5) }
+    }
+
+    for (const cam of cameras) {
+      checkPage()
+      newLine(4)
+      doc.setFillColor(40, 40, 40)
+      doc.roundedRect(margin, y - 4, pageW - margin * 2, 9, 2, 2, 'F')
+      addText(cam.label.toUpperCase(), margin + 3, 9, true, [255, 165, 0])
+      newLine(8)
+      if (cam.bodyName) { addText(cam.bodyName, margin, 11, true); newLine(6) }
+      const sections = [
+        { label: 'POWER', items: cam.items.filter((i: any) => i.section === 'power') },
+        { label: 'AKS', items: cam.items.filter((i: any) => i.section === 'aks') },
+        { label: 'GRIP', items: cam.items.filter((i: any) => i.section === 'grip') },
+        { label: 'FILTRATION', items: cam.items.filter((i: any) => i.section === 'filtration') },
+      ].filter(s => s.items.length > 0)
+      for (const section of sections) {
+        checkPage()
+        addText(section.label, margin, 8, true, [150, 150, 150])
+        newLine(4)
+        for (const item of section.items) {
+          const name = item.equipment_items?.name || item.custom_label || ''
+          const qty = item.quantity > 1 ? ` x${item.quantity}` : ''
+          addText('· ' + name + qty, margin + 3, 9)
+          newLine(4)
+          checkPage()
+        }
+        newLine(2)
+      }
+      if (cam.camera_notes) { addText('Notes: ' + cam.camera_notes, margin, 8, false, [120, 120, 120]); newLine(5) }
+    }
+
+    if (lenses) {
+      checkPage()
+      newLine(4)
+      doc.setFillColor(40, 40, 40)
+      doc.roundedRect(margin, y - 4, pageW - margin * 2, 9, 2, 2, 'F')
+      addText('LENSES', margin + 3, 9, true, [255, 165, 0])
+      newLine(8)
+      if (lenses.equipment_items?.name) { addText(lenses.equipment_items.name, margin, 11, true); newLine(6) }
+      if (lenses.focal_lengths?.length > 0) { addText('Focal lengths: ' + lenses.focal_lengths.join(', '), margin, 9); newLine(5) }
+      for (const z of lenses.list_lens_zooms || []) {
+        addText('· ' + (z.equipment_items?.name || ''), margin + 3, 9); newLine(4)
+      }
+      if (lenses.zoom_controller) { addText('Controller: ' + lenses.zoom_controller, margin, 9, false, [100, 100, 100]); newLine(5) }
+    }
+
+    if (misc && misc.length > 0) {
+      checkPage()
+      newLine(4)
+      doc.setFillColor(40, 40, 40)
+      doc.roundedRect(margin, y - 4, pageW - margin * 2, 9, 2, 2, 'F')
+      addText('MISC AKS', margin + 3, 9, true, [255, 165, 0])
+      newLine(8)
+      for (const item of misc) {
+        const name = item.equipment_items?.name || item.custom_label || ''
+        const notes = item.notes ? ' · ' + item.notes : ''
+        addText('· ' + name + notes, margin + 3, 9); newLine(4); checkPage()
+      }
+    }
+
+    newLine(8)
+    doc.setFontSize(7)
+    doc.setTextColor(180, 180, 180)
+    doc.text('Generated by KitList · kitlist.app', margin, y)
+    doc.save((list.project_name || 'kitlist') + '.pdf')
+  }
+
+  const handleExcel = async () => {
+    const XLSX = await import('xlsx')
+    const list = listData.list
+    const cameras = listData.cameras
+    const lenses = listData.lenses
+    const misc = listData.misc
+    const specs = listData.specs
+    const wb = XLSX.utils.book_new()
+
+    const summaryRows: any[][] = [
+      ['KitList Equipment List'],
+      [],
+      ['Project', list.project_name],
+      ['Production', list.production_co || ''],
+      ['Shoot Start', list.shoot_start ? new Date(list.shoot_start).toLocaleDateString('en-AU') : ''],
+      ['Shoot Days', list.shoot_days || ''],
+      ['DOP', dopName],
+      ['Company', companyName],
+      [],
+    ]
+
+    if (specs) {
+      summaryRows.push(['SHOOT SPECS'])
+      if (specs.format) summaryRows.push(['Format', specs.format])
+      if (specs.resolution) summaryRows.push(['Resolution', specs.resolution])
+      if (specs.fps) summaryRows.push(['Frame Rate', specs.fps])
+      if (specs.lut) summaryRows.push(['LUT', specs.lut])
+      if (specs.aspect_ratio) summaryRows.push(['Aspect Ratio', specs.aspect_ratio])
+      if (specs.job_notes) summaryRows.push(['Notes', specs.job_notes])
+      summaryRows.push([])
+    }
+
+    for (const cam of cameras) {
+      summaryRows.push([cam.label.toUpperCase()])
+      if (cam.bodyName) summaryRows.push(['Camera Body', cam.bodyName])
+      const sections = ['power', 'aks', 'grip', 'filtration']
+      for (const section of sections) {
+        const items = cam.items.filter((i: any) => i.section === section)
+        if (items.length > 0) {
+          summaryRows.push([section.toUpperCase()])
+          for (const item of items) {
+            const name = item.equipment_items?.name || item.custom_label || ''
+            const qty = item.quantity > 1 ? item.quantity : ''
+            summaryRows.push(['', name, qty ? 'x' + qty : ''])
+          }
+        }
+      }
+      if (cam.camera_notes) summaryRows.push(['Notes', cam.camera_notes])
+      summaryRows.push([])
+    }
+
+    if (lenses) {
+      summaryRows.push(['LENSES'])
+      if (lenses.equipment_items?.name) summaryRows.push(['Prime Set', lenses.equipment_items.name])
+      if (lenses.focal_lengths?.length > 0) summaryRows.push(['Focal Lengths', lenses.focal_lengths.join(', ')])
+      for (const z of lenses.list_lens_zooms || []) summaryRows.push(['Zoom', z.equipment_items?.name || ''])
+      if (lenses.zoom_controller) summaryRows.push(['Controller', lenses.zoom_controller])
+      summaryRows.push([])
+    }
+
+    if (misc && misc.length > 0) {
+      summaryRows.push(['MISC AKS'])
+      for (const item of misc) {
+        const name = item.equipment_items?.name || item.custom_label || ''
+        summaryRows.push(['', name, item.notes || ''])
+      }
+    }
+
+    const ws = XLSX.utils.aoa_to_sheet(summaryRows)
+    ws['!cols'] = [{ wch: 20 }, { wch: 45 }, { wch: 10 }]
+    XLSX.utils.book_append_sheet(wb, ws, 'Gear List')
+    XLSX.writeFile(wb, (list.project_name || 'kitlist') + '.xlsx')
+  }
+
+  return (
+    <div className="flex gap-3 mt-6">
+      <button onClick={handlePDF}
+        className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12h8M8 3v7m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Download PDF
+      </button>
+      <button onClick={handleExcel}
+        className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12h8M8 3v7m0 0l-3-3m3 3l3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Download Excel
+      </button>
+    </div>
+  )
+}
