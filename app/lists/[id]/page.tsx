@@ -7,75 +7,168 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: list } = await supabase
-    .from("gear_lists")
-    .select("*")
-    .eq("id", id)
-    .single()
-
+  const { data: list } = await supabase.from("gear_lists").select("*").eq("id", id).single()
   if (!list) redirect("/dashboard")
 
-  const { data: cameras } = await supabase
-    .from("camera_pages")
-    .select("*")
-    .eq("list_id", id)
-    .order("sort_order")
+  const { data: cameras } = await supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order")
+  const { data: lenses } = await supabase.from("list_lenses").select("*, equipment_items(name), list_lens_zooms(*, equipment_items(name))").eq("list_id", id).maybeSingle()
+  const { data: misc } = await supabase.from("list_misc_items").select("*, equipment_items(name)").eq("list_id", id)
+
+  const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
+    const { data: items } = await supabase.from("camera_page_items").select("*, equipment_items(name)").eq("page_id", cam.id)
+    return { ...cam, items: items || [] }
+  }))
 
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">
-          Kit<span className="text-orange-400">List</span>
-        </a>
-        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm transition-colors">Back to dashboard</a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Back to dashboard</a>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-6 py-10">
-        <div className="mb-8">
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">{list.project_name}</h2>
-              <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
-              <div className="flex gap-4 mt-2 text-xs text-zinc-600">
-                {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}</span>}
-                {list.shoot_days && <span>{list.shoot_days} days</span>}
-              </div>
+      <main className="max-w-3xl mx-auto px-6 py-10">
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <h2 className="text-2xl font-bold">{list.project_name}</h2>
+            <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
+            <div className="flex gap-4 mt-2 text-xs text-zinc-600">
+              {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}</span>}
+              {list.shoot_days && <span>{list.shoot_days} days</span>}
             </div>
-            <span className={`text-xs px-3 py-1 rounded-full font-medium ${list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400"}`}>{list.status}</span>
           </div>
+          <span className={`text-xs px-3 py-1 rounded-full font-medium ${ list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400" }`}>{list.status}</span>
         </div>
 
-        <div className="grid gap-4">
-          {cameras && cameras.map((cam: any) => (
-            <a
-              key={cam.id}
-              href={`/lists/${id}/camera/${cam.id}`}
-              className="block bg-zinc-900 border border-zinc-800 hover:border-orange-400 rounded-xl p-6 transition-colors group"
-            >
-              <div className="flex items-center justify-between">
+        <div className="space-y-3">
+
+          {camItems.map((cam: any) => {
+            const bodyName = cam.equipment_items?.name
+            const powerItems = cam.items.filter((i: any) => i.section === 'power')
+            const aksItems = cam.items.filter((i: any) => i.section === 'aks')
+            const gripItems = cam.items.filter((i: any) => i.section === 'grip')
+            const filtItems = cam.items.filter((i: any) => i.section === 'filtration')
+            const totalItems = cam.items.length
+            const isConfigured = bodyName || totalItems > 0
+            return (
+              <div key={cam.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                <a href={`/lists/${id}/camera/${cam.id}`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full ${ isConfigured ? 'bg-orange-400' : 'bg-zinc-700' }`} />
+                    <div>
+                      <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">{cam.label}</h3>
+                      {bodyName ? (
+                        <p className="text-zinc-500 text-xs mt-0.5">{bodyName}{cam.camera_body_source === 'dop_owned' ? ' · DOP owned' : ''}</p>
+                      ) : (
+                        <p className="text-zinc-700 text-xs mt-0.5">No camera selected</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {isConfigured && (
+                      <span className="text-xs text-zinc-500">{totalItems} item{totalItems !== 1 ? 's' : ''}</span>
+                    )}
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors">
+                      <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </a>
+                {isConfigured && (
+                  <div className="px-6 pb-4 border-t border-zinc-800 pt-3 grid grid-cols-2 gap-x-6 gap-y-1">
+                    {powerItems.length > 0 && (
+                      <div>
+                        <span className="text-zinc-600 text-xs uppercase tracking-wider">Power</span>
+                        {powerItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                      </div>
+                    )}
+                    {aksItems.length > 0 && (
+                      <div>
+                        <span className="text-zinc-600 text-xs uppercase tracking-wider">AKS</span>
+                        {aksItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                      </div>
+                    )}
+                    {gripItems.length > 0 && (
+                      <div className="mt-2">
+                        <span className="text-zinc-600 text-xs uppercase tracking-wider">Grip</span>
+                        {gripItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                      </div>
+                    )}
+                    {filtItems.length > 0 && (
+                      <div className="mt-2">
+                        <span className="text-zinc-600 text-xs uppercase tracking-wider">Filtration</span>
+                        {filtItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                      </div>
+                    )}
+                    {cam.camera_notes && (
+                      <div className="mt-2 col-span-2">
+                        <span className="text-zinc-600 text-xs uppercase tracking-wider">Notes</span>
+                        <p className="text-zinc-400 text-xs mt-0.5">{cam.camera_notes}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <a href={`/lists/${id}/lenses`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${ lenses ? 'bg-orange-400' : 'bg-zinc-700' }`} />
                 <div>
-                  <h3 className="text-white font-semibold text-lg group-hover:text-orange-400 transition-colors">{cam.label}</h3>
-                  <p className="text-zinc-600 text-sm mt-1">{cam.camera_body_id ? "Camera selected" : "No camera selected yet"}</p>
-                </div>
-                <div className="text-zinc-600 group-hover:text-orange-400 transition-colors">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M7 4l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Lenses</h3>
+                  {lenses ? (
+                    <p className="text-zinc-500 text-xs mt-0.5">{lenses.equipment_items?.name || 'Prime set selected'}{lenses.list_lens_zooms?.length > 0 ? ` · ${lenses.list_lens_zooms.length} zoom${lenses.list_lens_zooms.length !== 1 ? 's' : ''}` : ''}</p>
+                  ) : (
+                    <p className="text-zinc-700 text-xs mt-0.5">Not configured</p>
+                  )}
                 </div>
               </div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </a>
-          ))}
-        </div>
+            {lenses && (
+              <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-1">
+                {lenses.focal_lengths?.length > 0 && (
+                  <p className="text-zinc-400 text-xs">Focal lengths: {lenses.focal_lengths.join(', ')}</p>
+                )}
+                {lenses.list_lens_zooms?.map((z: any) => (
+                  <p key={z.id} className="text-zinc-400 text-xs">{z.equipment_items?.name}</p>
+                ))}
+                {lenses.zoom_controller && (
+                  <p className="text-zinc-400 text-xs">Controller: {lenses.zoom_controller}</p>
+                )}
+                {lenses.source === 'dop_owned' && <p className="text-zinc-600 text-xs">DOP owned</p>}
+              </div>
+            )}
+          </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h4 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Lenses</h4>
-            <a href={`/lists/${id}/lenses`} className="text-orange-400 hover:text-orange-300 text-sm transition-colors">Configure lens package</a>
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <a href={`/lists/${id}/misc`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${ misc && misc.length > 0 ? 'bg-orange-400' : 'bg-zinc-700' }`} />
+                <div>
+                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Misc AKS</h3>
+                  {misc && misc.length > 0 ? (
+                    <p className="text-zinc-500 text-xs mt-0.5">{misc.length} item{misc.length !== 1 ? 's' : ''} selected</p>
+                  ) : (
+                    <p className="text-zinc-700 text-xs mt-0.5">Not configured</p>
+                  )}
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
+            {misc && misc.length > 0 && (
+              <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
+                {misc.map((i: any) => (
+                  <p key={i.id} className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.notes ? ` · ${i.notes}` : ''}{i.source === 'dop_owned' ? ' · DOP owned' : ''}</p>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <h4 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Misc AKS</h4>
-            <a href={`/lists/${id}/misc`} className="text-orange-400 hover:text-orange-300 text-sm transition-colors">Configure misc items</a>
-          </div>
+
         </div>
       </main>
     </div>

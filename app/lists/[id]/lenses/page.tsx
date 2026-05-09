@@ -140,7 +140,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       await supabase.from('list_lenses').update({
         prime_set_id: selectedPrimeSet && !selectedPrimeSet.startsWith('custom:') ? selectedPrimeSet : null,
         focal_lengths: focalNames,
-        zoom_controller: selectedController,
+        zoom_controller: (() => { const item = allItems.find(i => i.id === selectedController); return item ? item.name : selectedController; })(),
         source: lensSource
       }).eq('id', lensRecordId)
       await supabase.from('list_lens_zooms').delete().eq('list_lens_id', lensRecordId)
@@ -152,7 +152,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
         list_id: listId,
         prime_set_id: selectedPrimeSet && !selectedPrimeSet.startsWith('custom:') ? selectedPrimeSet : null,
         focal_lengths: focalNames,
-        zoom_controller: selectedController,
+        zoom_controller: (() => { const item = allItems.find(i => i.id === selectedController); return item ? item.name : selectedController; })(),
         source: lensSource
       }).select().single()
       if (newRecord) {
