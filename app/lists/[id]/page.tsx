@@ -13,6 +13,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const { data: cameras } = await supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order")
   const { data: lenses } = await supabase.from("list_lenses").select("*, equipment_items(name), list_lens_zooms(*, equipment_items(name))").eq("list_id", id).maybeSingle()
   const { data: misc } = await supabase.from("list_misc_items").select("*, equipment_items(name)").eq("list_id", id)
+  const { data: specs } = await supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle()
 
   const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
     const { data: items } = await supabase.from("camera_page_items").select("*, equipment_items(name)").eq("page_id", cam.id)
@@ -167,6 +168,25 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                 ))}
               </div>
             )}
+          </div>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <a href={`/lists/${id}/specs`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${ specs ? 'bg-orange-400' : 'bg-zinc-700' }`} />
+                <div>
+                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Shoot specs</h3>
+                  {specs ? (
+                    <p className="text-zinc-500 text-xs mt-0.5">{[specs.format, specs.resolution, specs.fps, specs.aspect_ratio].filter(Boolean).join(' · ')}</p>
+                  ) : (
+                    <p className="text-zinc-700 text-xs mt-0.5">Not configured</p>
+                  )}
+                </div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
           </div>
 
         </div>

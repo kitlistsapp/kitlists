@@ -15,8 +15,15 @@ export default function NewListPage() {
   const [shootStart, setShootStart] = useState("")
   const [shootDays, setShootDays] = useState("1")
   const [numCameras, setNumCameras] = useState("1")
+  const [houseId, setHouseId] = useState("")
+  const [rentalHouses, setRentalHouses] = useState<any[]>([])
 
   const cameraLabels = ["A cam", "B cam", "C cam", "D cam", "E cam", "F cam"]
+
+  useEffect(() => {
+    const supabase2 = createClient()
+    supabase2.from('rental_houses').select('*').order('name').then(({ data }) => { if (data) setRentalHouses(data) })
+  }, [])
 
   const handleCreate = async () => {
     if (!projectName.trim()) { setError("Project name is required"); return }
@@ -31,6 +38,7 @@ export default function NewListPage() {
       .insert({
         owner_id: user.id,
         project_name: projectName.trim(),
+        house_id: houseId || null,
         production_co: productionCo.trim(),
         shoot_start: shootStart || null,
         shoot_days: parseInt(shootDays),
@@ -113,6 +121,17 @@ export default function NewListPage() {
                 className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="text-zinc-400 text-sm mb-1.5 block">Rental house</label>
+            <select value={houseId} onChange={e => setHouseId(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors">
+              <option value="">Select rental house (optional)</option>
+              {rentalHouses.map((h: any) => (
+                <option key={h.id} value={h.id}>{h.name}{h.city ? ` — ${h.city}` : ''}</option>
+              ))}
+            </select>
           </div>
 
           <div>
