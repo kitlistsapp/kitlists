@@ -24,7 +24,10 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
-        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Back to dashboard</a>
+        <div className="flex items-center gap-3">
+          <a href={`/lists/${id}/share`} className="bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
+          <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Back to dashboard</a>
+        </div>
       </nav>
 
       <main className="max-w-3xl mx-auto px-6 py-10">
