@@ -86,7 +86,7 @@ export default function ProfilePage() {
 
   const uploadLut = async (file: File) => {
     const uid = userIdRef.current || userId
-    if (!file || !uid || !newLutName.trim()) return
+    if (!file || !uid) return
     setLutUploading(true)
     const lutName = file.name.replace(/\.[^.]+$/, '')
     const ext = file.name.split('.').pop()
