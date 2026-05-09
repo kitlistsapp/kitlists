@@ -58,9 +58,9 @@ export default function DownloadButtons({ listData, dopName, companyName }: Prop
       checkPage()
       newLine(4)
       doc.setFillColor(40, 40, 40)
-      doc.roundedRect(margin, y - 4, pageW - margin * 2, 9, 2, 2, 'F')
-      addText(cam.label.toUpperCase(), margin + 3, 9, true, [255, 165, 0])
-      newLine(8)
+      doc.roundedRect(margin, y - 3, pageW - margin * 2, 7, 1, 1, 'F')
+      addText(cam.label.toUpperCase(), margin + 3, 8, true, [255, 165, 0])
+      newLine(7)
       if (cam.bodyName) { addText(cam.bodyName, margin, 11, true); newLine(6) }
       const sections = [
         { label: 'POWER', items: cam.items.filter((i: any) => i.section === 'power') },
@@ -88,9 +88,9 @@ export default function DownloadButtons({ listData, dopName, companyName }: Prop
       checkPage()
       newLine(4)
       doc.setFillColor(40, 40, 40)
-      doc.roundedRect(margin, y - 4, pageW - margin * 2, 9, 2, 2, 'F')
-      addText('LENSES', margin + 3, 9, true, [255, 165, 0])
-      newLine(8)
+      doc.roundedRect(margin, y - 3, pageW - margin * 2, 7, 1, 1, 'F')
+      addText('LENSES', margin + 3, 8, true, [255, 165, 0])
+      newLine(7)
       if (lenses.equipment_items?.name) { addText(lenses.equipment_items.name, margin, 11, true); newLine(6) }
       if (lenses.focal_lengths?.length > 0) { addText('Focal lengths: ' + lenses.focal_lengths.join(', '), margin, 9); newLine(5) }
       for (const z of lenses.list_lens_zooms || []) {
@@ -103,9 +103,9 @@ export default function DownloadButtons({ listData, dopName, companyName }: Prop
       checkPage()
       newLine(4)
       doc.setFillColor(40, 40, 40)
-      doc.roundedRect(margin, y - 4, pageW - margin * 2, 9, 2, 2, 'F')
-      addText('MISC AKS', margin + 3, 9, true, [255, 165, 0])
-      newLine(8)
+      doc.roundedRect(margin, y - 3, pageW - margin * 2, 7, 1, 1, 'F')
+      addText('MISC AKS', margin + 3, 8, true, [255, 165, 0])
+      newLine(7)
       for (const item of misc) {
         const name = item.equipment_items?.name || item.custom_label || ''
         const notes = item.notes ? ' · ' + item.notes : ''
