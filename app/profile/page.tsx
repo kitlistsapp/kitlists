@@ -22,7 +22,12 @@ export default function ProfilePage() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [companyName, setCompanyName] = useState('')
-  const [billingAddress, setBillingAddress] = useState('')
+  const [street1, setStreet1] = useState('')
+  const [street2, setStreet2] = useState('')
+  const [suburb, setSuburb] = useState('')
+  const [state, setState] = useState('')
+  const [postcode, setPostcode] = useState('')
+  const [country, setCountry] = useState('Australia')
   const [abn, setAbn] = useState('')
   const [logoUrl, setLogoUrl] = useState('')
   const [logoUploading, setLogoUploading] = useState(false)
@@ -50,7 +55,17 @@ export default function ProfilePage() {
       setFullName(profile.full_name && profile.full_name !== user.email ? profile.full_name : '')
       setPhone(profile.phone || '')
       setCompanyName(profile.company_name || '')
-      setBillingAddress(profile.billing_address || '')
+      if (profile.billing_address) {
+        try {
+          const addr = JSON.parse(profile.billing_address)
+          setStreet1(addr.street1 || '')
+          setStreet2(addr.street2 || '')
+          setSuburb(addr.suburb || '')
+          setState(addr.state || '')
+          setPostcode(addr.postcode || '')
+          setCountry(addr.country || 'Australia')
+        } catch { setStreet1(profile.billing_address) }
+      }
       setAbn(profile.abn || '')
       if (profile.camera_preferences) setCamPrefs({ notes: '', ...profile.camera_preferences })
       if (profile.company_logo_url) {
@@ -73,7 +88,7 @@ export default function ProfilePage() {
     const uid = userIdRef.current || userId
     const { error } = await supabase.from('profiles').update({
       full_name: fullName, phone, company_name: companyName,
-      billing_address: billingAddress, abn, camera_preferences: camPrefs
+      billing_address: JSON.stringify({ street1, street2, suburb, state, postcode, country }), abn, camera_preferences: camPrefs
     }).eq('id', uid)
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
@@ -182,7 +197,18 @@ export default function ProfilePage() {
             </div>
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Billing address</label>
-              <textarea value={billingAddress} onChange={e => setBillingAddress(e.target.value)} placeholder="Street, suburb, state, postcode" rows={2} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+              <div className="space-y-2">
+                <input type="text" value={street1} onChange={e => setStreet1(e.target.value)} placeholder="Street address" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                <input type="text" value={street2} onChange={e => setStreet2(e.target.value)} placeholder="Street address line 2 (optional)" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={suburb} onChange={e => setSuburb(e.target.value)} placeholder="Suburb" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="text" value={state} onChange={e => setState(e.target.value)} placeholder="State" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={postcode} onChange={e => setPostcode(e.target.value)} placeholder="Postcode" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="text" value={country} onChange={e => setCountry(e.target.value)} placeholder="Country" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3 mt-4">
