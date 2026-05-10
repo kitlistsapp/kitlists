@@ -12,7 +12,7 @@ const SUBCATEGORY_LABELS: Record<string, string> = {
   vintage: 'Vintage',
 }
 
-interface SelectedLens { id: string; name: string; brand: string; source: 'rental' | 'dop_owned' }
+interface SelectedLens { id: string; name: string; brand: string; source: 'rental' | 'dop_owned' | 'ac_owned' }
 
 export default function LensesPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient()
