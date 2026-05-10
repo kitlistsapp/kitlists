@@ -259,7 +259,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
                     <SearchablePicker
                       items={entry.type === 'onboard' ? onboardItems : blockItems}
                       value={entry.itemId}
-                      onChange={(id, name) => updatePower(idx, 'itemId', id) || updatePower(idx, 'itemName', name)}
+                      onChange={(id, name) => { updatePower(idx, 'itemId', id); updatePower(idx, 'itemName', name) }}
                       placeholder={entry.type === 'onboard' ? 'Select battery type...' : 'Select block battery...'}
                     />
                   </div>
@@ -331,7 +331,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
                       <SearchablePicker
                         items={allItems.filter(i => i.category === 'aks' && i.subcategory === entry.category)}
                         value={entry.itemId}
-                        onChange={(id, name) => updateAks(idx, 'itemId', id) || updateAks(idx, 'itemName', name)}
+                        onChange={(id, name) => { updateAks(idx, 'itemId', id); updateAks(idx, 'itemName', name) }}
                         placeholder={`Search ${entry.category}...`}
                       />
                     </div>
