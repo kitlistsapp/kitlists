@@ -14,6 +14,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const { data: lenses } = await supabase.from("list_lenses").select("*, equipment_items(name), list_lens_zooms(*, equipment_items(name))").eq("list_id", id).maybeSingle()
   const { data: misc } = await supabase.from("list_misc_items").select("*, equipment_items(name)").eq("list_id", id)
   const { data: specs } = await supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle()
+  const { data: files } = await supabase.from("list_files").select("*").eq("list_id", id).order("created_at")
 
   const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
     const { data: items } = await supabase.from("camera_page_items").select("*, equipment_items(name)").eq("page_id", cam.id)
@@ -193,6 +194,25 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
           </div>
 
         </div>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full ${ files && files.length > 0 ? 'bg-orange-400' : 'bg-zinc-700' }`} />
+                <div>
+                  <h3 className="text-white font-semibold">Files</h3>
+                  <p className="text-zinc-700 text-xs mt-0.5">{files && files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''}` : 'No files attached'}</p>
+                </div>
+              </div>
+            </div>
+            {files && files.length > 0 && (
+              <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-1">
+                {files.map((f: any) => (
+                  <p key={f.id} className="text-zinc-400 text-xs">{f.name}</p>
+                ))}
+              </div>
+            )}
+          </div>
+
       </main>
     </div>
   )
