@@ -95,12 +95,31 @@ export async function POST(request: Request) {
     </div>
   `
 
+  // Build LUT attachments
+  const attachments: any[] = []
+  if (listLuts && listLuts.length > 0) {
+    for (const lut of listLuts) {
+      if (lut.file_path) {
+        const { data: fileData } = await supabase.storage.from('luts').download(lut.file_path)
+        if (fileData) {
+          const buffer = await fileData.arrayBuffer()
+          const ext = lut.file_path.split('.').pop() || 'cube'
+          attachments.push({
+            filename: lut.name + '.' + ext,
+            content: Buffer.from(buffer).toString('base64'),
+          })
+        }
+      }
+    }
+  }
+
   try {
     const { data, error } = await resend.emails.send({
       from: 'KitList <onboarding@resend.dev>',
       to: [recipientEmail],
-      subject: `Equipment List — ${list?.project_name || listName}`,
-      html
+      subject: `DP Equipment Request — ${dopName} — ${list?.project_name || listName}`,
+      html,
+      attachments: attachments.length > 0 ? attachments : undefined
     })
     if (error) return NextResponse.json({ error }, { status: 400 })
     return NextResponse.json({ success: true })
