@@ -14,36 +14,35 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 NEXT_PUBLIC_APP_URL = https://kitlist-theta.vercel.app
 RESEND_API_KEY
 
-## Pages
-- /login — email/password auth
-- /dashboard — status tabs, archive/copy/delete, share indicator, light/dark mode
-- /profile — name, logo, phone, company, user prefs, LUT upload, saved contacts
-- /lists/new — project info, rental house selector, camera count
-- /lists/[id] — summary with orange dot status, expandable sections
-- /lists/[id]/camera/[cameraId] — digital/film, power, grip, AKS, filtration
-- /lists/[id]/lenses — brand > lens two-step picker, focal lengths, zooms, controller
-- /lists/[id]/misc — checklist with per-item notes and source
-- /lists/[id]/specs — format/codec, resolution, fps, aspect ratio, multi-LUT, notes
-- /lists/[id]/share — generate share links, role/view mode, send email, click row to open
-- /lists/[id]/files — file attachments upload/download
-- /share/[token] — read-only view, DOP branding, PDF + Excel download, LUT download
+## UAT Status — ALL DONE except data tables
+- Section 1: Profile — billing address, ABN, camera prefs, templates ✅
+- Section 2: Dashboard — copy job with equipment, edit job details ✅
+- Section 3: Power — blank qty default, Onboard/Block/AC/DC ✅
+- Section 4: Head & Tripod — new section (detailed list TBC from Lee) ✅
+- Section 5: Grip — new items, UAP-3 renamed ✅
+- Section 6: Onboard monitors updated ✅
+- Section 7: Wireless Focus Kits renamed, ARRI WCU-4 added ✅
+- Section 8: ARRI LMB-4 added to Matte Box ✅
+- Section 9: Follow Focus — FF4 only ✅
+- Section 10: Zoom Controller renamed, new options ✅
+- Section 11: Misc AKS fixes ✅
+- Section 12: DOP Owned flag on all equipment ✅
+- Mobile optimisation across all pages ✅
+- Templates — save from list, use on new list ✅
+
+## Still Outstanding
+- D1: Film cameras list (Lee to provide Super 16 + Super 35)
+- D2: Expanded lens database
+- D3: More aspect ratio options
+- 4.2: Head & Tripod detailed equipment list (Lee to provide)
+- Domain registration (crewflow.app or similar)
+- Custom domain on Vercel
+- Resend domain verification
+- Landing page at /
 
 ## Email
-Resend sandbox mode — can only send to whitakerleebo@gmail.com until domain verified
-Once crewflow.app (or similar) registered:
-- Add domain to Resend
-- Change from: address in app/api/send-share/route.ts from onboarding@resend.dev to noreply@crewflow.app
-
-## Outstanding / Backlog
-- [ ] Film camera list — Lee to provide
-- [ ] Light mode on all pages (currently dashboard only)
-- [ ] List summary — update for multi-lens format (shows first prime only)
-- [ ] Templates — save a list as a template, reuse on future jobs
-- [ ] Rental house export format (Current RMS / Rentman)
-- [ ] Domain registration — crewflow.app on Namecheap/Porkbun
-- [ ] Custom domain on Vercel once registered
-- [ ] Resend domain verification once domain registered
+Resend sandbox — sends to whitakerleebo@gmail.com only until domain verified
+Fix: change from address in app/api/send-share/route.ts
 
 ## Test account
 whitakerleebo@gmail.com
-Test list: TKMax (2112f6a7-2c3b-4534-91f9-3f17a2f4218b)
