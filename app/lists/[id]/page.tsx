@@ -24,41 +24,29 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+      <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
-        <div className="flex items-center gap-3">
-          <a href={`/lists/${id}/share`} className="bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
-          <div className="flex items-center gap-3">
-          <a href={`/lists/${id}/edit`} className="text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg transition-colors">Edit details</a>
-          <SaveAsTemplate listId={id} />
-          <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Dashboard</a>
-        </div>
-        </div>
+        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Dashboard</a>
       </nav>
 
       <main className="max-w-3xl mx-auto px-4 py-6">
-        <div className="flex items-start justify-between mb-8">
-          <div>
-            <h2 className="text-2xl font-bold">{list.project_name}</h2>
-            <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
-            <div className="flex gap-4 mt-2 text-xs text-zinc-600">
-              {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}</span>}
-              {list.shoot_days && <span>{list.shoot_days} days</span>}
+        <div className="mb-5">
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">{list.project_name}</h2>
+              <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
+              <div className="flex gap-4 mt-2 text-xs text-zinc-600">
+                {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}</span>}
+                {list.shoot_days && <span>{list.shoot_days} days</span>}
+              </div>
             </div>
+            <span className={`text-xs px-3 py-1 rounded-full font-medium ${ list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400" }`}>{list.status}</span>
           </div>
-        </div>
-        <div className="mt-3">
-          <SaveAsTemplate listId={id} />
-        </div>
-        <div className="hidden">
-        </div>
-        <div className="flex gap-2 flex-wrap mb-6">
-          <a href={`/lists/${id}/share`} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
-          <a href={`/lists/${id}/edit`} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm transition-colors">Edit details</a>
-          <SaveAsTemplate listId={id} />
-        </div>
-        <div className="hidden">
-          <span className={`text-xs px-3 py-1 rounded-full font-medium ${ list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400" }`}>{list.status}</span>
+          <div className="flex gap-2 flex-wrap mt-4">
+            <a href={`/lists/${id}/share`} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
+            <a href={`/lists/${id}/edit`} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm transition-colors">Edit details</a>
+            <SaveAsTemplate listId={id} />
+          </div>
         </div>
 
         <div className="space-y-3">
