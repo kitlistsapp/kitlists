@@ -7,7 +7,13 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('full_name, company_name, company_logo_url').eq('id', user.id).single()
+
+  let logoUrl = null
+  if (profile?.company_logo_url) {
+    const { data: signed } = await supabase.storage.from('logos').createSignedUrl(profile.company_logo_url, 3600)
+    if (signed) logoUrl = signed.signedUrl
+  }
 
   const { data: lists } = await supabase
     .from("gear_lists")
@@ -20,7 +26,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardClient
-      user={{ ...user, full_name: profile?.full_name }}
+      user={{ ...user, full_name: profile?.full_name, company_name: profile?.company_name, logo_url: logoUrl }}
       initialLists={lists || []}
       initialShares={shareCounts}
     />

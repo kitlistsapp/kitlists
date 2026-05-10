@@ -132,8 +132,15 @@ export default function DashboardClient({ user, initialLists, initialShares }: {
       <nav className={"border-b px-4 py-4 flex items-center justify-between " + navBg}>
         <h1 className="text-xl font-bold">Kit<span className="text-orange-400">List</span></h1>
         <div className="flex items-center gap-3">
-          <a href="/profile" className={"text-sm transition-colors " + (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900')}>
-            {user?.full_name || user?.email}
+          <a href="/profile" className="flex items-center gap-2 group">
+            {user?.logo_url && (
+              <img src={user.logo_url} alt="Logo" className="w-7 h-7 rounded-lg object-contain bg-zinc-800 p-0.5 border border-zinc-700" />
+            )}
+            <div className="text-right hidden sm:block">
+              {user?.full_name && <p className={"text-sm font-medium transition-colors " + (darkMode ? 'text-zinc-300 group-hover:text-white' : 'text-zinc-600 group-hover:text-zinc-900')}>{user.full_name}</p>}
+              {user?.company_name && <p className={"text-xs transition-colors " + (darkMode ? 'text-zinc-500 group-hover:text-zinc-400' : 'text-zinc-400 group-hover:text-zinc-600')}>{user.company_name}</p>}
+            </div>
+            {!user?.full_name && <span className={"text-sm transition-colors " + (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900')}>{user?.email}</span>}
           </a>
           <button onClick={toggleTheme} className={"w-9 h-9 rounded-lg flex items-center justify-center transition-colors " + (darkMode ? 'bg-zinc-800 hover:bg-zinc-700' : 'bg-gray-100 hover:bg-gray-200')}>
             {darkMode ? '☀️' : '🌙'}
