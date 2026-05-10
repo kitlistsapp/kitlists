@@ -6,9 +6,10 @@ interface Props {
   listData: any
   dopName: string
   companyName: string
+  luts?: any[]
 }
 
-export default function DownloadButtons({ listData, dopName, companyName }: Props) {
+export default function DownloadButtons({ listData, dopName, companyName, luts }: Props) {
   const handlePDF = async () => {
     const { default: jsPDF } = await import('jspdf')
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })

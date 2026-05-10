@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     if (specs.resolution) tableRows += row('Resolution', specs.resolution)
     if (specs.fps) tableRows += row('Frame Rate', specs.fps)
     if (specs.aspect_ratio) tableRows += row('Aspect Ratio', specs.aspect_ratio)
-    if (listLuts && listLuts.length > 0) tableRows += row('LUT(s)', listLuts.map((l: any) => l.name).join('<br>'))
+    if (listLuts && listLuts.length > 0) tableRows += row('LUT(s)', listLuts.map((l: any) => l.name).join('<br>') + '<br><span style="color:#71717a;font-size:11px;">Download from the link below</span>')
     if (specs.job_notes) tableRows += row('Notes', specs.job_notes)
   }
 

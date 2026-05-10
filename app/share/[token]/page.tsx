@@ -34,6 +34,15 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   const { data: misc } = await supabase.from('list_misc_items').select('*, equipment_items(name)').eq('list_id', list.id)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
 
+  const { data: listLuts } = await supabase.from('list_lut_files').select('*').eq('list_id', list.id)
+  const lutsWithUrls = await Promise.all((listLuts || []).map(async (lut: any) => {
+    if (lut.file_path) {
+      const { data: signed } = await supabase.storage.from('luts').createSignedUrl(lut.file_path, 3600)
+      return { ...lut, signedUrl: signed?.signedUrl || null }
+    }
+    return { ...lut, signedUrl: null }
+  }))
+
   const listData = { list, cameras: camItems, lenses, misc, specs }
 
   return (
@@ -66,7 +75,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             {list.shoot_days && <span>{list.shoot_days} days</span>}
             {list.rental_houses?.name && <span>{list.rental_houses.name}</span>}
           </div>
-          <DownloadButtons listData={listData} dopName={dop?.full_name || ''} companyName={dop?.company_name || ''} />
+          <DownloadButtons listData={listData} dopName={dop?.full_name || ''} companyName={dop?.company_name || ''} luts={lutsWithUrls} />
         </div>
 
         {specs && (
@@ -139,6 +148,25 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             </div>
           )}
         </div>
+
+          {lutsWithUrls && lutsWithUrls.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">LUT Files</h3>
+              <div className="space-y-2">
+                {lutsWithUrls.map((lut: any) => (
+                  <div key={lut.id} className="flex items-center justify-between">
+                    <span className="text-zinc-300 text-sm">{lut.name}</span>
+                    {lut.signedUrl && (
+                      <a href={lut.signedUrl} download
+                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-orange-400 px-3 py-1.5 rounded-lg transition-colors">
+                        Download
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         <div className="mt-10 pt-6 border-t border-zinc-800 flex items-center justify-between">
           {dop && (
