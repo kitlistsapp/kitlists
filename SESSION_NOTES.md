@@ -4,6 +4,10 @@ Last updated: 10 May 2026
 ## Live URL
 https://kitlist-theta.vercel.app
 
+## Start command (fresh Terminal)
+source ~/.zshrc && cd ~/Desktop/kitlist && npm run dev
+Then go to: http://localhost:3000/dashboard
+
 ## Stack
 Next.js 16, Supabase (pzydgyqykcgdcikutzpg / Oceania Sydney), Tailwind, jsPDF + SheetJS, Vercel, Resend
 Repo: github.com/whitakerleebo/kitlist
@@ -14,35 +18,41 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 NEXT_PUBLIC_APP_URL = https://kitlist-theta.vercel.app
 RESEND_API_KEY
 
-## UAT Status — ALL DONE except data tables
-- Section 1: Profile — billing address, ABN, camera prefs, templates ✅
-- Section 2: Dashboard — copy job with equipment, edit job details ✅
-- Section 3: Power — blank qty default, Onboard/Block/AC/DC ✅
-- Section 4: Head & Tripod — new section (detailed list TBC from Lee) ✅
-- Section 5: Grip — new items, UAP-3 renamed ✅
-- Section 6: Onboard monitors updated ✅
-- Section 7: Wireless Focus Kits renamed, ARRI WCU-4 added ✅
-- Section 8: ARRI LMB-4 added to Matte Box ✅
-- Section 9: Follow Focus — FF4 only ✅
-- Section 10: Zoom Controller renamed, new options ✅
-- Section 11: Misc AKS fixes ✅
-- Section 12: DOP Owned flag on all equipment ✅
-- Mobile optimisation across all pages ✅
-- Templates — save from list, use on new list ✅
+## Test accounts
+- whitakerleebo@gmail.com (Aaron McKlisky / Aaron M Pty Ltd)
+- lee@hyperautomate.com.au (Joel Mc / Joel Mc DOP Pty Ltd)
 
-## Still Outstanding
-- D1: Film cameras list (Lee to provide Super 16 + Super 35)
+## All UAT Complete ✅
+- Sections 1-12 from UAT brief all done
+- Mobile optimisation across all pages
+- Templates (save from list, use on new list)
+- DOP owned + AC owned flags on all equipment
+- AC owned shows to rental house + focus puller, hidden from production clean view
+- Dashboard server-side fetch (fast load)
+- Email preview modal on share page
+- Signup captures name, phone, company
+- Signup → sign in flow automatic
+- DOP logo + company name in dashboard nav
+- LUT upload uses original filename
+- Film cameras: ARRI 435, ARRI 416 added
+
+## Outstanding / Backlog
+- D1: Film cameras expanded list (Lee to provide Super 16 + Super 35)
 - D2: Expanded lens database
 - D3: More aspect ratio options
 - 4.2: Head & Tripod detailed equipment list (Lee to provide)
-- Domain registration (crewflow.app or similar)
-- Custom domain on Vercel
-- Resend domain verification
+- Domain registration (crewflow.app or similar on Namecheap/Porkbun)
+- Custom domain on Vercel once registered
+- Resend domain verification (change from: onboarding@resend.dev to noreply@crewflow.app in app/api/send-share/route.ts)
 - Landing page at /
+- Sign out button on dashboard (currently only theme toggle + name showing)
 
 ## Email
 Resend sandbox — sends to whitakerleebo@gmail.com only until domain verified
-Fix: change from address in app/api/send-share/route.ts
+Fix when domain ready: change from address in app/api/send-share/route.ts
 
-## Test account
-whitakerleebo@gmail.com
+## Key architecture notes
+- Supabase email confirmation: DISABLED (Authentication → Providers → Email)
+- All storage buckets: private (logos, luts, list-files)
+- Source values: rental | dop_owned | ac_owned
+- Camera page items constraint allows: power, aks, grip, filtration, head_tripod
