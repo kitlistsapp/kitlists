@@ -193,8 +193,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             </a>
           </div>
 
-        </div>
-        <a href={`/lists/${id}/files`} className="block bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-xl overflow-hidden transition-colors group">
+          <a href={`/lists/${id}/files`} className="block bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-xl overflow-hidden transition-colors group mt-0">
             <div className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className={`w-2 h-2 rounded-full ${ files && files.length > 0 ? 'bg-orange-400' : 'bg-zinc-700' }`} />
@@ -216,6 +215,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             )}
           </a>
 
+        </div>
       </main>
     </div>
   )
