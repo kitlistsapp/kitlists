@@ -55,7 +55,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
         </span>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-10">
+      <main className="max-w-3xl mx-auto px-4 py-6">
 
         {dop && (
           <div className="flex items-center gap-4 mb-8 pb-8 border-b border-zinc-800">
@@ -108,7 +108,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                   {isProduction && cam.camera_body_source === 'dop_owned' && <span className="text-xs bg-zinc-800 text-zinc-500 px-2.5 py-1 rounded-full">Supplied</span>}
                 </div>
                 {cam.bodyName && <p className="text-white font-medium mb-4">{cam.bodyName}</p>}
-                <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                   {powerItems.length > 0 && <div><span className="text-zinc-600 text-xs uppercase tracking-wider">Power</span>{powerItems.map((i: any) => <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</p>)}</div>}
                   {aksItems.length > 0 && <div><span className="text-zinc-600 text-xs uppercase tracking-wider">AKS</span>{aksItems.map((i: any) => <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</p>)}</div>}
                   {gripItems.length > 0 && <div className="mt-2"><span className="text-zinc-600 text-xs uppercase tracking-wider">Grip</span>{gripItems.map((i: any) => <p key={i.id} className="text-zinc-300 text-sm mt-1">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</p>)}</div>}

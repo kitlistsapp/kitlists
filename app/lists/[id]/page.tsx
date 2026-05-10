@@ -34,7 +34,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-10">
+      <main className="max-w-3xl mx-auto px-4 py-6">
         <div className="flex items-start justify-between mb-8">
           <div>
             <h2 className="text-2xl font-bold">{list.project_name}</h2>

@@ -105,7 +105,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-10">
+      <main className="max-w-3xl mx-auto px-4 py-6">
         <h2 className="text-2xl font-bold mb-8">Shoot specs</h2>
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 space-y-6">
 

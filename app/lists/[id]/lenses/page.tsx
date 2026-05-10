@@ -165,7 +165,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-zinc-500 text-xs mb-2">1. Select brand</p>
                 <input type="text" value={brandSearch} onChange={e => setBrandSearch(e.target.value)} placeholder="Search brands..."
@@ -242,7 +242,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-zinc-500 text-xs mb-2">1. Select brand</p>
                 <div className="border border-zinc-800 rounded-xl overflow-hidden max-h-48 overflow-y-auto">

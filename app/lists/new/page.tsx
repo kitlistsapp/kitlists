@@ -71,13 +71,13 @@ export default function NewListPage() {
         </a>
       </nav>
 
-      <main className="max-w-2xl mx-auto px-6 py-10">
+      <main className="max-w-2xl mx-auto px-4 py-6">
         <div className="mb-8">
           <h2 className="text-2xl font-bold">New Gear List</h2>
           <p className="text-zinc-500 text-sm mt-1">Set up your project details to get started</p>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 space-y-6">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 space-y-5">
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Project name <span className="text-orange-400">*</span></label>

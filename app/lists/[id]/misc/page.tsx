@@ -82,7 +82,7 @@ export default function MiscPage({ params }: { params: Promise<{ id: string }> }
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-10">
+      <main className="max-w-3xl mx-auto px-4 py-6">
         <h2 className="text-2xl font-bold mb-2">Misc AKS</h2>
         <p className="text-zinc-500 text-sm mb-8">Additional accessories for the whole package</p>
 

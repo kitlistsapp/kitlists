@@ -157,7 +157,7 @@ export default function ProfilePage() {
         <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Back to dashboard</a>
       </nav>
 
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
         <h2 className="text-2xl font-bold">Profile</h2>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">

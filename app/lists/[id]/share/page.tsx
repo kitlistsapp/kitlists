@@ -80,7 +80,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
         <a href={`/lists/${listId}`} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
       </nav>
 
-      <main className="max-w-2xl mx-auto px-6 py-10">
+      <main className="max-w-2xl mx-auto px-4 py-6">
         <h2 className="text-2xl font-bold mb-2">Share this list</h2>
         <p className="text-zinc-500 text-sm mb-8">Generate links to share with your rental house, focus puller, or production</p>
 
@@ -97,7 +97,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
 
             <div>
               <label className="text-zinc-400 text-sm mb-2 block">Recipient type</label>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {['rental', 'ac', 'production'].map(r => (
                   <button key={r} onClick={() => { setNewRole(r); if (r === 'production') { setNewMode('production_clean') } else { setNewMode('full') } }}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${ newRole === r ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' }`}>
@@ -109,7 +109,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
 
             <div>
               <label className="text-zinc-400 text-sm mb-2 block">View mode</label>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <button onClick={() => setNewMode('full')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${ newMode === 'full' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' }`}>
                   Full — shows DOP ownership
