@@ -44,7 +44,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
     const res = await fetch('/api/send-share', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ shareId: share.id, recipientEmail: share.recipient_email, listName, dopName, companyName, token: share.token })
+      body: JSON.stringify({ shareId: share.id, recipientEmail: share.recipient_email, listName, dopName, companyName, token: share.token, listId })
     })
     setSending(null)
     if (res.ok) { setSent(share.id); setTimeout(() => setSent(null), 3000) }
