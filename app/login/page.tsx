@@ -71,13 +71,13 @@ export default function LoginPage() {
                 <div>
                   <label className="text-zinc-400 text-sm mb-1.5 block">Full name</label>
                   <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
-                    placeholder="e.g. Aaron McKlisky ACS"
+                    placeholder="e.g. John Smith ACS"
                     className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
                 </div>
                 <div>
                   <label className="text-zinc-400 text-sm mb-1.5 block">Company name</label>
                   <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)}
-                    placeholder="e.g. McLisky Camera Co"
+                    placeholder="e.g. My Company Pty Ltd"
                     className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
                 </div>
                 <div>
