@@ -30,7 +30,11 @@ export default function LoginPage() {
           phone: phone.trim(),
           company_name: companyName.trim()
         }).eq('id', data.user.id)
-        setMessage('Check your email to confirm your account.')
+        setMessage('Account created! Please sign in.')
+        setIsSignUp(false)
+        setFullName('')
+        setPhone('')
+        setCompanyName('')
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
