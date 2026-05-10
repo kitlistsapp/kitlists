@@ -13,6 +13,9 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
   const [newMode, setNewMode] = useState('full')
   const [copied, setCopied] = useState<string | null>(null)
   const [sending, setSending] = useState<string | null>(null)
+  const [previewShare, setPreviewShare] = useState<any | null>(null)
+  const [previewHtml, setPreviewHtml] = useState('')
+  const [loadingPreview, setLoadingPreview] = useState(false)
   const [sent, setSent] = useState<string | null>(null)
   const [listName, setListName] = useState('')
   const [dopName, setDopName] = useState('')
@@ -48,6 +51,19 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
     })
     setSending(null)
     if (res.ok) { setSent(share.id); setTimeout(() => setSent(null), 3000) }
+  }
+
+  const previewEmail = async (share: any) => {
+    setLoadingPreview(true)
+    setPreviewShare(share)
+    const res = await fetch('/api/preview-share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ listId, listName, dopName, companyName, token: share.token })
+    })
+    const data = await res.json()
+    setPreviewHtml(data.html || '')
+    setLoadingPreview(false)
   }
 
   const createShare = async () => {
@@ -146,6 +162,10 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
                   {share.recipient_email && <p className="text-zinc-500 text-xs mt-1">{share.recipient_email}</p>}
                 </div>
                 <div className="flex items-center gap-2">
+                  <button onClick={e => { e.stopPropagation(); previewEmail(share) }}
+                      className="bg-zinc-700 hover:bg-zinc-600 text-zinc-200 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
+                      Preview
+                    </button>
                   {share.recipient_email && (
                     <button onClick={e => { e.stopPropagation(); sendEmail(share) }} disabled={sending === share.id}
                       className="bg-orange-400 hover:bg-orange-300 text-black text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50">
@@ -166,6 +186,37 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
           </div>
         )}
       </main>
+      {previewShare && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setPreviewShare(null)}>
+          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+              <div>
+                <h3 className="font-semibold text-zinc-900 text-sm">Email preview</h3>
+                <p className="text-zinc-500 text-xs mt-0.5">This is what the recipient will see</p>
+              </div>
+              <button onClick={() => setPreviewShare(null)} className="text-zinc-400 hover:text-zinc-600 text-xl">×</button>
+            </div>
+            <div className="overflow-y-auto flex-1">
+              {loadingPreview ? (
+                <div className="flex items-center justify-center py-20">
+                  <p className="text-zinc-400 text-sm">Loading preview...</p>
+                </div>
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
+              )}
+            </div>
+            {previewShare.recipient_email && (
+              <div className="px-5 py-4 border-t border-gray-200 flex items-center justify-between">
+                <p className="text-zinc-500 text-xs">To: {previewShare.recipient_email}</p>
+                <button onClick={() => { sendEmail(previewShare); setPreviewShare(null) }} disabled={sending === previewShare.id}
+                  className="bg-orange-400 hover:bg-orange-300 text-black text-xs font-semibold px-4 py-2 rounded-lg disabled:opacity-50">
+                  {sending === previewShare.id ? 'Sending...' : 'Send now'}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

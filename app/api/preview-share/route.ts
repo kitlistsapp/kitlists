@@ -1,0 +1,93 @@
+import { createClient } from '@/lib/supabase/server'
+import { NextResponse } from 'next/server'
+
+export async function POST(request: Request) {
+  const { listId, dopName, companyName, token } = await request.json()
+  const supabase = await createClient()
+  const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/share/${token}`
+
+  const { data: list } = await supabase.from('gear_lists').select('*, rental_houses(name)').eq('id', listId).single()
+  const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', listId).order('sort_order')
+  const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
+    const { data: items } = await supabase.from('camera_page_items').select('*, equipment_items(name, subcategory)').eq('page_id', cam.id)
+    return { ...cam, items: items || [] }
+  }))
+  const { data: lenses } = await supabase.from('list_lenses').select('*, equipment_items(name), list_lens_zooms(*, equipment_items(name))').eq('list_id', listId).maybeSingle()
+  const { data: misc } = await supabase.from('list_misc_items').select('*, equipment_items(name)').eq('list_id', listId)
+  const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', listId).maybeSingle()
+  const { data: listLuts } = await supabase.from('list_lut_files').select('*').eq('list_id', listId)
+
+  const row = (label: string, value: string) => value ? `
+    <tr>
+      <td style='padding: 8px 12px; color: #71717a; font-size: 13px; white-space: nowrap; vertical-align: top; width: 180px;'>${label}</td>
+      <td style='padding: 8px 12px; color: #ffffff; font-size: 13px;'>${value}</td>
+    </tr>` : ''
+
+  const sectionHeader = (title: string) => `
+    <tr>
+      <td colspan='2' style='padding: 16px 12px 4px; color: #fb923c; font-size: 11px; font-weight: bold; letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid #27272a;'>${title}</td>
+    </tr>`
+
+  let tableRows = ''
+  tableRows += row('Project', list?.project_name || '')
+  tableRows += row('Production Co', list?.production_co || '')
+  tableRows += row('Shoot Start', list?.shoot_start ? new Date(list.shoot_start).toLocaleDateString('en-AU') : '')
+  tableRows += row('Shoot Days', list?.shoot_days ? String(list.shoot_days) : '')
+  tableRows += row('Rental House', list?.rental_houses?.name || '')
+
+  for (const cam of camItems) {
+    const bodyName = cam.equipment_items?.name
+    if (!bodyName && cam.items.length === 0) continue
+    const power = cam.items.filter((i: any) => i.section === 'power')
+    const aks = cam.items.filter((i: any) => i.section === 'aks')
+    const grip = cam.items.filter((i: any) => i.section === 'grip')
+    const filt = cam.items.filter((i: any) => i.section === 'filtration')
+    tableRows += sectionHeader(cam.label)
+    if (bodyName) tableRows += row('Camera Body', bodyName)
+    if (power.length > 0) tableRows += row('Power', power.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.quantity > 1 ? ' x' + i.quantity : ''}`).join('<br>'))
+    if (aks.length > 0) tableRows += row('AKS', aks.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.quantity > 1 ? ' x' + i.quantity : ''}`).join('<br>'))
+    if (grip.length > 0) tableRows += row('Grip', grip.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.quantity > 1 ? ' x' + i.quantity : ''}`).join('<br>'))
+    if (filt.length > 0) tableRows += row('Filtration', filt.map((i: any) => `${i.equipment_items?.name || i.custom_label}`).join('<br>'))
+    if (cam.camera_notes) tableRows += row('Notes', cam.camera_notes)
+  }
+
+  if (lenses) {
+    tableRows += sectionHeader('Lenses')
+    if (lenses.equipment_items?.name) tableRows += row('Prime Set', lenses.equipment_items.name)
+    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths', lenses.focal_lengths.join(', '))
+    if (lenses.list_lens_zooms?.length > 0) tableRows += row('Zooms', lenses.list_lens_zooms.map((z: any) => z.equipment_items?.name).filter(Boolean).join('<br>'))
+    if (lenses.zoom_controller) tableRows += row('Controller', lenses.zoom_controller)
+  }
+
+  if (misc && misc.length > 0) {
+    tableRows += sectionHeader('Other Accessories')
+    tableRows += row('Items', misc.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.notes ? ' — ' + i.notes : ''}`).join('<br>'))
+  }
+
+  if (specs) {
+    tableRows += sectionHeader('Shoot Specs')
+    if (specs.format) tableRows += row('Format / Codec', specs.format)
+    if (specs.resolution) tableRows += row('Resolution', specs.resolution)
+    if (specs.fps) tableRows += row('Frame Rate', specs.fps)
+    if (specs.aspect_ratio) tableRows += row('Aspect Ratio', specs.aspect_ratio)
+    if (listLuts && listLuts.length > 0) tableRows += row('LUT(s)', listLuts.map((l: any) => l.name).join('<br>') + '<br><span style="color:#71717a;font-size:11px;">Download from the link below</span>')
+    if (specs.job_notes) tableRows += row('Notes', specs.job_notes)
+  }
+
+  const html = `
+    <div style='font-family: helvetica, arial, sans-serif; max-width: 640px; margin: 0 auto; background: #09090b; color: #fff; padding: 32px;'>
+      <h1 style='font-size: 22px; font-weight: bold; margin: 0 0 4px;'>Kit<span style='color: #fb923c;'>List</span></h1>
+      <p style='color: #71717a; font-size: 11px; margin: 0 0 24px; letter-spacing: 0.1em; text-transform: uppercase;'>Camera Equipment Platform</p>
+      <hr style='border: none; border-top: 1px solid #27272a; margin: 0 0 24px;' />
+      <p style='color: #a1a1aa; font-size: 13px; margin: 0 0 4px;'>${dopName}${companyName ? ' &middot; ' + companyName : ''} has sent you a gear list.</p>
+      <table style='width: 100%; border-collapse: collapse; margin: 16px 0 24px;'>
+        <tbody>${tableRows}</tbody>
+      </table>
+      <a href='${shareUrl}' style='display: inline-block; background: #fb923c; color: #000; font-weight: bold; font-size: 13px; padding: 12px 24px; border-radius: 8px; text-decoration: none;'>View online</a>
+      <hr style='border: none; border-top: 1px solid #27272a; margin: 32px 0 16px;' />
+      <p style='color: #3f3f46; font-size: 11px; margin: 0;'>Powered by KitList</p>
+    </div>
+  `
+
+  return NextResponse.json({ html })
+}
