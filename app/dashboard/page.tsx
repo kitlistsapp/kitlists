@@ -71,7 +71,47 @@ export default function DashboardPage() {
     if (newList) {
       const { data: cameras } = await supabase.from('camera_pages').select('*').eq('list_id', list.id)
       if (cameras && cameras.length > 0) {
-        await supabase.from('camera_pages').insert(cameras.map((c: any) => ({ list_id: newList.id, label: c.label, sort_order: c.sort_order })))
+        for (const cam of cameras) {
+          const { data: newCam } = await supabase.from('camera_pages').insert({
+            list_id: newList.id, label: cam.label, sort_order: cam.sort_order,
+            camera_body_id: cam.camera_body_id, camera_body_source: cam.camera_body_source,
+            camera_notes: cam.camera_notes, camera_format: cam.camera_format
+          }).select().single()
+          if (newCam) {
+            const { data: items } = await supabase.from('camera_page_items').select('*').eq('page_id', cam.id)
+            if (items && items.length > 0) {
+              await supabase.from('camera_page_items').insert(items.map((i: any) => ({
+                page_id: newCam.id, section: i.section, item_id: i.item_id,
+                custom_label: i.custom_label, source: i.source, quantity: i.quantity
+              })))
+            }
+          }
+        }
+      }
+      const { data: lenses } = await supabase.from('list_lenses').select('*, list_lens_zooms(*)').eq('list_id', list.id).maybeSingle()
+      if (lenses) {
+        const { data: newLenses } = await supabase.from('list_lenses').insert({
+          list_id: newList.id, prime_set_id: lenses.prime_set_id,
+          focal_lengths: lenses.focal_lengths, zoom_controller: lenses.zoom_controller, source: lenses.source
+        }).select().single()
+        if (newLenses && lenses.list_lens_zooms?.length > 0) {
+          await supabase.from('list_lens_zooms').insert(lenses.list_lens_zooms.map((z: any) => ({
+            list_lens_id: newLenses.id, item_id: z.item_id, source: z.source
+          })))
+        }
+      }
+      const { data: misc } = await supabase.from('list_misc_items').select('*').eq('list_id', list.id)
+      if (misc && misc.length > 0) {
+        await supabase.from('list_misc_items').insert(misc.map((i: any) => ({
+          list_id: newList.id, item_id: i.item_id, custom_label: i.custom_label, source: i.source, notes: i.notes
+        })))
+      }
+      const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
+      if (specs) {
+        await supabase.from('shoot_specs').insert({
+          list_id: newList.id, format: specs.format, resolution: specs.resolution,
+          fps: specs.fps, lut: specs.lut, aspect_ratio: specs.aspect_ratio, job_notes: specs.job_notes
+        })
       }
       router.push('/lists/' + newList.id)
     }
