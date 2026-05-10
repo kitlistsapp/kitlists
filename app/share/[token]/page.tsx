@@ -34,10 +34,11 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   const { data: misc } = await supabase.from('list_misc_items').select('*, equipment_items(name)').eq('list_id', list.id)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
 
-  const { data: listLuts } = await supabase.from('list_lut_files').select('*').eq('list_id', list.id)
+  const { data: listLuts } = await supabase.from('list_lut_files').select('*, user_luts(file_url)').eq('list_id', list.id)
   const lutsWithUrls = await Promise.all((listLuts || []).map(async (lut: any) => {
-    if (lut.file_path) {
-      const { data: signed } = await supabase.storage.from('luts').createSignedUrl(lut.file_path, 3600)
+    const filePath = lut.file_path || lut.user_luts?.file_url
+    if (filePath) {
+      const { data: signed } = await supabase.storage.from('luts').createSignedUrl(filePath, 3600)
       return { ...lut, signedUrl: signed?.signedUrl || null }
     }
     return { ...lut, signedUrl: null }
