@@ -67,7 +67,11 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                     <div>
                       <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">{cam.label}</h3>
                       {bodyName ? (
-                        <p className="text-zinc-500 text-xs mt-0.5">{bodyName}{cam.camera_body_source === 'dop_owned' ? ' · DOP owned' : ''}</p>
+                        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                          <span className="text-zinc-500 text-xs">{bodyName}</span>
+                          {cam.camera_body_source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP</span>}
+                          {cam.camera_body_source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC</span>}
+                        </div>
                       ) : (
                         <p className="text-zinc-700 text-xs mt-0.5">No camera selected</p>
                       )}
@@ -87,25 +91,49 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                     {powerItems.length > 0 && (
                       <div>
                         <span className="text-zinc-600 text-xs uppercase tracking-wider">Power</span>
-                        {powerItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                        {powerItems.map((i: any) => (
+                          <div key={i.id} className="flex items-center gap-1 mt-0.5">
+                            <span className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                            {i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1 py-0.5 rounded-full">DOP</span>}
+                            {i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1 py-0.5 rounded-full">AC</span>}
+                          </div>
+                        ))}
                       </div>
                     )}
                     {aksItems.length > 0 && (
                       <div>
                         <span className="text-zinc-600 text-xs uppercase tracking-wider">AKS</span>
-                        {aksItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                        {aksItems.map((i: any) => (
+                          <div key={i.id} className="flex items-center gap-1 mt-0.5">
+                            <span className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                            {i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1 py-0.5 rounded-full">DOP</span>}
+                            {i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1 py-0.5 rounded-full">AC</span>}
+                          </div>
+                        ))}
                       </div>
                     )}
                     {gripItems.length > 0 && (
                       <div className="mt-2">
                         <span className="text-zinc-600 text-xs uppercase tracking-wider">Grip</span>
-                        {gripItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                        {gripItems.map((i: any) => (
+                          <div key={i.id} className="flex items-center gap-1 mt-0.5">
+                            <span className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                            {i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1 py-0.5 rounded-full">DOP</span>}
+                            {i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1 py-0.5 rounded-full">AC</span>}
+                          </div>
+                        ))}
                       </div>
                     )}
                     {filtItems.length > 0 && (
                       <div className="mt-2">
                         <span className="text-zinc-600 text-xs uppercase tracking-wider">Filtration</span>
-                        {filtItems.map((i: any) => <p key={i.id} className="text-zinc-400 text-xs mt-0.5">{i.equipment_items?.name || i.custom_label}</p>)}
+                        {filtItems.map((i: any) => (
+                          <div key={i.id} className="flex items-center gap-1 mt-0.5">
+                            <span className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                            {i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1 py-0.5 rounded-full">DOP</span>}
+                            {i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1 py-0.5 rounded-full">AC</span>}
+                          </div>
+                        ))}
                       </div>
                     )}
                     {cam.camera_notes && (
@@ -173,7 +201,11 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             {misc && misc.length > 0 && (
               <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
                 {misc.map((i: any) => (
-                  <p key={i.id} className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.notes ? ` · ${i.notes}` : ''}{i.source === 'dop_owned' ? ' · DOP owned' : ''}</p>
+                  <div key={i.id} className="flex items-center gap-1.5">
+                    <span className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.notes ? ` · ${i.notes}` : ''}</span>
+                    {i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1 py-0.5 rounded-full">DOP</span>}
+                    {i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1 py-0.5 rounded-full">AC</span>}
+                  </div>
                 ))}
               </div>
             )}
