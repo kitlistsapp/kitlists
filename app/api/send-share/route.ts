@@ -113,8 +113,6 @@ export async function POST(request: Request) {
     }
   }
 
-  console.log('send-share called, recipientEmail:', recipientEmail, 'listId:', listId)
-
   try {
     const { data, error } = await resend.emails.send({
       from: 'KitList <onboarding@resend.dev>',
@@ -123,10 +121,9 @@ export async function POST(request: Request) {
       html,
       attachments: attachments.length > 0 ? attachments : undefined
     })
-    if (error) { console.log('Resend error:', error); return NextResponse.json({ error }, { status: 400 }) }
+    if (error) return NextResponse.json({ error }, { status: 400 })
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.log('Caught error:', err)
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }
