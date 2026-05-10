@@ -28,12 +28,13 @@ export default function SaveAsTemplate({ listId }: { listId: string }) {
 
     const snapshot = { list, cameras: camData, lenses, misc, specs }
 
-    await supabase.from('templates').insert({
+    const { error } = await supabase.from('templates').insert({
       owner_id: user.id,
       house_id: list?.house_id || null,
       name: name.trim(),
       snapshot
     })
+    if (error) { console.log('Template save error:', error); setSaving(false); return }
 
     setSaving(false)
     setSaved(true)
