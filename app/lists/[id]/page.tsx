@@ -194,24 +194,27 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
           </div>
 
         </div>
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+        <a href={`/lists/${id}/files`} className="block bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-xl overflow-hidden transition-colors group">
             <div className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className={`w-2 h-2 rounded-full ${ files && files.length > 0 ? 'bg-orange-400' : 'bg-zinc-700' }`} />
                 <div>
-                  <h3 className="text-white font-semibold">Files</h3>
-                  <p className="text-zinc-700 text-xs mt-0.5">{files && files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''}` : 'No files attached'}</p>
+                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Files</h3>
+                  <p className="text-zinc-600 text-xs mt-0.5">{files && files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''}` : 'No files attached'}</p>
                 </div>
               </div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
             {files && files.length > 0 && (
-              <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-1">
+              <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
                 {files.map((f: any) => (
                   <p key={f.id} className="text-zinc-400 text-xs">{f.name}</p>
                 ))}
               </div>
             )}
-          </div>
+          </a>
 
       </main>
     </div>
