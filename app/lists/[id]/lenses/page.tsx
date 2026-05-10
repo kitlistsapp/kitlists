@@ -157,7 +157,11 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                       <p className="text-zinc-500 text-xs">{lens.brand}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button onClick={() => toggleLensSource(lens.id)} className={`text-xs px-2.5 py-1 rounded-full transition-colors ${ lens.source === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-700 text-zinc-300' }`}>{lens.source === 'dop_owned' ? 'DOP owned' : 'Rental'}</button>
+                      <div className="flex gap-1">
+                        <button onClick={() => setSelectedLenses(prev => prev.map(l => l.id === lens.id ? {...l, source: 'rental'} : l))} className={"text-xs px-2 py-1 rounded-full transition-colors " + (lens.source === 'rental' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-400')}>Rental</button>
+                        <button onClick={() => setSelectedLenses(prev => prev.map(l => l.id === lens.id ? {...l, source: 'dop_owned'} : l))} className={"text-xs px-2 py-1 rounded-full transition-colors " + (lens.source === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400')}>DOP</button>
+                        <button onClick={() => setSelectedLenses(prev => prev.map(l => l.id === lens.id ? {...l, source: 'ac_owned'} : l))} className={"text-xs px-2 py-1 rounded-full transition-colors " + (lens.source === 'ac_owned' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-400')}>AC</button>
+                      </div>
                       <button onClick={() => removeLens(lens.id)} className="text-zinc-600 hover:text-red-400 text-lg transition-colors">×</button>
                     </div>
                   </div>

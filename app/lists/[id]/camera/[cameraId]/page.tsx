@@ -118,6 +118,10 @@ function SectionList({ title, items, entries, setEntries }: {
                   className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
                   DOP owned
                 </button>
+                <button onClick={() => update(entry.id, 'source', 'ac_owned')}
+                  className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'ac_owned' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
+                  AC owned
+                </button>
               </div>
             )}
           </div>
@@ -244,8 +248,9 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
           <SearchablePicker items={bodies} value={selectedBody} onChange={id => setSelectedBody(id)} placeholder="Search camera bodies..." />
           {selectedBody && (
             <div className="flex gap-2 mt-3">
-              <button onClick={() => setBodySource('rental')} className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === 'rental' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>Rental house</button>
+              <button onClick={() => setBodySource('rental')} className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === 'rental' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>Rental</button>
               <button onClick={() => setBodySource('dop_owned')} className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>DOP owned</button>
+              <button onClick={() => setBodySource('ac_owned')} className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === 'ac_owned' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>AC owned</button>
             </div>
           )}
         </div>
@@ -279,6 +284,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
                   <div className="flex gap-1 ml-1">
                     <button onClick={() => updatePower(idx, 'source', 'rental')} className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'rental' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>Rental</button>
                     <button onClick={() => updatePower(idx, 'source', 'dop_owned')} className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>DOP owned</button>
+                    <button onClick={() => updatePower(idx, 'source', 'ac_owned')} className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'ac_owned' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>AC owned</button>
                   </div>
                 )}
               </div>
@@ -332,6 +338,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
                   <div className="flex gap-1">
                     <button onClick={() => updateAks(idx, 'source', 'rental')} className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'rental' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>Rental</button>
                     <button onClick={() => updateAks(idx, 'source', 'dop_owned')} className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>DOP owned</button>
+                    <button onClick={() => updateAks(idx, 'source', 'ac_owned')} className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === 'ac_owned' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>AC owned</button>
                   </div>
                 )}
               </div>
