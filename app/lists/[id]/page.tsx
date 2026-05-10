@@ -46,6 +46,18 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               {list.shoot_days && <span>{list.shoot_days} days</span>}
             </div>
           </div>
+        </div>
+        <div className="mt-3">
+          <SaveAsTemplate listId={id} />
+        </div>
+        <div className="hidden">
+        </div>
+        <div className="flex gap-2 flex-wrap mb-6">
+          <a href={`/lists/${id}/share`} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
+          <a href={`/lists/${id}/edit`} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm transition-colors">Edit details</a>
+          <SaveAsTemplate listId={id} />
+        </div>
+        <div className="hidden">
           <span className={`text-xs px-3 py-1 rounded-full font-medium ${ list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400" }`}>{list.status}</span>
         </div>
 
@@ -145,7 +157,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                 {lenses.list_lens_zooms?.map((z: any) => (
                   <p key={z.id} className="text-zinc-400 text-xs">{z.equipment_items?.name}</p>
                 ))}
-                {lenses.zoom_controller && (
+                {lenses.zoom_controller && !lenses.zoom_controller.includes('-') && (
                   <p className="text-zinc-400 text-xs">Controller: {lenses.zoom_controller}</p>
                 )}
                 {lenses.source === 'dop_owned' && <p className="text-zinc-600 text-xs">DOP owned</p>}
