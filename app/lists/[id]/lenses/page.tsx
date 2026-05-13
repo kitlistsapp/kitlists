@@ -227,7 +227,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
           </div>
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Focal lengths</h3>
+            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Focal lengths (approximate)</h3>
             <div className="flex flex-wrap gap-2">
               {focalLengths.map(fl => (
                 <button key={fl.id} onClick={() => setSelectedFocalLengths(prev => prev.includes(fl.id) ? prev.filter(x => x !== fl.id) : [...prev, fl.id])}
