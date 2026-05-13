@@ -22,6 +22,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const gripItems = (listItems || []).filter((i: any) => i.section === "grip")
   const filtrationItems = (listItems || []).filter((i: any) => i.section === "filtration")
   const aksItems = (listItems || []).filter((i: any) => i.section === "aks")
+  const getSectionNotes = (section: string) => (sectionNotesList || []).find((n: any) => n.section === section)?.notes || ''
 
   const arrow = (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors flex-shrink-0">
@@ -39,7 +40,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
     return null
   }
 
-  const sectionCard = (title: string, href: string, items: any[], emptyText = "Not configured") => (
+  const sectionCard = (title: string, href: string, items: any[], emptyText = "Not configured", notes = "") => (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
       <a href={href} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
         <div className="flex items-center gap-3">
@@ -64,6 +65,15 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             </div>
           ))}
         </div>
+      )}
+      {notes && (
+        <details className="border-t border-zinc-800">
+          <summary className="px-6 py-2.5 text-xs text-zinc-500 cursor-pointer hover:text-zinc-300 list-none flex items-center gap-1.5 select-none">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="flex-shrink-0 details-arrow transition-transform"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            Notes
+          </summary>
+          <p className="px-6 pb-4 text-zinc-400 text-xs leading-relaxed">{notes}</p>
+        </details>
       )}
     </div>
   )
@@ -153,11 +163,11 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             )}
           </div>
 
-          {sectionCard("Power", `/lists/${id}/power`, powerItems)}
-          {sectionCard("Head & Tripod", `/lists/${id}/head-tripod`, headTripodItems)}
-          {sectionCard("Grip", `/lists/${id}/grip`, gripItems)}
-          {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems)}
-          {sectionCard("AKS", `/lists/${id}/aks`, aksItems)}
+          {sectionCard("Power", `/lists/${id}/power`, powerItems, "Not configured", getSectionNotes("power"))}
+          {sectionCard("Head & Tripod", `/lists/${id}/head-tripod`, headTripodItems, "Not configured", getSectionNotes("head_tripod"))}
+          {sectionCard("Grip", `/lists/${id}/grip`, gripItems, "Not configured", getSectionNotes("grip"))}
+          {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems, "Not configured", getSectionNotes("filtration"))}
+          {sectionCard("AKS", `/lists/${id}/aks`, aksItems, "Not configured", getSectionNotes("aks"))}
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <a href={`/lists/${id}/specs`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
