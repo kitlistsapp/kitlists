@@ -25,14 +25,17 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   }
 
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', list.id).order('sort_order')
-  const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
-    const { data: items } = await supabase.from('camera_page_items').select('*, equipment_items(name)').eq('page_id', cam.id)
-    return { ...cam, bodyName: cam.equipment_items?.name, items: items || [] }
-  }))
-
   const { data: lenses } = await supabase.from('list_lenses').select('*, equipment_items(name), list_lens_zooms(*, equipment_items(name))').eq('list_id', list.id).maybeSingle()
-  const { data: misc } = await supabase.from('list_misc_items').select('*, equipment_items(name)').eq('list_id', list.id)
+  const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', list.id).order('sort_order')
+  const { data: sectionNotesList } = await supabase.from('list_section_notes').select('*').eq('list_id', list.id)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
+
+  const powerItems = (listItems || []).filter((i: any) => i.section === 'power')
+  const headTripodItems = (listItems || []).filter((i: any) => i.section === 'head_tripod')
+  const gripItems = (listItems || []).filter((i: any) => i.section === 'grip')
+  const filtrationItems = (listItems || []).filter((i: any) => i.section === 'filtration')
+  const aksItems = (listItems || []).filter((i: any) => i.section === 'aks')
+  const getSectionNote = (section: string) => (sectionNotesList || []).find((n: any) => n.section === section)?.notes || ''
 
   const { data: listLuts } = await supabase.from('list_lut_files').select('*, user_luts(file_url)').eq('list_id', list.id)
   const lutsWithUrls = await Promise.all((listLuts || []).map(async (lut: any) => {
@@ -44,7 +47,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
     return { ...lut, signedUrl: null }
   }))
 
-  const listData = { list, cameras: camItems, lenses, misc, specs }
+  const listData = { list, cameras: cameras || [], lenses, specs, powerItems, headTripodItems, gripItems, filtrationItems, aksItems }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -86,7 +89,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               {specs.format && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.format}</span>}
               {specs.resolution && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.resolution}</span>}
               {specs.fps && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.fps}</span>}
-              {specs.lut && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.lut}</span>}
+              {lutsWithUrls && lutsWithUrls.length > 0 && lutsWithUrls.map((l: any) => <span key={l.id} className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{l.name}</span>)}
               {specs.aspect_ratio && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.aspect_ratio}</span>}
             </div>
             {specs.job_notes && <p className="text-zinc-500 text-sm mt-3">{specs.job_notes}</p>}
@@ -94,64 +97,124 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
         )}
 
         <div className="space-y-4">
-          {camItems.map((cam: any) => {
-            if (!cam.bodyName && cam.items.length === 0) return null
-            const powerItems = cam.items.filter((i: any) => i.section === 'power')
-            const aksItems = cam.items.filter((i: any) => i.section === 'aks')
-            const gripItems = cam.items.filter((i: any) => i.section === 'grip')
-            const filtItems = cam.items.filter((i: any) => i.section === 'filtration')
-            return (
-              <div key={cam.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <h3 className="font-semibold text-lg mb-3">{cam.label}</h3>
-                {cam.bodyName && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <p className="text-white font-medium">{cam.bodyName}</p>
-                    {!isProduction && cam.camera_body_source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-2 py-0.5 rounded-full">DOP owned</span>}
-                    {!isProduction && cam.camera_body_source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded-full">AC owned</span>}
-                    {isProduction && (cam.camera_body_source === 'dop_owned' || cam.camera_body_source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded-full">Supplied</span>}
-                  </div>
-                )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                  {powerItems.length > 0 && <div><span className="text-zinc-600 text-xs uppercase tracking-wider">Power</span>{powerItems.map((i: any) => <div key={i.id} className="flex items-center gap-1.5 mt-1"><span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>{!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP</span>}{!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC</span>}{isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}</div>)}</div>}
-                  {aksItems.length > 0 && <div><span className="text-zinc-600 text-xs uppercase tracking-wider">AKS</span>{aksItems.map((i: any) => <div key={i.id} className="flex items-center gap-1.5 mt-1"><span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>{!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP</span>}{!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC</span>}{isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}</div>)}</div>}
-                  {gripItems.length > 0 && <div className="mt-2"><span className="text-zinc-600 text-xs uppercase tracking-wider">Grip</span>{gripItems.map((i: any) => <div key={i.id} className="flex items-center gap-1.5 mt-1"><span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>{!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP</span>}{!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC</span>}{isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}</div>)}</div>}
-                  {filtItems.length > 0 && <div className="mt-2"><span className="text-zinc-600 text-xs uppercase tracking-wider">Filtration</span>{filtItems.map((i: any) => <div key={i.id} className="flex items-center gap-1.5 mt-1"><span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}</span>{!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP</span>}{!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC</span>}{isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}</div>)}</div>}
-                </div>
-                {cam.camera_notes && <p className="text-zinc-500 text-sm mt-4 pt-4 border-t border-zinc-800">{cam.camera_notes}</p>}
-                {share.role === 'rental' && <div className="mt-4 pt-4 border-t border-zinc-800"><p className="text-zinc-500 text-xs uppercase tracking-widest mb-1">Rental house notes</p><p className="text-zinc-400 text-sm">{cam.rental_notes || 'No notes added'}</p></div>}
-              </div>
-            )
-          })}
 
+          {/* Camera bodies */}
+          {(cameras || []).filter((cam: any) => cam.equipment_items?.name).map((cam: any) => (
+            <div key={cam.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-3">{cam.label}</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <p className="text-white font-medium">{cam.equipment_items?.name}</p>
+                {!isProduction && cam.camera_body_source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-2 py-0.5 rounded-full">DOP owned</span>}
+                {!isProduction && cam.camera_body_source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded-full">AC owned</span>}
+                {isProduction && (cam.camera_body_source === 'dop_owned' || cam.camera_body_source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded-full">Supplied</span>}
+              </div>
+              {cam.camera_notes && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{cam.camera_notes}</p>}
+              {share.role === 'rental' && <div className="mt-3 pt-3 border-t border-zinc-800"><p className="text-zinc-500 text-xs uppercase tracking-widest mb-1">Rental house notes</p><p className="text-zinc-400 text-sm">{cam.rental_notes || 'No notes added'}</p></div>}
+            </div>
+          ))}
+
+          {/* Lenses */}
           {lenses && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-lg">Lenses</h3>
-                {!isProduction && lenses.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-2.5 py-1 rounded-full">DOP owned</span>}
-                {isProduction && lenses.source === 'dop_owned' && <span className="text-xs bg-zinc-800 text-zinc-500 px-2.5 py-1 rounded-full">Supplied</span>}
-              </div>
+              <h3 className="font-semibold text-lg mb-4">Lenses</h3>
               {lenses.equipment_items?.name && <p className="text-white font-medium mb-3">{lenses.equipment_items.name}</p>}
-              {lenses.focal_lengths?.length > 0 && <p className="text-zinc-400 text-sm mb-2">Focal lengths: {lenses.focal_lengths.join(', ')}</p>}
+              {lenses.focal_lengths?.length > 0 && <p className="text-zinc-400 text-sm mb-2">Focal lengths (approx): {lenses.focal_lengths.join(', ')}</p>}
               {lenses.list_lens_zooms?.map((z: any) => <p key={z.id} className="text-zinc-400 text-sm">{z.equipment_items?.name}</p>)}
               {lenses.zoom_controller && <p className="text-zinc-500 text-sm mt-2">Controller: {lenses.zoom_controller}</p>}
+              {getSectionNote('lenses') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('lenses')}</p>}
             </div>
           )}
 
-          {misc && misc.length > 0 && (
+          {/* Power */}
+          {powerItems.length > 0 && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <h3 className="font-semibold text-lg mb-4">Misc AKS</h3>
+              <h3 className="font-semibold text-lg mb-4">Power</h3>
               <div className="space-y-2">
-                {misc.map((i: any) => (
-                  <div key={i.id} className="flex items-center justify-between">
-                    <div><span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}</span>{i.notes && <span className="text-zinc-600 text-xs ml-2">{i.notes}</span>}</div>
-                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-2 py-0.5 rounded-full">DOP owned</span>}
-                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded-full">AC owned</span>}
-                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded-full">Supplied</span>}
+                {powerItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
                   </div>
                 ))}
               </div>
+              {getSectionNote('power') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('power')}</p>}
             </div>
           )}
+
+          {/* Head & Tripod */}
+          {headTripodItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Head & Tripod</h3>
+              <div className="space-y-2">
+                {headTripodItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('head_tripod') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('head_tripod')}</p>}
+            </div>
+          )}
+
+          {/* Grip */}
+          {gripItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Grip</h3>
+              <div className="space-y-2">
+                {gripItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('grip') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('grip')}</p>}
+            </div>
+          )}
+
+          {/* Filtration */}
+          {filtrationItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Filtration</h3>
+              <div className="space-y-2">
+                {filtrationItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('filtration') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('filtration')}</p>}
+            </div>
+          )}
+
+          {/* AKS */}
+          {aksItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">AKS</h3>
+              <div className="space-y-2">
+                {aksItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('aks') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('aks')}</p>}
+            </div>
+          )}
+
         </div>
 
           {lutsWithUrls && lutsWithUrls.length > 0 && (
