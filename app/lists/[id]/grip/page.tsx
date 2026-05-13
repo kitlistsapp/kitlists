@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 
 interface Item { id: string; name: string; brand: string | null; subcategory: string | null; category: string }
-interface Entry { id: string; itemId: string; itemName: string; quantity: number; source: string; notes: string }
+interface Entry { id: string; itemId: string; itemName: string; quantity: number; source: string }
 
 function SearchablePicker({ items, value, onChange, placeholder }: {
   items: Item[]; value: string; onChange: (id: string, name: string) => void; placeholder: string
@@ -94,9 +94,9 @@ export default function GripPage({ params }: { params: Promise<{ id: string }> }
     if (eq) setAllItems(eq)
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
     if (existing && existing.length > 0) {
-      setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental', notes: i.notes || '' })))
+      setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental'})))
     } else {
-      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '' }])
+      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 0, source: 'rental' }])
     }
   }
 
@@ -112,7 +112,7 @@ export default function GripPage({ params }: { params: Promise<{ id: string }> }
       list_id: listId, owner_id: userId, section: 'grip',
       item_id: e.itemId.startsWith('custom:') ? null : e.itemId,
       custom_label: e.itemId.startsWith('custom:') ? e.itemName : null,
-      quantity: e.quantity, source: e.source, notes: e.notes, sort_order: i
+      quantity: e.quantity, source: e.source, sort_order: i
     }))
     if (rows.length > 0) await supabase.from('list_items').insert(rows)
     if (notesId) {
@@ -126,7 +126,7 @@ export default function GripPage({ params }: { params: Promise<{ id: string }> }
 
   const update = (id: string, field: string, value: any) => setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   const remove = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
-  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '' }])
+  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental' }])
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -168,9 +168,6 @@ export default function GripPage({ params }: { params: Promise<{ id: string }> }
                       </button>
                     ))}
                   </div>
-                  <input type="text" value={entry.notes} onChange={e => update(entry.id, 'notes', e.target.value)}
-                    placeholder="Notes (optional)..."
-                    className="w-full bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-400" />
                 </div>
               )}
             </div>
