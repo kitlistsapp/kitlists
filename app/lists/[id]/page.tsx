@@ -15,6 +15,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const { data: lenses } = await supabase.from("list_lenses").select("*, equipment_items(name), list_lens_zooms(*, equipment_items(name))").eq("list_id", id).maybeSingle()
   const { data: specs } = await supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle()
   const { data: files } = await supabase.from("list_files").select("*").eq("list_id", id).order("created_at")
+  const { data: listLuts } = await supabase.from("list_lut_files").select("*").eq("list_id", id).order("created_at")
   const { data: listItems } = await supabase.from("list_items").select("*, equipment_items(name, subcategory, category)").eq("list_id", id).order("sort_order")
   const { data: sectionNotesList } = await supabase.from("list_section_notes").select("*").eq("list_id", id)
 
@@ -186,7 +187,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                 <div>
                   <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Shoot specs</h3>
                   {specs ? (
-                    <p className="text-zinc-500 text-xs mt-0.5">{[specs.format, specs.resolution, specs.fps, specs.aspect_ratio].filter(Boolean).join(" · ")}</p>
+                    <p className="text-zinc-500 text-xs mt-0.5">{[specs.format, specs.resolution, specs.fps, specs.aspect_ratio, ...(listLuts && listLuts.length > 0 ? [listLuts.map((l: any) => l.name).join(", ")] : [])].filter(Boolean).join(" · ")}</p>
                   ) : (
                     <p className="text-zinc-700 text-xs mt-0.5">Not configured</p>
                   )}
