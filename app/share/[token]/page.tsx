@@ -47,6 +47,16 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
     return { ...lut, signedUrl: null }
   }))
 
+  const isAC = share.role === 'ac'
+  const { data: listFiles } = isAC ? await supabase.from('list_files').select('*').eq('list_id', list.id).order('created_at') : { data: [] }
+  const filesWithUrls = await Promise.all((listFiles || []).map(async (file: any) => {
+    if (file.file_path) {
+      const { data: signed } = await supabase.storage.from('list-files').createSignedUrl(file.file_path, 3600)
+      return { ...file, signedUrl: signed?.signedUrl || null }
+    }
+    return { ...file, signedUrl: null }
+  }))
+
   const listData = { list, cameras: cameras || [], lenses, specs, powerItems, headTripodItems, gripItems, filtrationItems, aksItems }
 
   return (
@@ -217,7 +227,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
 
         </div>
 
-          {lutsWithUrls && lutsWithUrls.length > 0 && (
+          {isAC && lutsWithUrls && lutsWithUrls.length > 0 && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-4">LUT Files</h3>
               <div className="space-y-2">
@@ -226,6 +236,25 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                     <span className="text-zinc-300 text-sm">{lut.name}</span>
                     {lut.signedUrl && (
                       <a href={lut.signedUrl} download
+                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-orange-400 px-3 py-1.5 rounded-lg transition-colors">
+                        Download
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {isAC && filesWithUrls && filesWithUrls.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Files</h3>
+              <div className="space-y-2">
+                {filesWithUrls.map((file: any) => (
+                  <div key={file.id} className="flex items-center justify-between">
+                    <span className="text-zinc-300 text-sm">{file.name}</span>
+                    {file.signedUrl && (
+                      <a href={file.signedUrl} download
                         className="text-xs bg-zinc-800 hover:bg-zinc-700 text-orange-400 px-3 py-1.5 rounded-lg transition-colors">
                         Download
                       </a>
