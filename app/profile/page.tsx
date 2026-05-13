@@ -124,9 +124,12 @@ export default function ProfilePage() {
   }
 
   const deleteLut = async (lut: Lut) => {
-    await supabase.storage.from('luts').remove([lut.file_url])
-    await supabase.from('user_luts').delete().eq('id', lut.id)
-    setLuts(prev => prev.filter(l => l.id !== lut.id))
+    if (lut.file_url) {
+      try { await supabase.storage.from('luts').remove([lut.file_url]) } catch {}
+    }
+    const { error } = await supabase.from('user_luts').delete().eq('id', lut.id)
+    if (!error) setLuts(prev => prev.filter(l => l.id !== lut.id))
+    else console.error('deleteLut error', error)
   }
 
   const deleteTemplate = async (id: string) => {
