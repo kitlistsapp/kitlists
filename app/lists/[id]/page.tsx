@@ -162,6 +162,15 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                 {lenses.zoom_controller && !lenses.zoom_controller.includes("-") && <p className="text-zinc-400 text-xs">Controller: {lenses.zoom_controller}</p>}
               </div>
             )}
+            {getSectionNotes("lenses") && (
+              <details className="border-t border-zinc-800">
+                <summary className="px-6 py-2.5 text-xs text-zinc-500 cursor-pointer hover:text-zinc-300 list-none flex items-center gap-1.5 select-none">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="flex-shrink-0"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Notes
+                </summary>
+                <p className="px-6 pb-4 text-zinc-400 text-xs leading-relaxed">{getSectionNotes("lenses")}</p>
+              </details>
+            )}
           </div>
 
           {sectionCard("Power", `/lists/${id}/power`, powerItems, "Not configured", getSectionNotes("power"))}
