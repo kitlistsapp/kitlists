@@ -112,7 +112,7 @@ export default function ProfilePage() {
     const uid = userIdRef.current || userId
     if (!file || !uid) return
     setLutUploading(true)
-    const lutName = file.name.replace(/\.[^.]+$/, '')
+    const lutName = file.name
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
     const path = uid + '/' + Date.now() + '-' + safeName
     const { error } = await supabase.storage.from('luts').upload(path, file)
