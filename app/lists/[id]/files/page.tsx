@@ -81,7 +81,7 @@ export default function FilesPage({ params }: { params: Promise<{ id: string }> 
 
       <main className="max-w-2xl mx-auto px-6 py-10">
         <h2 className="text-2xl font-bold mb-2">Files</h2>
-        <p className="text-zinc-500 text-sm mb-8">Attach call sheets, contracts, scripts or any other files to this list</p>
+        <p className="text-zinc-500 text-sm mb-8">Attach storyboards and treatments, etc</p>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
           <div className="space-y-3 mb-6">
