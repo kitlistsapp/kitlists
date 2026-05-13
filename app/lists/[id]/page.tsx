@@ -16,6 +16,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const { data: specs } = await supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle()
   const { data: files } = await supabase.from("list_files").select("*").eq("list_id", id).order("created_at")
   const { data: listItems } = await supabase.from("list_items").select("*, equipment_items(name, subcategory, category)").eq("list_id", id).order("sort_order")
+  const { data: sectionNotesList } = await supabase.from("list_section_notes").select("*").eq("list_id", id)
 
   const powerItems = (listItems || []).filter((i: any) => i.section === "power")
   const headTripodItems = (listItems || []).filter((i: any) => i.section === "head_tripod")
