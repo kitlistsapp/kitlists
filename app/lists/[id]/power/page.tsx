@@ -99,13 +99,19 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     if (eq) setAllItems(eq)
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
     if (existing && existing.length > 0) {
-      setOnboardEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
-      setBlockEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
-      setAcdcEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'acdc').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
+      setOnboardEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
+      setBlockEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
+      setAcdcEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'acdc').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
     }
   }
 
   const save = async () => {
+    const allEntries = [...onboardEntries, ...blockEntries, ...acdcEntries]
+    const invalid = allEntries.filter(e => e.itemId && (e.quantity < 1 || !e.quantity))
+    if (invalid.length > 0) {
+      alert('Please enter a quantity of at least 1 for all items.')
+      return
+    }
     setSaving(true)
     await supabase.from('list_items').delete().eq('list_id', listId).eq('section', 'power')
     const rows: any[] = []
@@ -128,7 +134,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
-  const newEntry = () => ({ id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' })
+  const newEntry = () => ({ id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental' })
   const updateEntry = (setFn: any, id: string, field: string, value: any) => setFn((prev: Entry[]) => prev.map((e: Entry) => e.id === id ? { ...e, [field]: value } : e))
   const removeEntry = (setFn: any, id: string) => setFn((prev: Entry[]) => prev.filter((e: Entry) => e.id !== id))
 
