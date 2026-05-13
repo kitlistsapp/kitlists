@@ -1,58 +1,52 @@
-# KitList — Session Notes
-Last updated: 10 May 2026
+# KitList Session Notes — 13 May 2026
 
-## Live URL
-https://kitlist-theta.vercel.app
+## Completed this session
 
-## Start command (fresh Terminal)
-source ~/.zshrc && cd ~/Desktop/kitlist && npm run dev
-Then go to: http://localhost:3000/dashboard
+### Power page
+- Qty field now defaults to empty (not 1) on new item add
+- Minimum qty of 1 enforced on save with alert
 
-## Stack
-Next.js 16, Supabase (pzydgyqykcgdcikutzpg / Oceania Sydney), Tailwind, jsPDF + SheetJS, Vercel, Resend
-Repo: github.com/whitakerleebo/kitlist
+### New section pages created
+- `/lists/[id]/head-tripod` — searchable picker, section notes
+- `/lists/[id]/grip` — searchable picker, section notes
+- `/lists/[id]/filtration` — searchable picker, section notes
+- Per-item notes removed from all three (section notes at bottom is sufficient)
 
-## Environment Variables (Vercel)
-NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-NEXT_PUBLIC_APP_URL = https://kitlist-theta.vercel.app
-RESEND_API_KEY
+### Lenses page
+- Section notes block added at bottom
+- Focal lengths section renamed to "Focal lengths (approximate)"
 
-## Test accounts
-- whitakerleebo@gmail.com (Aaron McKlisky / Aaron M Pty Ltd)
-- lee@hyperautomate.com.au (Joel Mc / Joel Mc DOP Pty Ltd)
+### List summary page
+- Expandable `<details>` notes toggle on all section cards (Power, Head & Tripod, Grip, Filtration, AKS, Lenses)
+- LUT names now shown in Shoot Specs summary line
+- Files section description updated to "Attach storyboards and treatments, etc"
 
-## All UAT Complete ✅
-- Sections 1-12 from UAT brief all done
-- Mobile optimisation across all pages
-- Templates (save from list, use on new list)
-- DOP owned + AC owned flags on all equipment
-- AC owned shows to rental house + focus puller, hidden from production clean view
-- Dashboard server-side fetch (fast load)
-- Email preview modal on share page
-- Signup captures name, phone, company
-- Signup → sign in flow automatic
-- DOP logo + company name in dashboard nav
-- LUT upload uses original filename
-- Film cameras: ARRI 435, ARRI 416 added
+### LUT fixes
+- Profile page: LUT filenames now saved with extension (e.g. AARON WARM.aml)
+- Specs page: same fix for list-level LUT uploads
+- LUT delete: FK constraint fix — clears list_lut_files references before deleting user_lut
+- Profile page: storage delete made non-blocking so DB delete always runs
 
-## Outstanding / Backlog
-- D1: Film cameras expanded list (Lee to provide Super 16 + Super 35)
-- D2: Expanded lens database
-- D3: More aspect ratio options
-- 4.2: Head & Tripod detailed equipment list (Lee to provide)
-- Domain registration (crewflow.app or similar on Namecheap/Porkbun)
-- Custom domain on Vercel once registered
-- Resend domain verification (change from: onboarding@resend.dev to noreply@crewflow.app in app/api/send-share/route.ts)
+### Share / Email / Preview
+- Email and preview routes rebuilt to use new list_items structure (not camera_page_items)
+- Ownership labels (DOP/AC badges) now appear in full view emails
+- Sections now in correct order: Camera Body → Lenses → Power → Head & Tripod → Grip → Filtration → AKS → Shoot Specs
+- Section notes included in email per section
+- Public share page fully rebuilt with new structure
+- LUTs and Files (with download buttons) now only shown for AC/Focus Puller role
+- Production and Rental House views hide LUTs and Files
+
+## Still outstanding
+- PDF/Excel export — still reading old camera_page_items structure
+- Copy job — needs to copy list_items and list_section_notes
+- Templates snapshot — needs to include list_items and list_section_notes
+- list_misc_items table + /misc route — needs retiring
+- Domain crewflow.app — register on Namecheap/Porkbun
+- Custom domain on Vercel
+- Resend domain verification
 - Landing page at /
-- Sign out button on dashboard (currently only theme toggle + name showing)
-
-## Email
-Resend sandbox — sends to whitakerleebo@gmail.com only until domain verified
-Fix when domain ready: change from address in app/api/send-share/route.ts
-
-## Key architecture notes
-- Supabase email confirmation: DISABLED (Authentication → Providers → Email)
-- All storage buckets: private (logos, luts, list-files)
-- Source values: rental | dop_owned | ac_owned
-- Camera page items constraint allows: power, aks, grip, filtration, head_tripod
+- Sign out button on dashboard nav
+- Film cameras expanded list (Lee to provide)
+- Expanded lens database
+- More aspect ratio options
+- Head & Tripod detailed equipment list (Lee to provide)
