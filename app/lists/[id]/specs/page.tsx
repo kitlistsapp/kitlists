@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 
 interface Lut { id: string; name: string; file_url: string }
-interface ListLut { id: string; name: string; source: string; profile_lut_id?: string }
+interface ListLut { id: string; name: string; source: string; profile_lut_id?: string; file_path?: string }
 
 export default function ShootSpecsPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient()
@@ -73,7 +73,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
   const uploadLutFile = async (file: File) => {
     if (!file || !userId) return
     setLutUploading(true)
-    const lutName = file.name.replace(/\.[^.]+$/, '')
+    const lutName = file.name
     const ext = file.name.split('.').pop()
     const path = userId + '/list-' + listId + '-' + Date.now() + '.' + ext
     const { error } = await supabase.storage.from('luts').upload(path, file)
@@ -150,7 +150,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
                 {listLuts.map(lut => (
                   <div key={lut.id} className="flex items-center justify-between bg-zinc-800 rounded-xl px-4 py-2.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-white text-sm">{lut.name}</span>
+                      <span className="text-white text-sm">{lut.source === 'upload' && lut.file_path && !lut.name.includes('.') ? lut.name + '.' + lut.file_path.split('.').pop() : lut.name}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${ lut.source === 'profile' ? 'bg-zinc-700 text-zinc-400' : 'bg-blue-900 text-blue-400' }`}>{lut.source === 'profile' ? 'Profile' : 'Uploaded'}</span>
                     </div>
                     <button onClick={() => removeLut(lut.id)} className="text-zinc-600 hover:text-red-400 text-lg transition-colors">×</button>
