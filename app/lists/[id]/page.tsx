@@ -97,37 +97,37 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
 
         <div className="space-y-3">
 
-          {(cameras || []).map((cam: any) => {
-            const bodyName = cam.equipment_items?.name
-            return (
-              <div key={cam.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-                <a href={`/lists/${id}/camera/${cam.id}`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-zinc-800">
+              <div className="flex items-center gap-3">
+                {dot((cameras || []).some((c: any) => c.equipment_items?.name))}
+                <h3 className="text-white font-semibold">Camera Body</h3>
+              </div>
+            </div>
+            {(cameras || []).map((cam: any, idx: number) => {
+              const bodyName = cam.equipment_items?.name
+              return (
+                <a key={cam.id} href={`/lists/${id}/camera/${cam.id}`}
+                  className={`flex items-center justify-between px-6 py-3 hover:bg-zinc-800 transition-colors group ${idx < (cameras || []).length - 1 ? "border-b border-zinc-800" : ""}`}>
                   <div className="flex items-center gap-3">
                     {dot(!!bodyName)}
                     <div>
-                      <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">{cam.label}</h3>
+                      <p className="text-white text-sm font-medium group-hover:text-orange-400 transition-colors">{cam.label}</p>
                       {bodyName ? (
-                        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="text-zinc-500 text-xs">{bodyName}</span>
                           {badge(cam.camera_body_source)}
                         </div>
                       ) : (
-                        <p className="text-zinc-700 text-xs mt-0.5">No camera selected</p>
+                        <p className="text-zinc-700 text-xs">No camera selected</p>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {arrow}
-                  </div>
+                  {arrow}
                 </a>
-                {cam.camera_notes && (
-                  <div className="px-6 pb-4 border-t border-zinc-800 pt-3">
-                    <p className="text-zinc-400 text-xs">{cam.camera_notes}</p>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <a href={`/lists/${id}/lenses`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">

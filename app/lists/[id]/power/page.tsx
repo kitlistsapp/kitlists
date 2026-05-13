@@ -81,6 +81,8 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const [onboardEntries, setOnboardEntries] = useState<Entry[]>([])
   const [blockEntries, setBlockEntries] = useState<Entry[]>([])
   const [acdcEntries, setAcdcEntries] = useState<Entry[]>([])
+  const [sectionNotes, setSectionNotes] = useState('')
+  const [notesId, setNotesId] = useState<string | null>(null)
 
   useEffect(() => {
     params.then(p => { setListId(p.id); loadData(p.id) })
@@ -89,11 +91,13 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const loadData = async (lid: string) => {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) setUserId(user.id)
-    const [{ data: eq }, { data: existing }] = await Promise.all([
+    const [{ data: eq }, { data: existing }, { data: notesData }] = await Promise.all([
       supabase.from('equipment_items').select('*').eq('category', 'power').order('name'),
-      supabase.from('list_items').select('*, equipment_items(name, subcategory)').eq('list_id', lid).eq('section', 'power').order('sort_order')
+      supabase.from('list_items').select('*, equipment_items(name, subcategory)').eq('list_id', lid).eq('section', 'power').order('sort_order'),
+      supabase.from('list_section_notes').select('*').eq('list_id', lid).eq('section', 'power').maybeSingle()
     ])
     if (eq) setAllItems(eq)
+    if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
     if (existing && existing.length > 0) {
       setOnboardEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
       setBlockEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
@@ -115,6 +119,12 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     addRows(blockEntries, 100)
     addRows(acdcEntries, 200)
     if (rows.length > 0) await supabase.from('list_items').insert(rows)
+    if (notesId) {
+      await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
+    } else if (sectionNotes.trim()) {
+      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: listId, owner_id: userId, section: 'power', notes: sectionNotes }).select().single()
+      if (newNote) setNotesId(newNote.id)
+    }
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
@@ -182,6 +192,13 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
           {renderEntries(onboardEntries, setOnboardEntries, onboardItems, 'Onboard', 'blue')}
           {renderEntries(blockEntries, setBlockEntries, blockItems, 'Block batteries', 'amber')}
           {renderEntries(acdcEntries, setAcdcEntries, acdcItems, 'AC/DC', 'purple')}
+        </div>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
+          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Section notes</h3>
+          <textarea value={sectionNotes} onChange={e => setSectionNotes(e.target.value)}
+            placeholder="Any notes about power requirements..."
+            rows={3}
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
         </div>
       </main>
     </div>
