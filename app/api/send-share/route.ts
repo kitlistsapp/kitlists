@@ -11,14 +11,28 @@ export async function POST(request: Request) {
 
   const { data: list } = await supabase.from('gear_lists').select('*, rental_houses(name)').eq('id', listId).single()
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', listId).order('sort_order')
-  const camItems = await Promise.all((cameras || []).map(async (cam: any) => {
-    const { data: items } = await supabase.from('camera_page_items').select('*, equipment_items(name, subcategory)').eq('page_id', cam.id)
-    return { ...cam, items: items || [] }
-  }))
   const { data: lenses } = await supabase.from('list_lenses').select('*, equipment_items(name), list_lens_zooms(*, equipment_items(name))').eq('list_id', listId).maybeSingle()
-  const { data: misc } = await supabase.from('list_misc_items').select('*, equipment_items(name)').eq('list_id', listId)
+  const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', listId).order('sort_order')
+  const { data: sectionNotes } = await supabase.from('list_section_notes').select('*').eq('list_id', listId)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', listId).maybeSingle()
   const { data: listLuts } = await supabase.from('list_lut_files').select('*').eq('list_id', listId)
+
+  const powerItems = (listItems || []).filter((i: any) => i.section === 'power')
+  const headTripodItems = (listItems || []).filter((i: any) => i.section === 'head_tripod')
+  const gripItems = (listItems || []).filter((i: any) => i.section === 'grip')
+  const filtrationItems = (listItems || []).filter((i: any) => i.section === 'filtration')
+  const aksItems = (listItems || []).filter((i: any) => i.section === 'aks')
+  const getSectionNote = (section: string) => (sectionNotes || []).find((n: any) => n.section === section)?.notes || ''
+
+  const ownerLabel = (source: string, viewMode: string) => {
+    if (viewMode !== 'full') return ''
+    if (source === 'dop_owned') return ' <span style="background:#431407;color:#fb923c;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:bold;">DOP</span>'
+    if (source === 'ac_owned') return ' <span style="background:#1e3a5f;color:#60a5fa;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:bold;">AC</span>'
+    return ''
+  }
+
+  const formatItems = (items: any[], viewMode: string, showQty = true) =>
+    items.map((i: any) => `${i.equipment_items?.name || i.custom_label}${showQty && i.quantity > 1 ? ' x' + i.quantity : ''}${ownerLabel(i.source, viewMode)}`).join('<br>')
 
   const row = (label: string, value: string) => value ? `
     <tr>
@@ -32,6 +46,7 @@ export async function POST(request: Request) {
     </tr>`
 
   let tableRows = ''
+  const viewMode = 'full'
 
   tableRows += row('Project', list?.project_name || '')
   tableRows += row('Production Co', list?.production_co || '')
@@ -39,33 +54,57 @@ export async function POST(request: Request) {
   tableRows += row('Shoot Days', list?.shoot_days ? String(list.shoot_days) : '')
   tableRows += row('Rental House', list?.rental_houses?.name || '')
 
-  for (const cam of camItems) {
+  for (const cam of (cameras || [])) {
     const bodyName = cam.equipment_items?.name
-    if (!bodyName && cam.items.length === 0) continue
-    const power = cam.items.filter((i: any) => i.section === 'power')
-    const aks = cam.items.filter((i: any) => i.section === 'aks')
-    const grip = cam.items.filter((i: any) => i.section === 'grip')
-    const filt = cam.items.filter((i: any) => i.section === 'filtration')
+    if (!bodyName) continue
     tableRows += sectionHeader(cam.label)
-    if (bodyName) tableRows += row('Camera Body', bodyName)
-    if (power.length > 0) tableRows += row('Power', power.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.quantity > 1 ? ' x' + i.quantity : ''}`).join('<br>'))
-    if (aks.length > 0) tableRows += row('AKS', aks.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.quantity > 1 ? ' x' + i.quantity : ''}`).join('<br>'))
-    if (grip.length > 0) tableRows += row('Grip', grip.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.quantity > 1 ? ' x' + i.quantity : ''}`).join('<br>'))
-    if (filt.length > 0) tableRows += row('Filtration', filt.map((i: any) => `${i.equipment_items?.name || i.custom_label}`).join('<br>'))
+    tableRows += row('Camera Body', bodyName + ownerLabel(cam.camera_body_source, viewMode))
     if (cam.camera_notes) tableRows += row('Notes', cam.camera_notes)
+  }
+
+  if (powerItems.length > 0) {
+    tableRows += sectionHeader('Power')
+    tableRows += row('Items', formatItems(powerItems, viewMode))
+    const pNote = getSectionNote('power')
+    if (pNote) tableRows += row('Notes', pNote)
+  }
+
+  if (headTripodItems.length > 0) {
+    tableRows += sectionHeader('Head & Tripod')
+    tableRows += row('Items', formatItems(headTripodItems, viewMode))
+    const htNote = getSectionNote('head_tripod')
+    if (htNote) tableRows += row('Notes', htNote)
+  }
+
+  if (gripItems.length > 0) {
+    tableRows += sectionHeader('Grip')
+    tableRows += row('Items', formatItems(gripItems, viewMode))
+    const gNote = getSectionNote('grip')
+    if (gNote) tableRows += row('Notes', gNote)
+  }
+
+  if (filtrationItems.length > 0) {
+    tableRows += sectionHeader('Filtration')
+    tableRows += row('Items', formatItems(filtrationItems, viewMode, false))
+    const fNote = getSectionNote('filtration')
+    if (fNote) tableRows += row('Notes', fNote)
+  }
+
+  if (aksItems.length > 0) {
+    tableRows += sectionHeader('AKS')
+    tableRows += row('Items', formatItems(aksItems, viewMode))
+    const aNote = getSectionNote('aks')
+    if (aNote) tableRows += row('Notes', aNote)
   }
 
   if (lenses) {
     tableRows += sectionHeader('Lenses')
     if (lenses.equipment_items?.name) tableRows += row('Prime Set', lenses.equipment_items.name)
-    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths', lenses.focal_lengths.join(', '))
+    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths (approx)', lenses.focal_lengths.join(', '))
     if (lenses.list_lens_zooms?.length > 0) tableRows += row('Zooms', lenses.list_lens_zooms.map((z: any) => z.equipment_items?.name).filter(Boolean).join('<br>'))
     if (lenses.zoom_controller) tableRows += row('Controller', lenses.zoom_controller)
-  }
-
-  if (misc && misc.length > 0) {
-    tableRows += sectionHeader('Other Accessories')
-    tableRows += row('Items', misc.map((i: any) => `${i.equipment_items?.name || i.custom_label}${i.notes ? ' — ' + i.notes : ''}`).join('<br>'))
+    const lNote = getSectionNote('lenses')
+    if (lNote) tableRows += row('Notes', lNote)
   }
 
   if (specs) {
