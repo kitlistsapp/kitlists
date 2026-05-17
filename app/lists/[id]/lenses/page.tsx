@@ -55,14 +55,9 @@ const MODULE_CATEGORIES = ['Secondary lenses', 'PC / Tilt lenses', 'Probe / Snor
 export default function LensesPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient()
   const [listId, setListId] = useState('')
-  const [userId, setUserId] = useState('')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
-
-  // Saved lenses (already in DB)
   const [savedLenses, setSavedLenses] = useState<SavedLens[]>([])
-
-  // Browser state (pending additions)
   const [pendingKit, setPendingKit] = useState<Map<string, SelectedLens>>(new Map())
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedManufacturer, setSelectedManufacturer] = useState<string | null>(null)
@@ -76,24 +71,16 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   }, [])
 
   const loadData = async (lid: string) => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) setUserId(user.id)
-    const { data: existing } = await supabase
-      .from('list_lenses')
-      .select('*')
-      .eq('list_id', lid)
-      .order('sort_order')
+    const { data: existing } = await supabase.from('list_lenses').select('*').eq('list_id', lid).order('sort_order')
     if (existing) setSavedLenses(existing)
   }
 
-  // Search
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return []
     const terms = searchQuery.toLowerCase().split(/\s+/).filter(Boolean)
     return searchIndex.filter(item => terms.every(t => item.label.includes(t))).slice(0, 40)
   }, [searchQuery])
 
-  // Column data
   const categories = useMemo(() => Object.keys(data).sort(), [])
   const manufacturers = useMemo(() => selectedCategory ? Object.keys(data[selectedCategory]).sort() : [], [selectedCategory])
   const seriesList = useMemo(() => selectedCategory && selectedManufacturer ? Object.keys(data[selectedCategory][selectedManufacturer]).sort() : [], [selectedCategory, selectedManufacturer])
@@ -101,13 +88,10 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
 
   const breadcrumb = [selectedCategory, selectedManufacturer, selectedSeries].filter(Boolean).join(' › ')
   const isModuleCategory = selectedCategory ? MODULE_CATEGORIES.includes(selectedCategory) : false
-
-  // All keys currently in DB (so browser chips show as selected if already saved)
   const savedKeys = useMemo(() => new Set(savedLenses.map(l => `${l.category}|${l.manufacturer}|${l.series}|${l.focal_length}`)), [savedLenses])
 
   const togglePending = (lens: SelectedLens) => {
     const key = lensKey(lens)
-    // If already saved to DB, don't add to pending (it's already there)
     if (savedKeys.has(key)) return
     setPendingKit(prev => {
       const next = new Map(prev)
@@ -117,71 +101,33 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     })
   }
 
-  const handleCategorySelect = (cat: string) => {
-    setSelectedCategory(cat)
-    setSelectedManufacturer(null)
-    setSelectedSeries(null)
-  }
-
-  const handleManufacturerSelect = (mfr: string) => {
-    setSelectedManufacturer(mfr)
-    setSelectedSeries(null)
-  }
-
-  const updateSavedSource = (id: string, source: string) => {
-    setSavedLenses(prev => prev.map(l => l.id === id ? { ...l, source } : l))
-  }
-
-  const removeSaved = (id: string) => {
-    setSavedLenses(prev => prev.filter(l => l.id !== id))
-  }
+  const handleCategorySelect = (cat: string) => { setSelectedCategory(cat); setSelectedManufacturer(null); setSelectedSeries(null) }
+  const handleManufacturerSelect = (mfr: string) => { setSelectedManufacturer(mfr); setSelectedSeries(null) }
+  const updateSavedSource = (id: string, source: string) => setSavedLenses(prev => prev.map(l => l.id === id ? { ...l, source } : l))
+  const removeSaved = (id: string) => setSavedLenses(prev => prev.filter(l => l.id !== id))
 
   const save = async () => {
     setSaving(true)
-
-    // Update source on existing saved lenses
     for (const lens of savedLenses) {
       await supabase.from('list_lenses').update({ source: lens.source }).eq('id', lens.id)
     }
-
-    // Insert pending new lenses
     if (pendingKit.size > 0) {
-      const existingCount = savedLenses.length
       const rows = Array.from(pendingKit.values()).map((lens, i) => ({
-        list_id: listId,
-        category: lens.category,
-        manufacturer: lens.manufacturer,
-        series: lens.series,
-        focal_length: lens.focalLength,
-        source: 'rental',
-        sort_order: existingCount + i,
+        list_id: listId, category: lens.category, manufacturer: lens.manufacturer,
+        series: lens.series, focal_length: lens.focalLength, source: 'rental', sort_order: savedLenses.length + i,
       }))
       const { data: inserted, error } = await supabase.from('list_lenses').insert(rows).select()
-      if (error) { console.error('Failed to save lenses:', error) }
-      else if (inserted) {
-        setSavedLenses(prev => [...prev, ...inserted])
-        setPendingKit(new Map())
-      }
+      if (!error && inserted) { setSavedLenses(prev => [...prev, ...inserted]); setPendingKit(new Map()) }
     }
-
-    // Delete removed lenses (ones in DB but not in savedLenses anymore)
-    // We track removals via removeSaved which filters from state;
-    // on save we delete any DB rows not in current savedLenses
     const currentIds = new Set(savedLenses.map(l => l.id))
     const { data: dbLenses } = await supabase.from('list_lenses').select('id').eq('list_id', listId)
     if (dbLenses) {
       const toDelete = dbLenses.filter(l => !currentIds.has(l.id)).map(l => l.id)
-      if (toDelete.length > 0) {
-        await supabase.from('list_lenses').delete().in('id', toDelete)
-      }
+      if (toDelete.length > 0) await supabase.from('list_lenses').delete().in('id', toDelete)
     }
-
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
-  // Group saved lenses by category for display
   const groupedSaved = useMemo(() => {
     const groups: Record<string, SavedLens[]> = {}
     for (const lens of savedLenses) {
@@ -195,7 +141,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Nav */}
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
         <div className="flex items-center gap-3">
@@ -210,9 +155,8 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       <main className="max-w-3xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6">Lenses</h2>
 
-        {/* Lens browser panel */}
+        {/* Lens browser panel — always first */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden mb-4">
-          {/* Browser header */}
           <div className="px-6 py-4 border-b border-zinc-800">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-zinc-300">Add lenses</h3>
@@ -221,7 +165,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 : <span className="text-xs text-zinc-600">Browse by category or search</span>
               }
             </div>
-            {/* Search */}
             <div className="relative">
               <input
                 ref={searchRef}
@@ -263,9 +206,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             </div>
           </div>
 
-          {/* Miller columns */}
           <div className="flex overflow-x-auto" style={{height: '320px'}}>
-            {/* Category */}
             <div className="flex-none w-[130px] min-w-[130px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Category</div>
               {categories.map(cat => (
@@ -274,8 +215,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 </button>
               ))}
             </div>
-
-            {/* Manufacturer */}
             <div className="flex-none w-[140px] min-w-[140px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Manufacturer</div>
               {!selectedCategory ? (
@@ -286,8 +225,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 </button>
               ))}
             </div>
-
-            {/* Series */}
             <div className="flex-none w-[150px] min-w-[150px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Series</div>
               {!selectedManufacturer ? (
@@ -298,8 +235,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 </button>
               ))}
             </div>
-
-            {/* Focal lengths */}
             <div className="flex-1 min-w-[170px] overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">
                 {isModuleCategory ? 'Modules' : 'Focal Lengths'}
@@ -325,7 +260,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             </div>
           </div>
 
-          {/* Browser footer */}
           {pendingCount > 0 && (
             <div className="px-6 py-3 border-t border-zinc-800 flex items-center justify-between">
               <span className="text-sm text-zinc-400">
@@ -340,139 +274,10 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             </div>
           )}
         </div>
-        {/* Lens browser panel */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden mb-4">
-          {/* Browser header */}
-          <div className="px-6 py-4 border-b border-zinc-800">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-zinc-300">Add lenses</h3>
-              {breadcrumb
-                ? <span className="text-xs text-zinc-500 truncate max-w-[60%] text-right">{breadcrumb}</span>
-                : <span className="text-xs text-zinc-600">Browse by category or search</span>
-              }
-            </div>
-            {/* Search */}
-            <div className="relative">
-              <input
-                ref={searchRef}
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setTimeout(() => setSearchFocused(false), 150)}
-                placeholder="Search any lens, e.g. arri master 50mm"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-400 transition-colors"
-              />
-              {searchQuery && (
-                <button onClick={() => { setSearchQuery(''); searchRef.current?.focus() }} className="absolute right-3 top-3.5 text-zinc-500 hover:text-zinc-300 text-xs">✕</button>
-              )}
-              {searchFocused && searchQuery.trim() && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-lg z-50 max-h-64 overflow-y-auto shadow-xl">
-                  {searchResults.length === 0 ? (
-                    <div className="px-4 py-3 text-sm text-zinc-500">No lenses found</div>
-                  ) : (
-                    searchResults.map(item => {
-                      const key = lensKey(item)
-                      const inPending = pendingKit.has(key)
-                      const inSaved = savedKeys.has(key)
-                      return (
-                        <button key={key} onMouseDown={() => togglePending(item)}
-                          className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between gap-2 border-b border-zinc-800 last:border-0 transition-colors ${inSaved ? 'text-zinc-600 cursor-default' : inPending ? 'bg-[#1a1000] text-orange-400' : 'text-zinc-200 hover:bg-zinc-800'}`}>
-                          <span>
-                            <span className="text-zinc-500 text-xs mr-1.5">{item.category}</span>
-                            {item.manufacturer} {item.series} <span className="font-medium">{item.focalLength}</span>
-                          </span>
-                          {inSaved && <span className="text-zinc-600 text-xs flex-none">already added</span>}
-                          {inPending && !inSaved && <span className="text-orange-400 text-xs flex-none">✓ added</span>}
-                        </button>
-                      )
-                    })
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* Miller columns */}
-          <div className="flex overflow-x-auto" style={{height: '320px'}}>
-            {/* Category */}
-            <div className="flex-none w-[130px] min-w-[130px] border-r border-zinc-800 overflow-y-auto">
-              <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Category</div>
-              {categories.map(cat => (
-                <button key={cat} onClick={() => handleCategorySelect(cat)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedCategory === cat ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
-                  {cat}
-                </button>
-              ))}
-            </div>
-
-            {/* Manufacturer */}
-            <div className="flex-none w-[140px] min-w-[140px] border-r border-zinc-800 overflow-y-auto">
-              <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Manufacturer</div>
-              {!selectedCategory ? (
-                <div className="px-3 py-3 text-xs text-zinc-600">← Pick a category</div>
-              ) : manufacturers.map(mfr => (
-                <button key={mfr} onClick={() => handleManufacturerSelect(mfr)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedManufacturer === mfr ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
-                  {mfr}
-                </button>
-              ))}
-            </div>
-
-            {/* Series */}
-            <div className="flex-none w-[150px] min-w-[150px] border-r border-zinc-800 overflow-y-auto">
-              <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Series</div>
-              {!selectedManufacturer ? (
-                <div className="px-3 py-3 text-xs text-zinc-600">← Pick a manufacturer</div>
-              ) : seriesList.map(series => (
-                <button key={series} onClick={() => setSelectedSeries(series)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedSeries === series ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
-                  {series}
-                </button>
-              ))}
-            </div>
-
-            {/* Focal lengths */}
-            <div className="flex-1 min-w-[170px] overflow-y-auto">
-              <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">
-                {isModuleCategory ? 'Modules' : 'Focal Lengths'}
-              </div>
-              {!selectedSeries ? (
-                <div className="px-3 py-3 text-xs text-zinc-600">← Pick a series</div>
-              ) : (
-                <div className="px-3 py-3 flex flex-wrap gap-1.5">
-                  {focalLengths.map(fl => {
-                    const lens: SelectedLens = { category: selectedCategory!, manufacturer: selectedManufacturer!, series: selectedSeries!, focalLength: fl }
-                    const key = lensKey(lens)
-                    const inPending = pendingKit.has(key)
-                    const inSaved = savedKeys.has(key)
-                    return (
-                      <button key={fl} onClick={() => togglePending(lens)}
-                        className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${inSaved ? 'bg-zinc-800 border-zinc-700 text-zinc-600 cursor-default' : inPending ? 'bg-[#1a1000] border-orange-400 text-orange-400' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white'}`}>
-                        {fl}
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Browser footer */}
-          {pendingCount > 0 && (
-            <div className="px-6 py-3 border-t border-zinc-800 flex items-center justify-between">
-              <span className="text-sm text-zinc-400">
-                <span className="text-orange-400 font-semibold">{pendingCount}</span> {pendingCount === 1 ? 'lens' : 'lenses'} pending
-              </span>
-              <div className="flex items-center gap-3">
-                <button onClick={() => setPendingKit(new Map())} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear</button>
-                <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-1.5 rounded-lg text-sm disabled:opacity-50">
-                  {saving ? 'Saving...' : 'Save'}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-        {/* Saved lenses */}
+        {/* Saved lenses — below browser */}
         {Object.keys(groupedSaved).length > 0 && (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
             {Object.entries(groupedSaved).map(([category, lenses]) => (
               <div key={category} className="mb-6 last:mb-0">
                 <h4 className="text-zinc-500 text-xs uppercase tracking-widest mb-3">{category}</h4>
@@ -502,7 +307,6 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             ))}
           </div>
         )}
-
       </main>
     </div>
   )
