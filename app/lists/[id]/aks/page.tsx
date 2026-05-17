@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 
-interface Item { id: string; name: string; brand: string | null; subcategory: string | null; category: string }
+interface Item { id: string; name: string; brand: string | null; subcategory: string | null; category: string; notes: string | null }
 interface Entry { id: string; itemId: string; itemName: string; quantity: number; source: string; notes: string; subcategory: string }
 
 function SearchablePicker({ items, value, onChange, placeholder }: {
@@ -158,6 +158,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                       </button>
                     ))}
                   </div>
+                  {(() => { const item = combinedItems.find(i => i.id === entry.itemId); return item?.notes ? <p className="text-xs text-amber-500/80 px-1">{item.notes}</p> : null })()}
                   <input type="text" value={entry.notes} onChange={e => update(entry.id, 'notes', e.target.value)}
                     placeholder="Notes (optional)..."
                     className="w-full bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-400" />
