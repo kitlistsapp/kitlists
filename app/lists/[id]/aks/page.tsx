@@ -4,39 +4,130 @@ import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 
 interface Item { id: string; name: string; brand: string | null; subcategory: string | null; category: string; notes: string | null }
-interface Entry { id: string; itemId: string; itemName: string; quantity: number; source: string; notes: string; subcategory: string }
+interface Entry { id: string; topCategory: string; itemId: string; itemName: string; quantity: number; source: string; notes: string }
 
-function SearchablePicker({ items, value, onChange, placeholder }: {
-  items: Item[]; value: string; onChange: (id: string, name: string) => void; placeholder: string
-}) {
-  const [query, setQuery] = useState('')
+const TOP_CATEGORIES = [
+  'Camera Plates',
+  'Camera Support',
+  'AKS',
+  'Mattebox',
+  'Lens Control',
+  "Director's Viewfinder",
+  'Rangefinder',
+  'VTR',
+  'Transmission',
+  'Director & Client Monitors',
+  'Recorders',
+  'Misc',
+]
+
+const SUBCATEGORY_TO_TOP: Record<string, string> = {
+  'Alexa 35': 'Camera Plates',
+  'Mini LF': 'Camera Plates',
+  'Stabilisers': 'Camera Support',
+  'Support': 'Camera Support',
+  'Handheld Handles': 'Camera Support',
+  'Camera Handles': 'Camera Support',
+  'Onboard Monitors': 'AKS',
+  'Camera Control Monitor': 'AKS',
+  'Recording Onboard Monitor': 'AKS',
+  'Director & Client Monitors': 'Director & Client Monitors',
+  'Clamp-on': 'Mattebox',
+  'Studio': 'Mattebox',
+  'Manual': 'Lens Control',
+  'Digital Control': 'Lens Control',
+  'Wireless': 'Lens Control',
+  'Digital': "Director's Viewfinder",
+  'Analog': "Director's Viewfinder",
+  'Rangefinder': 'Rangefinder',
+  'Vtr': 'VTR',
+  'Transmission': 'Transmission',
+  'Recorders': 'Recorders',
+  'Underwater': 'Misc',
+  'Rain Deflectors': 'Misc',
+  'Carts': 'Misc',
+}
+
+function CategoryPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  const selected = items.find(i => i.id === value)
-  useEffect(() => { if (selected) setQuery(selected.name) }, [value])
   useEffect(() => {
     const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [])
-  const filtered = items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className={"w-full text-left bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors flex items-center justify-between " + (value ? "text-white" : "text-zinc-500")}
+      >
+        {value || "Select category..."}
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="flex-shrink-0 text-zinc-500"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden">
+          {TOP_CATEGORIES.map(cat => (
+            <button key={cat}
+              onClick={() => { onChange(cat); setOpen(false) }}
+              className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (value === cat ? "bg-[#1a1000] text-orange-400" : "text-zinc-200 hover:bg-zinc-800")}>
+              {cat}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ItemPicker({ items, topCategory, value, onChange }: {
+  items: Item[]; topCategory: string; value: string; onChange: (id: string, name: string) => void
+}) {
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const selected = items.find(i => i.id === value)
+
+  useEffect(() => { if (selected) setQuery(selected.name); else setQuery('') }, [value, selected])
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  // Filter to top category, then filter by search query
+  const categoryItems = items.filter(i => {
+    if (i.category === 'misc' && topCategory === 'Misc') return true
+    return SUBCATEGORY_TO_TOP[i.subcategory || ''] === topCategory
+  })
+
+  const filtered = categoryItems.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
+
   const grouped = filtered.reduce((acc: Record<string, Item[]>, item) => {
-    const key = (item as any)._groupKey || item.subcategory || item.brand || 'Other'
+    const key = item.subcategory || 'Other'
     if (!acc[key]) acc[key] = []
     acc[key].push(item)
     return acc
   }, {})
+
+  if (!topCategory) return null
+
   return (
     <div ref={ref} className="relative">
-      <input type="text" value={query}
+      <input
+        type="text"
+        value={query}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => setOpen(true)}
-        placeholder={placeholder}
-        className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
-      {value && <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>}
+        placeholder={"Search " + topCategory.toLowerCase() + "..."}
+        className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400"
+      />
+      {value && (
+        <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>
+      )}
       {open && (
         <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl max-h-64 overflow-y-auto">
-          {Object.keys(grouped).length === 0 ? (
+          {filtered.length === 0 ? (
             <button className="w-full text-left px-4 py-3 text-sm text-orange-400 hover:bg-zinc-800"
               onClick={() => { onChange('custom:' + query, query); setOpen(false) }}>
               + Add "{query}" as custom
@@ -45,9 +136,12 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
             <>
               {Object.entries(grouped).map(([group, groupItems]) => (
                 <div key={group}>
-                  <div className="px-4 py-1.5 text-xs text-zinc-500 uppercase tracking-widest bg-zinc-950">{group}</div>
+                  {Object.keys(grouped).length > 1 && (
+                    <div className="px-4 py-1.5 text-xs text-zinc-500 uppercase tracking-widest bg-zinc-950">{group}</div>
+                  )}
                   {groupItems.map(item => (
-                    <button key={item.id} className="w-full text-left px-4 py-2.5 text-sm text-zinc-200 hover:bg-zinc-800"
+                    <button key={item.id}
+                      className="w-full text-left px-4 py-2.5 text-sm text-zinc-200 hover:bg-zinc-800"
                       onClick={() => { onChange(item.id, item.name); setQuery(item.name); setOpen(false) }}>
                       {item.name}
                     </button>
@@ -90,13 +184,22 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
     ])
     if (eq) setAllItems(eq)
     if (existing && existing.length > 0) {
-      setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental', notes: i.notes || '', subcategory: i.equipment_items?.subcategory || '' })))
+      setEntries(existing.map((i: any) => {
+        const subcat = i.equipment_items?.subcategory || ''
+        const topCat = SUBCATEGORY_TO_TOP[subcat] || (i.equipment_items?.category === 'misc' ? 'Miscellaneous' : '')
+        return { id: i.id, topCategory: topCat, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 0, source: i.source || 'rental', notes: i.notes || '' }
+      }))
     } else {
-      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '', subcategory: '' }])
+      setEntries([{ id: '1', topCategory: '', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '' }])
     }
   }
 
   const save = async () => {
+    const invalid = entries.filter(e => e.itemId && (e.quantity < 1 || !e.quantity))
+    if (invalid.length > 0) {
+      alert('Please enter a quantity of at least 1 for all items.')
+      return
+    }
     setSaving(true)
     await supabase.from('list_items').delete().eq('list_id', listId).eq('section', 'aks')
     const rows = entries.filter(e => e.itemId).map((e, i) => ({
@@ -111,32 +214,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
 
   const update = (id: string, field: string, value: any) => setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   const remove = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
-  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '', subcategory: '' }])
-
-  // Top-level category grouping for the picker
-  const topCategoryMap: Record<string, string> = {
-    'Alexa 35': 'Camera Plates', 'Mini LF': 'Camera Plates',
-    'Stabilisers': 'Camera Support', 'Support': 'Camera Support',
-    'Handheld Handles': 'Camera Support', 'Camera Handles': 'Camera Support',
-    'Onboard Monitors': 'AKS - Monitors', 'Camera Control Monitor': 'AKS - Monitors',
-    'Recording Onboard Monitor': 'AKS - Monitors', 'Director & Client Monitors': 'AKS - Monitors',
-    'Clamp-on': 'Mattebox', 'Studio': 'Mattebox',
-    'Manual': 'Lens Control', 'Digital': 'Lens Control', 'Wireless': 'Lens Control',
-    'Rangefinder': 'Rangefinder',
-    'Vtr': 'VTR',
-    'Transmission': 'Transmission',
-    'Recorders': 'Recorders',
-    'Underwater': 'Misc', 'Rain Deflectors': 'Misc', 'Carts': 'Misc',
-  }
-
-  // For picker: attach top-level category as a virtual field for grouping
-  const aksItems = allItems.filter(i => i.category === 'aks').map(i => ({
-    ...i,
-    _topCategory: topCategoryMap[i.subcategory || ''] || i.subcategory || 'Other',
-    _groupKey: i.subcategory ? `${topCategoryMap[i.subcategory] || i.subcategory} — ${i.subcategory}` : 'Other'
-  }))
-  const miscItems = allItems.filter(i => i.category === 'misc').map(i => ({ ...i, _topCategory: 'Miscellaneous', _groupKey: 'Miscellaneous' }))
-  const combinedItems = [...aksItems, ...miscItems]
+  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), topCategory: '', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '' }])
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -153,23 +231,25 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
       <main className="max-w-3xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-2">AKS</h2>
         <p className="text-zinc-500 text-sm mb-6">Camera accessories, wireless systems, monitors and other kit</p>
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6">
           {entries.map(entry => (
-            <div key={entry.id}>
-              <div className="flex gap-2 items-center">
-                <div className="flex-1">
-                  <SearchablePicker items={combinedItems} value={entry.itemId}
-                    onChange={(id, name) => { update(entry.id, 'itemId', id); update(entry.id, 'itemName', name) }}
-                    placeholder="Search AKS items..." />
+            <div key={entry.id} className="space-y-2">
+              <div className="flex gap-2 items-start">
+                <div className="flex-1 space-y-2">
+                  <CategoryPicker value={entry.topCategory} onChange={v => { update(entry.id, 'topCategory', v); update(entry.id, 'itemId', ''); update(entry.id, 'itemName', '') }} />
+                  {entry.topCategory && (
+                    <ItemPicker items={allItems} topCategory={entry.topCategory} value={entry.itemId}
+                      onChange={(id, name) => { update(entry.id, 'itemId', id); update(entry.id, 'itemName', name) }} />
+                  )}
                 </div>
                 <input type="number" min="1" placeholder="Qty"
                   value={entry.quantity === 0 ? '' : entry.quantity}
                   onChange={e => update(entry.id, 'quantity', parseInt(e.target.value) || 0)}
-                  className="w-16 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-orange-400" />
-                <button onClick={() => remove(entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+                  className="w-16 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-orange-400 mt-0" />
+                <button onClick={() => remove(entry.id)} className="text-zinc-600 hover:text-red-400 text-lg mt-2.5">×</button>
               </div>
               {entry.itemId && (
-                <div className="mt-1.5 ml-1 space-y-1.5">
+                <div className="ml-1 space-y-1.5">
                   <div className="flex gap-1">
                     {['rental', 'dop_owned', 'ac_owned'].map(s => (
                       <button key={s} onClick={() => update(entry.id, 'source', s)}
@@ -178,7 +258,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                       </button>
                     ))}
                   </div>
-                  {(() => { const item = combinedItems.find(i => i.id === entry.itemId); return item?.notes ? <p className="text-xs text-amber-500/80 px-1">{item.notes}</p> : null })()}
+                  {(() => { const item = allItems.find(i => i.id === entry.itemId); return item?.notes ? <p className="text-xs text-amber-500/80 px-1">{item.notes}</p> : null })()}
                   <input type="text" value={entry.notes} onChange={e => update(entry.id, 'notes', e.target.value)}
                     placeholder="Notes (optional)..."
                     className="w-full bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-400" />
