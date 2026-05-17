@@ -362,9 +362,14 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
           {pendingCount > 0 && (
             <div className="px-6 py-3 border-t border-zinc-800 flex items-center justify-between">
               <span className="text-sm text-zinc-400">
-                <span className="text-orange-400 font-semibold">{pendingCount}</span> {pendingCount === 1 ? 'lens' : 'lenses'} pending — hit Save to confirm
+                <span className="text-orange-400 font-semibold">{pendingCount}</span> {pendingCount === 1 ? 'lens' : 'lenses'} pending
               </span>
-              <button onClick={() => setPendingKit(new Map())} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear</button>
+              <div className="flex items-center gap-3">
+                <button onClick={() => setPendingKit(new Map())} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear</button>
+                <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-1.5 rounded-lg text-sm disabled:opacity-50">
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
             </div>
           )}
         </div>
