@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { createClient } from '../../utils/supabase/client'
+import { createClient } from '../../../lib/supabase/client'
 import lensData from '../../data/lens_data.json'
 
 type LensData = {
