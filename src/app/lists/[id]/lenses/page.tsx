@@ -1,8 +1,8 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import LensBrowser from '../../../components/LensBrowser'
-import { createClient } from '../../../utils/supabase/client'
+import LensBrowser from '../../components/LensBrowser'
+import { createClient } from '../../utils/supabase/client'
 
 type SelectedLens = {
   category: string
