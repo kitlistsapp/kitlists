@@ -21,7 +21,7 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
   }, [])
   const filtered = items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
   const grouped = filtered.reduce((acc: Record<string, Item[]>, item) => {
-    const key = item.subcategory || item.brand || 'Other'
+    const key = item.category === 'misc' ? 'Miscellaneous' : (item.subcategory || item.brand || 'Other')
     if (!acc[key]) acc[key] = []
     acc[key].push(item)
     return acc
