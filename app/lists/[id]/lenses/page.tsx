@@ -108,9 +108,21 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
 
   const save = async () => {
     setSaving(true)
+
+    // 1. Delete any rows the user removed (in DB but not in savedLenses state)
+    const currentIds = new Set(savedLenses.map(l => l.id).filter(Boolean))
+    const { data: dbLenses } = await supabase.from('list_lenses').select('id').eq('list_id', listId)
+    if (dbLenses) {
+      const toDelete = dbLenses.filter(l => !currentIds.has(l.id)).map(l => l.id)
+      if (toDelete.length > 0) await supabase.from('list_lenses').delete().in('id', toDelete)
+    }
+
+    // 2. Update source on existing saved lenses
     for (const lens of savedLenses) {
       await supabase.from('list_lenses').update({ source: lens.source }).eq('id', lens.id)
     }
+
+    // 3. Insert pending new lenses
     if (pendingKit.size > 0) {
       const rows = Array.from(pendingKit.values()).map((lens, i) => ({
         list_id: listId, category: lens.category, manufacturer: lens.manufacturer,
@@ -119,12 +131,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       const { data: inserted, error } = await supabase.from('list_lenses').insert(rows).select()
       if (!error && inserted) { setSavedLenses(prev => [...prev, ...inserted]); setPendingKit(new Map()) }
     }
-    const currentIds = new Set(savedLenses.map(l => l.id))
-    const { data: dbLenses } = await supabase.from('list_lenses').select('id').eq('list_id', listId)
-    if (dbLenses) {
-      const toDelete = dbLenses.filter(l => !currentIds.has(l.id)).map(l => l.id)
-      if (toDelete.length > 0) await supabase.from('list_lenses').delete().in('id', toDelete)
-    }
+
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
