@@ -12,7 +12,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   if (!list) redirect("/dashboard")
 
   const { data: cameras } = await supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order")
-  const { data: lenses } = await supabase.from("list_lenses").select("*, equipment_items(name), list_lens_zooms(*, equipment_items(name))").eq("list_id", id).maybeSingle()
+  const { data: lensRows } = await supabase.from("list_lenses").select("*").eq("list_id", id).order("sort_order")
   const { data: specs } = await supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle()
   const { data: files } = await supabase.from("list_files").select("*").eq("list_id", id).order("created_at")
   const { data: listLuts } = await supabase.from("list_lut_files").select("*").eq("list_id", id).order("created_at")
@@ -144,11 +144,11 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <a href={`/lists/${id}/lenses`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
               <div className="flex items-center gap-3">
-                {dot(!!lenses)}
+                {dot((lensRows || []).length > 0)}
                 <div>
                   <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Lenses</h3>
-                  {lenses ? (
-                    <p className="text-zinc-500 text-xs mt-0.5">{lenses.equipment_items?.name || "Prime set selected"}{lenses.list_lens_zooms?.length > 0 ? ` · ${lenses.list_lens_zooms.length} zoom${lenses.list_lens_zooms.length !== 1 ? "s" : ""}` : ""}</p>
+                  {(lensRows || []).length > 0 ? (
+                    <p className="text-zinc-500 text-xs mt-0.5">{(lensRows || []).length} lens{(lensRows || []).length !== 1 ? "es" : ""}</p>
                   ) : (
                     <p className="text-zinc-700 text-xs mt-0.5">Not configured</p>
                   )}
@@ -156,11 +156,14 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               </div>
               {arrow}
             </a>
-            {lenses && (
+            {(lensRows || []).length > 0 && (
               <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
-                {lenses.focal_lengths?.length > 0 && <p className="text-zinc-400 text-xs">Focal lengths: {lenses.focal_lengths.join(", ")}</p>}
-                {lenses.list_lens_zooms?.map((z: any) => <p key={z.id} className="text-zinc-400 text-xs">{z.equipment_items?.name}</p>)}
-                {lenses.zoom_controller && !lenses.zoom_controller.includes("-") && <p className="text-zinc-400 text-xs">Controller: {lenses.zoom_controller}</p>}
+                {(lensRows || []).map((l: any) => (
+                  <div key={l.id} className="flex items-center gap-1.5">
+                    <span className="text-zinc-400 text-xs">{l.manufacturer} {l.series} <span className="text-orange-400">{l.focal_length}</span></span>
+                    {badge(l.source)}
+                  </div>
+                ))}
               </div>
             )}
             {getSectionNotes("lenses") && (
