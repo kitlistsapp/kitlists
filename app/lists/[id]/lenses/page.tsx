@@ -58,6 +58,8 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [savedLenses, setSavedLenses] = useState<SavedLens[]>([])
+  const [sectionNotes, setSectionNotes] = useState('')
+  const [notesId, setNotesId] = useState<string | null>(null)
   const [pendingKit, setPendingKit] = useState<Map<string, SelectedLens>>(new Map())
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedManufacturer, setSelectedManufacturer] = useState<string | null>(null)
@@ -71,8 +73,12 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   }, [])
 
   const loadData = async (lid: string) => {
-    const { data: existing } = await supabase.from('list_lenses').select('*').eq('list_id', lid).order('sort_order')
+    const [{ data: existing }, { data: notesData }] = await Promise.all([
+      supabase.from('list_lenses').select('*').eq('list_id', lid).order('sort_order'),
+      supabase.from('list_section_notes').select('*').eq('list_id', lid).eq('section', 'lenses').maybeSingle()
+    ])
     if (existing) setSavedLenses(existing)
+    if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
   }
 
   const searchResults = useMemo(() => {
@@ -132,6 +138,13 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       if (!error && inserted) { setSavedLenses(prev => [...prev, ...inserted]); setPendingKit(new Map()) }
     }
 
+    // Save section notes
+    if (notesId) {
+      await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
+    } else if (sectionNotes.trim()) {
+      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: listId, section: 'lenses', notes: sectionNotes }).select().single()
+      if (newNote) setNotesId(newNote.id)
+    }
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
@@ -314,6 +327,14 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             ))}
           </div>
         )}
+        {/* Section notes */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
+          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Section notes</h3>
+          <textarea value={sectionNotes} onChange={e => setSectionNotes(e.target.value)}
+            placeholder="Any notes about lenses..."
+            rows={3}
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+        </div>
       </main>
     </div>
   )

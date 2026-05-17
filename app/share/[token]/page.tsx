@@ -25,7 +25,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   }
 
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', list.id).order('sort_order')
-  const { data: lenses } = await supabase.from('list_lenses').select('*, equipment_items(name), list_lens_zooms(*, equipment_items(name))').eq('list_id', list.id).maybeSingle()
+  const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', list.id).order('sort_order')
   const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', list.id).order('sort_order')
   const { data: sectionNotesList } = await supabase.from('list_section_notes').select('*').eq('list_id', list.id)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
@@ -57,7 +57,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
     return { ...file, signedUrl: null }
   }))
 
-  const listData = { list, cameras: cameras || [], lenses, specs, powerItems, headTripodItems, gripItems, filtrationItems, aksItems }
+  const listData = { list, cameras: cameras || [], lenses: lensRows || [], specs, powerItems, headTripodItems, gripItems, filtrationItems, aksItems }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -124,13 +124,28 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
           ))}
 
           {/* Lenses */}
-          {lenses && (
+          {(lensRows || []).length > 0 && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-4">Lenses</h3>
-              {lenses.equipment_items?.name && <p className="text-white font-medium mb-3">{lenses.equipment_items.name}</p>}
-              {lenses.focal_lengths?.length > 0 && <p className="text-zinc-400 text-sm mb-2">Focal lengths (approx): {lenses.focal_lengths.join(', ')}</p>}
-              {lenses.list_lens_zooms?.map((z: any) => <p key={z.id} className="text-zinc-400 text-sm">{z.equipment_items?.name}</p>)}
-              {lenses.zoom_controller && <p className="text-zinc-500 text-sm mt-2">Controller: {lenses.zoom_controller}</p>}
+              <div className="space-y-2">
+                {Object.entries((lensRows || []).reduce((acc: Record<string, any[]>, l: any) => {
+                  if (!acc[l.category]) acc[l.category] = []
+                  acc[l.category].push(l)
+                  return acc
+                }, {})).map(([cat, lenses]: [string, any[]]) => (
+                  <div key={cat} className="mb-3 last:mb-0">
+                    <p className="text-zinc-500 text-xs uppercase tracking-widest mb-2">{cat}</p>
+                    {lenses.map((l: any) => (
+                      <div key={l.id} className="flex items-center gap-2 mb-1">
+                        <span className="text-zinc-300 text-sm">{l.manufacturer} {l.series} <span className="text-orange-400">{l.focal_length}</span></span>
+                        {!isProduction && l.source === 'dop_owned' && <span className="text-xs bg-orange-950 text-orange-400 px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                        {!isProduction && l.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                        {isProduction && (l.source === 'dop_owned' || l.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
               {getSectionNote('lenses') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('lenses')}</p>}
             </div>
           )}

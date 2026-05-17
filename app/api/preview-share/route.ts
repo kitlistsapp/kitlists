@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 
   const { data: list } = await supabase.from('gear_lists').select('*, rental_houses(name)').eq('id', listId).single()
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', listId).order('sort_order')
-  const { data: lenses } = await supabase.from('list_lenses').select('*, equipment_items(name), list_lens_zooms(*, equipment_items(name))').eq('list_id', listId).maybeSingle()
+  const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', listId).order('sort_order')
   const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', listId).order('sort_order')
   const { data: sectionNotes } = await supabase.from('list_section_notes').select('*').eq('list_id', listId)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', listId).maybeSingle()
@@ -94,12 +94,16 @@ export async function POST(request: Request) {
     if (aNote) tableRows += row('Notes', aNote)
   }
 
-  if (lenses) {
+  if ((lensRows || []).length > 0) {
     tableRows += sectionHeader('Lenses')
-    if (lenses.equipment_items?.name) tableRows += row('Prime Set', lenses.equipment_items.name)
-    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths (approx)', lenses.focal_lengths.join(', '))
-    if (lenses.list_lens_zooms?.length > 0) tableRows += row('Zooms', lenses.list_lens_zooms.map((z: any) => z.equipment_items?.name).filter(Boolean).join('<br>'))
-    if (lenses.zoom_controller) tableRows += row('Controller', lenses.zoom_controller)
+    const byCategory = (lensRows || []).reduce((acc: Record<string, any[]>, l: any) => {
+      if (!acc[l.category]) acc[l.category] = []
+      acc[l.category].push(l)
+      return acc
+    }, {})
+    for (const [cat, lenses] of Object.entries(byCategory)) {
+      tableRows += row(cat, (lenses as any[]).map((l: any) => `${l.manufacturer} ${l.series} ${l.focal_length}`).join('<br>'))
+    }
     const lNote = getSectionNote('lenses')
     if (lNote) tableRows += row('Notes', lNote)
   }
