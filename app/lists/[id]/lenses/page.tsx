@@ -1,325 +1,242 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useMemo, useRef } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 import { createClient } from "@/lib/supabase/client"
+import lensData from "@/app/data/lens_data.json"
 
-interface Item { id: string; name: string; lens_brand: string | null; subcategory: string | null; category: string }
-
-const SUBCATEGORY_LABELS: Record<string, string> = {
-  large_format: 'Large Format',
-  super_35: 'Super 35',
-  specialty: 'Specialty / Probe',
-  vintage: 'Vintage',
+type LensData = {
+  [category: string]: {
+    [manufacturer: string]: {
+      [series: string]: string[]
+    }
+  }
 }
 
-interface SelectedLens { id: string; name: string; brand: string; source: 'rental' | 'dop_owned' | 'ac_owned' }
+type SelectedLens = {
+  category: string
+  manufacturer: string
+  series: string
+  focalLength: string
+}
 
-export default function LensesPage({ params }: { params: Promise<{ id: string }> }) {
-  const supabase = createClient()
-  const [listId, setListId] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [lensRecordId, setLensRecordId] = useState<string | null>(null)
-  const [sectionNotes, setSectionNotes] = useState('')
-  const [notesId, setNotesId] = useState<string | null>(null)
-  const [allItems, setAllItems] = useState<Item[]>([])
+const data = lensData as LensData
 
-  const [selectedLenses, setSelectedLenses] = useState<SelectedLens[]>([])
-  const [selectedBrand, setSelectedBrand] = useState('')
-  const [brandSearch, setBrandSearch] = useState('')
-  const [lensSearch, setLensSearch] = useState('')
-  const [selectedFocalLengths, setSelectedFocalLengths] = useState<string[]>([])
-  const [selectedZooms, setSelectedZoom] = useState<SelectedLens[]>([])
-  const [selectedZoomBrand, setSelectedZoomBrand] = useState('')
-  const [selectedController, setSelectedController] = useState('')
-  const [controllerSearch, setControllerSearch] = useState('')
-  const [controllerOpen, setControllerOpen] = useState(false)
-  const controllerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    params.then(p => { setListId(p.id); loadData(p.id) })
-  }, [])
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => { if (controllerRef.current && !controllerRef.current.contains(e.target as Node)) setControllerOpen(false) }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
-  const loadData = async (lid: string) => {
-    const [{ data: eq }, { data: existing }, { data: notesData }] = await Promise.all([
-      supabase.from('equipment_items').select('*').order('name'),
-      supabase.from('list_lenses').select('*, equipment_items(name, lens_brand), list_lens_zooms(*, equipment_items(name, lens_brand))').eq('list_id', lid).maybeSingle(),
-      supabase.from('list_section_notes').select('*').eq('list_id', lid).eq('section', 'lenses').maybeSingle()
-    ])
-    if (eq) setAllItems(eq)
-    if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
-    if (existing) {
-      setLensRecordId(existing.id)
-      if (existing.focal_lengths) {
-        const focalItems = (eq || []).filter((i: Item) => i.category === 'focal_length')
-        const ids = existing.focal_lengths.map((name: string) => focalItems.find((i: Item) => i.name === name)?.id).filter(Boolean)
-        setSelectedFocalLengths(ids)
-      }
-      if (existing.zoom_controller) setSelectedController(existing.zoom_controller)
-      if (existing.list_lens_zooms) {
-        setSelectedZoom(existing.list_lens_zooms.map((z: any) => ({
-          id: z.item_id,
-          name: z.equipment_items?.name || '',
-          brand: z.equipment_items?.lens_brand || '',
-          source: z.source || 'rental'
-        })))
+const buildSearchIndex = () => {
+  const index: Array<SelectedLens & { label: string }> = []
+  for (const cat of Object.keys(data)) {
+    for (const mfr of Object.keys(data[cat])) {
+      for (const series of Object.keys(data[cat][mfr])) {
+        for (const fl of data[cat][mfr][series]) {
+          index.push({ category: cat, manufacturer: mfr, series, focalLength: fl, label: `${mfr} ${series} ${fl}`.toLowerCase() })
+        }
       }
     }
   }
+  return index
+}
 
-  const brands = [...new Set(allItems.filter(i => i.category === 'prime_set').map(i => i.lens_brand || 'Other'))].sort()
-  const zoomBrands = [...new Set(allItems.filter(i => i.category === 'zoom').map(i => i.lens_brand || 'Other'))].sort()
-  const focalLengths = allItems.filter(i => i.category === 'focal_length').sort((a, b) => (a.subcategory || '').localeCompare(b.subcategory || ''))
-  const controllers = allItems.filter(i => i.category === 'controller')
+const searchIndex = buildSearchIndex()
 
-  const filteredBrands = brands.filter(b => b.toLowerCase().includes(brandSearch.toLowerCase()))
-  const lensesForBrand = allItems.filter(i => i.category === 'prime_set' && i.lens_brand === selectedBrand)
-  const filteredLenses = lensesForBrand.filter(l => l.name.toLowerCase().includes(lensSearch.toLowerCase()))
+function lensKey(l: SelectedLens) {
+  return `${l.category}|${l.manufacturer}|${l.series}|${l.focalLength}`
+}
 
-  const zoomLensesForBrand = allItems.filter(i => i.category === 'zoom' && i.lens_brand === selectedZoomBrand)
+const MODULE_CATEGORIES = ['Secondary lenses', 'PC / Tilt lenses', 'Probe / Snorkel', 'Effects lenses']
 
-  const groupedLenses = filteredLenses.reduce((acc: Record<string, Item[]>, item) => {
-    const key = SUBCATEGORY_LABELS[item.subcategory || ''] || 'Other'
-    if (!acc[key]) acc[key] = []
-    acc[key].push(item)
-    return acc
-  }, {})
+export default function LensesPage() {
+  const params = useParams()
+  const router = useRouter()
+  const listId = params.id as string
 
-  const addLens = (item: Item) => {
-    if (selectedLenses.find(l => l.id === item.id)) return
-    setSelectedLenses(prev => [...prev, { id: item.id, name: item.name, brand: item.lens_brand || '', source: 'rental' }])
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedManufacturer, setSelectedManufacturer] = useState<string | null>(null)
+  const [selectedSeries, setSelectedSeries] = useState<string | null>(null)
+  const [kit, setKit] = useState<Map<string, SelectedLens>>(new Map())
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return []
+    const terms = searchQuery.toLowerCase().split(/\s+/).filter(Boolean)
+    return searchIndex.filter(item => terms.every(t => item.label.includes(t))).slice(0, 40)
+  }, [searchQuery])
+
+  const categories = useMemo(() => Object.keys(data).sort(), [])
+  const manufacturers = useMemo(() => selectedCategory ? Object.keys(data[selectedCategory]).sort() : [], [selectedCategory])
+  const seriesList = useMemo(() => selectedCategory && selectedManufacturer ? Object.keys(data[selectedCategory][selectedManufacturer]).sort() : [], [selectedCategory, selectedManufacturer])
+  const focalLengths = useMemo(() => selectedCategory && selectedManufacturer && selectedSeries ? data[selectedCategory][selectedManufacturer][selectedSeries] : [], [selectedCategory, selectedManufacturer, selectedSeries])
+
+  const breadcrumb = [selectedCategory, selectedManufacturer, selectedSeries].filter(Boolean).join(' › ')
+
+  const toggleLens = (lens: SelectedLens) => {
+    const key = lensKey(lens)
+    setKit(prev => {
+      const next = new Map(prev)
+      if (next.has(key)) next.delete(key)
+      else next.set(key, lens)
+      return next
+    })
   }
 
-  const removeLens = (id: string) => setSelectedLenses(prev => prev.filter(l => l.id !== id))
-  const toggleLensSource = (id: string) => setSelectedLenses(prev => prev.map(l => l.id === id ? { ...l, source: l.source === 'rental' ? 'dop_owned' : 'rental' } : l))
-
-  const addZoom = (item: Item) => {
-    if (selectedZooms.find(z => z.id === item.id)) return
-    setSelectedZoom(prev => [...prev, { id: item.id, name: item.name, brand: item.lens_brand || '', source: 'rental' }])
+  const handleCategorySelect = (cat: string) => {
+    setSelectedCategory(cat)
+    setSelectedManufacturer(null)
+    setSelectedSeries(null)
   }
-  const removeZoom = (id: string) => setSelectedZoom(prev => prev.filter(z => z.id !== id))
 
-  const save = async () => {
-    setSaving(true)
-    const focalNames = selectedFocalLengths.map(id => focalLengths.find(f => f.id === id)?.name || id)
-    const payload = {
+  const handleManufacturerSelect = (mfr: string) => {
+    setSelectedManufacturer(mfr)
+    setSelectedSeries(null)
+  }
+
+  const handleSave = async () => {
+    if (!kit.size) return
+    const supabase = createClient()
+    const rows = Array.from(kit.values()).map((lens, i) => ({
       list_id: listId,
-      prime_set_id: selectedLenses[0]?.id || null,
-      focal_lengths: focalNames,
-      zoom_controller: selectedController,
-      source: selectedLenses[0]?.source || 'rental'
-    }
-    if (lensRecordId) {
-      await supabase.from('list_lenses').update(payload).eq('id', lensRecordId)
-      await supabase.from('list_lens_zooms').delete().eq('list_lens_id', lensRecordId)
-      if (selectedZooms.length > 0) await supabase.from('list_lens_zooms').insert(selectedZooms.map(z => ({ list_lens_id: lensRecordId, item_id: z.id, source: z.source })))
-    } else {
-      const { data: newRec } = await supabase.from('list_lenses').insert(payload).select().single()
-      if (newRec) {
-        setLensRecordId(newRec.id)
-        if (selectedZooms.length > 0) await supabase.from('list_lens_zooms').insert(selectedZooms.map(z => ({ list_lens_id: newRec.id, item_id: z.id, source: z.source })))
-      }
-    }
-    if (notesId) {
-      await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
-    } else if (sectionNotes.trim()) {
-      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: listId, owner_id: (await supabase.auth.getUser()).data.user?.id, section: 'lenses', notes: sectionNotes }).select().single()
-      if (newNote) setNotesId(newNote.id)
-    }
-    setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
+      category: lens.category,
+      manufacturer: lens.manufacturer,
+      series: lens.series,
+      focal_length: lens.focalLength,
+      sort_order: i,
+    }))
+    const { error } = await supabase.from('list_lenses').insert(rows)
+    if (error) { console.error('Failed to save lenses:', error); return }
+    router.push(`/lists/${listId}`)
   }
 
-  const filteredControllers = controllers.filter(c => c.name.toLowerCase().includes(controllerSearch.toLowerCase()))
-  const selectedControllerName = controllers.find(c => c.id === selectedController)?.name || selectedController
+  const kitCount = kit.size
+  const isModuleCategory = selectedCategory ? MODULE_CATEGORIES.includes(selectedCategory) : false
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
-        <div className="flex items-center gap-4">
-          {saved && <span className="text-green-400 text-sm">Saved</span>}
-          <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
-          <a href={`/lists/${listId}`} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
+    <div className="flex flex-col h-screen bg-black text-white select-none">
+      <div className="flex-none px-4 pt-4 pb-3 border-b border-zinc-800">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-base font-semibold tracking-tight text-white">Lens Browser</h1>
+          {breadcrumb ? (
+            <span className="text-xs text-zinc-500 truncate max-w-[60%] text-right">{breadcrumb}</span>
+          ) : (
+            <span className="text-xs text-zinc-600">Select a category</span>
+          )}
         </div>
-      </nav>
-
-      <main className="max-w-4xl mx-auto px-6 py-10">
-        <h2 className="text-2xl font-bold mb-2">Lenses</h2>
-        <p className="text-zinc-500 text-sm mb-8">Shared across all cameras on this list</p>
-
-        <div className="space-y-6">
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Prime lenses</h3>
-
-            {selectedLenses.length > 0 && (
-              <div className="mb-4 space-y-2">
-                {selectedLenses.map(lens => (
-                  <div key={lens.id} className="flex items-center justify-between bg-zinc-800 rounded-xl px-4 py-3">
-                    <div>
-                      <p className="text-white text-sm font-medium">{lens.name}</p>
-                      <p className="text-zinc-500 text-xs">{lens.brand}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        <button onClick={() => setSelectedLenses(prev => prev.map(l => l.id === lens.id ? {...l, source: 'rental'} : l))} className={"text-xs px-2 py-1 rounded-full transition-colors " + (lens.source === 'rental' ? 'bg-zinc-600 text-white' : 'bg-zinc-800 text-zinc-400')}>Rental</button>
-                        <button onClick={() => setSelectedLenses(prev => prev.map(l => l.id === lens.id ? {...l, source: 'dop_owned'} : l))} className={"text-xs px-2 py-1 rounded-full transition-colors " + (lens.source === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400')}>DOP</button>
-                        <button onClick={() => setSelectedLenses(prev => prev.map(l => l.id === lens.id ? {...l, source: 'ac_owned'} : l))} className={"text-xs px-2 py-1 rounded-full transition-colors " + (lens.source === 'ac_owned' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-400')}>AC</button>
-                      </div>
-                      <button onClick={() => removeLens(lens.id)} className="text-zinc-600 hover:text-red-400 text-lg transition-colors">×</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-zinc-500 text-xs mb-2">1. Select brand</p>
-                <input type="text" value={brandSearch} onChange={e => setBrandSearch(e.target.value)} placeholder="Search brands..."
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400 mb-2" />
-                <div className="border border-zinc-800 rounded-xl overflow-hidden max-h-64 overflow-y-auto">
-                  {filteredBrands.map(brand => (
-                    <button key={brand} onClick={() => { setSelectedBrand(brand); setLensSearch('') }}
-                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors border-b border-zinc-800 last:border-0 ${ selectedBrand === brand ? 'bg-orange-400 text-black font-medium' : 'text-zinc-300 hover:bg-zinc-800' }`}>
-                      {brand}
+        <div className="relative">
+          <input
+            ref={searchRef}
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setTimeout(() => setSearchFocused(false), 150)}
+            placeholder="Search any lens, e.g. arri master 50mm"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-md px-3 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-400 transition-colors"
+          />
+          {searchQuery && (
+            <button onClick={() => { setSearchQuery(''); searchRef.current?.focus() }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 text-xs">✕</button>
+          )}
+          {searchFocused && searchQuery.trim() && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-md z-50 max-h-64 overflow-y-auto shadow-xl">
+              {searchResults.length === 0 ? (
+                <div className="px-3 py-3 text-xs text-zinc-500">No lenses found</div>
+              ) : (
+                searchResults.map(item => {
+                  const key = lensKey(item)
+                  const inKit = kit.has(key)
+                  return (
+                    <button key={key} onMouseDown={() => toggleLens(item)} className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between gap-2 border-b border-zinc-800 last:border-0 transition-colors ${inKit ? 'bg-[#1a1000] text-orange-400' : 'text-zinc-200 hover:bg-zinc-800'}`}>
+                      <span>
+                        <span className="text-zinc-500 text-xs mr-1.5">{item.category}</span>
+                        {item.manufacturer} {item.series} <span className="font-medium">{item.focalLength}</span>
+                      </span>
+                      {inKit && <span className="text-orange-400 text-xs flex-none">✓ added</span>}
                     </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-zinc-500 text-xs mb-2">2. Select lens {selectedBrand && `— ${selectedBrand}`}</p>
-                {selectedBrand ? (
-                  <>
-                    <input type="text" value={lensSearch} onChange={e => setLensSearch(e.target.value)} placeholder="Search lenses..."
-                      className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400 mb-2" />
-                    <div className="border border-zinc-800 rounded-xl overflow-hidden max-h-64 overflow-y-auto">
-                      {Object.entries(groupedLenses).map(([subcat, items]) => (
-                        <div key={subcat}>
-                          {Object.keys(groupedLenses).length > 1 && (
-                            <div className="px-4 py-1.5 text-xs text-zinc-600 uppercase tracking-widest bg-zinc-950">{subcat}</div>
-                          )}
-                          {items.map(item => (
-                            <button key={item.id} onClick={() => addLens(item)}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-colors border-b border-zinc-800 last:border-0 ${ selectedLenses.find(l => l.id === item.id) ? 'bg-zinc-700 text-zinc-400' : 'text-zinc-300 hover:bg-zinc-800' }`}>
-                              {item.name}
-                              {selectedLenses.find(l => l.id === item.id) && <span className="text-orange-400 ml-2 text-xs">✓</span>}
-                            </button>
-                          ))}
-                        </div>
-                      ))}
-                      {filteredLenses.length === 0 && <p className="text-zinc-600 text-sm px-4 py-3">No lenses found</p>}
-                    </div>
-                  </>
-                ) : (
-                  <div className="border border-dashed border-zinc-800 rounded-xl h-32 flex items-center justify-center">
-                    <p className="text-zinc-600 text-sm">Select a brand first</p>
-                  </div>
-                )}
-              </div>
+                  )
+                })
+              )}
             </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-hidden">
+        <div className="flex h-full overflow-x-auto">
+          <div className="flex-none w-[130px] min-w-[130px] border-r border-zinc-800 overflow-y-auto">
+            <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-black z-10">Category</div>
+            {categories.map(cat => (
+              <button key={cat} onClick={() => handleCategorySelect(cat)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedCategory === cat ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-900 hover:text-white'}`}>
+                {cat}
+              </button>
+            ))}
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Focal lengths (approximate)</h3>
-            <div className="flex flex-wrap gap-2">
-              {focalLengths.map(fl => (
-                <button key={fl.id} onClick={() => setSelectedFocalLengths(prev => prev.includes(fl.id) ? prev.filter(x => x !== fl.id) : [...prev, fl.id])}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${ selectedFocalLengths.includes(fl.id) ? 'bg-orange-400 border-orange-400 text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500' }`}>
-                  {fl.name}
+          <div className="flex-none w-[140px] min-w-[140px] border-r border-zinc-800 overflow-y-auto">
+            <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-black z-10">Manufacturer</div>
+            {!selectedCategory ? (
+              <div className="px-3 py-3 text-xs text-zinc-600">← Pick a category</div>
+            ) : (
+              manufacturers.map(mfr => (
+                <button key={mfr} onClick={() => handleManufacturerSelect(mfr)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedManufacturer === mfr ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-900 hover:text-white'}`}>
+                  {mfr}
                 </button>
-              ))}
-            </div>
-            {selectedFocalLengths.length > 0 && <p className="text-zinc-600 text-xs mt-3">{selectedFocalLengths.length} selected</p>}
+              ))
+            )}
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Zoom lenses</h3>
+          <div className="flex-none w-[150px] min-w-[150px] border-r border-zinc-800 overflow-y-auto">
+            <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-black z-10">Series</div>
+            {!selectedManufacturer ? (
+              <div className="px-3 py-3 text-xs text-zinc-600">← Pick a manufacturer</div>
+            ) : (
+              seriesList.map(series => (
+                <button key={series} onClick={() => setSelectedSeries(series)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedSeries === series ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-900 hover:text-white'}`}>
+                  {series}
+                </button>
+              ))
+            )}
+          </div>
 
-            {selectedZooms.length > 0 && (
-              <div className="mb-4 space-y-2">
-                {selectedZooms.map(zoom => (
-                  <div key={zoom.id} className="flex items-center justify-between bg-zinc-800 rounded-xl px-4 py-3">
-                    <div>
-                      <p className="text-white text-sm font-medium">{zoom.name}</p>
-                      <p className="text-zinc-500 text-xs">{zoom.brand}</p>
-                    </div>
-                    <button onClick={() => removeZoom(zoom.id)} className="text-zinc-600 hover:text-red-400 text-lg transition-colors">×</button>
-                  </div>
-                ))}
+          <div className="flex-none w-[170px] min-w-[170px] overflow-y-auto">
+            <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-black z-10">
+              {isModuleCategory ? 'Modules' : 'Focal Lengths'}
+            </div>
+            {!selectedSeries ? (
+              <div className="px-3 py-3 text-xs text-zinc-600">← Pick a series</div>
+            ) : (
+              <div className="px-2 py-2 flex flex-wrap gap-1.5">
+                {focalLengths.map(fl => {
+                  const lens: SelectedLens = { category: selectedCategory!, manufacturer: selectedManufacturer!, series: selectedSeries!, focalLength: fl }
+                  const key = lensKey(lens)
+                  const inKit = kit.has(key)
+                  return (
+                    <button key={fl} onClick={() => toggleLens(lens)} className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${inKit ? 'bg-[#1a1000] border-orange-400 text-orange-400' : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white'}`}>
+                      {fl}
+                    </button>
+                  )
+                })}
               </div>
             )}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-zinc-500 text-xs mb-2">1. Select brand</p>
-                <div className="border border-zinc-800 rounded-xl overflow-hidden max-h-48 overflow-y-auto">
-                  {zoomBrands.map(brand => (
-                    <button key={brand} onClick={() => setSelectedZoomBrand(brand)}
-                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors border-b border-zinc-800 last:border-0 ${ selectedZoomBrand === brand ? 'bg-orange-400 text-black font-medium' : 'text-zinc-300 hover:bg-zinc-800' }`}>
-                      {brand}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-zinc-500 text-xs mb-2">2. Select zoom {selectedZoomBrand && `— ${selectedZoomBrand}`}</p>
-                {selectedZoomBrand ? (
-                  <div className="border border-zinc-800 rounded-xl overflow-hidden max-h-48 overflow-y-auto">
-                    {zoomLensesForBrand.map(item => (
-                      <button key={item.id} onClick={() => addZoom(item)}
-                        className={`w-full text-left px-4 py-2.5 text-sm transition-colors border-b border-zinc-800 last:border-0 ${ selectedZooms.find(z => z.id === item.id) ? 'bg-zinc-700 text-zinc-400' : 'text-zinc-300 hover:bg-zinc-800' }`}>
-                        {item.name}
-                        {selectedZooms.find(z => z.id === item.id) && <span className="text-orange-400 ml-2 text-xs">✓</span>}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="border border-dashed border-zinc-800 rounded-xl h-24 flex items-center justify-center">
-                    <p className="text-zinc-600 text-sm">Select a brand first</p>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Zoom / focus controller</h3>
-            <div ref={controllerRef} className="relative">
-              <input type="text" value={controllerSearch || selectedControllerName} onFocus={() => { setControllerOpen(true); setControllerSearch('') }} onChange={e => { setControllerSearch(e.target.value); setControllerOpen(true) }}
-                placeholder="Search controllers..."
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
-              {selectedController && (
-                <button onClick={() => { setSelectedController(''); setControllerSearch('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>
-              )}
-              {controllerOpen && (
-                <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl max-h-48 overflow-y-auto">
-                  {filteredControllers.map(c => (
-                    <button key={c.id} onClick={() => { setSelectedController(c.id); setControllerOpen(false); setControllerSearch('') }}
-                      className="w-full text-left px-4 py-2.5 text-sm text-zinc-200 hover:bg-zinc-800">
-                      {c.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
         </div>
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-6">
-          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Section notes</h3>
-          <textarea value={sectionNotes} onChange={e => setSectionNotes(e.target.value)}
-            placeholder="Any notes about lenses..."
-            rows={3}
-            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+      </div>
+
+      <div className="flex-none border-t border-zinc-800 px-4 py-3 bg-black flex items-center justify-between gap-3">
+        <div className="text-sm">
+          {kitCount === 0 ? (
+            <span className="text-zinc-600">No lenses selected</span>
+          ) : (
+            <span><span className="text-orange-400 font-semibold">{kitCount}</span><span className="text-zinc-400"> {kitCount === 1 ? 'lens' : 'lenses'} selected</span></span>
+          )}
         </div>
-      </main>
+        <div className="flex items-center gap-2">
+          {kitCount > 0 && (
+            <button onClick={() => setKit(new Map())} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear all</button>
+          )}
+          <button onClick={handleSave} disabled={kitCount === 0} className={`px-4 py-1.5 rounded text-sm font-medium transition-all ${kitCount > 0 ? 'bg-orange-400 text-black hover:bg-orange-300' : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'}`}>
+            Save to list
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
