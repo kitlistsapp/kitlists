@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useRef } from 'react'
-import lensData from '@/data/lens_data.json'
+import lensData from '../../../data/lens_data.json'
 
 type LensData = {
   [category: string]: {
