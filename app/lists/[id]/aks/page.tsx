@@ -21,7 +21,7 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
   }, [])
   const filtered = items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
   const grouped = filtered.reduce((acc: Record<string, Item[]>, item) => {
-    const key = item.category === 'misc' ? 'Miscellaneous' : (item.subcategory || item.brand || 'Other')
+    const key = (item as any)._groupKey || item.subcategory || item.brand || 'Other'
     if (!acc[key]) acc[key] = []
     acc[key].push(item)
     return acc
@@ -92,7 +92,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
     if (existing && existing.length > 0) {
       setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental', notes: i.notes || '', subcategory: i.equipment_items?.subcategory || '' })))
     } else {
-      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '', subcategory: '' }])
+      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '', subcategory: '' }])
     }
   }
 
@@ -111,11 +111,31 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
 
   const update = (id: string, field: string, value: any) => setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   const remove = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
-  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '', subcategory: '' }])
+  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '', subcategory: '' }])
 
-  // Group items: AKS subcategories first, then Misc at bottom
-  const aksItems = allItems.filter(i => i.category === 'aks')
-  const miscItems = allItems.filter(i => i.category === 'misc')
+  // Top-level category grouping for the picker
+  const topCategoryMap: Record<string, string> = {
+    'Alexa 35': 'Camera Plates', 'Mini LF': 'Camera Plates',
+    'Stabilisers': 'Camera Support', 'Support': 'Camera Support',
+    'Handheld Handles': 'Camera Support', 'Camera Handles': 'Camera Support',
+    'Onboard Monitors': 'AKS - Monitors', 'Camera Control Monitor': 'AKS - Monitors',
+    'Recording Onboard Monitor': 'AKS - Monitors', 'Director & Client Monitors': 'AKS - Monitors',
+    'Clamp-on': 'Mattebox', 'Studio': 'Mattebox',
+    'Manual': 'Lens Control', 'Digital': 'Lens Control', 'Wireless': 'Lens Control',
+    'Rangefinder': 'Rangefinder',
+    'Vtr': 'VTR',
+    'Transmission': 'Transmission',
+    'Recorders': 'Recorders',
+    'Underwater': 'Misc', 'Rain Deflectors': 'Misc', 'Carts': 'Misc',
+  }
+
+  // For picker: attach top-level category as a virtual field for grouping
+  const aksItems = allItems.filter(i => i.category === 'aks').map(i => ({
+    ...i,
+    _topCategory: topCategoryMap[i.subcategory || ''] || i.subcategory || 'Other',
+    _groupKey: i.subcategory ? `${topCategoryMap[i.subcategory] || i.subcategory} — ${i.subcategory}` : 'Other'
+  }))
+  const miscItems = allItems.filter(i => i.category === 'misc').map(i => ({ ...i, _topCategory: 'Miscellaneous', _groupKey: 'Miscellaneous' }))
   const combinedItems = [...aksItems, ...miscItems]
 
   return (
