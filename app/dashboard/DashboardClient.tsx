@@ -4,10 +4,11 @@ import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
-export default function DashboardClient({ user, initialLists, initialShares }: {
+export default function DashboardClient({ user, initialLists, initialShares, collaboratedLists }: {
   user: any
   initialLists: any[]
   initialShares: Record<string, number>
+  collaboratedLists: any[]
 }) {
   const supabase = createClient()
   const router = useRouter()
@@ -214,6 +215,37 @@ export default function DashboardClient({ user, initialLists, initialShares }: {
                 </div>
               )
             })}
+          </div>
+        )}
+        {/* Shared with me */}
+        {collaboratedLists && collaboratedLists.length > 0 && (
+          <div className="mt-10">
+            <h3 className={"text-sm font-semibold uppercase tracking-widest mb-3 " + mutedText}>Shared with me</h3>
+            <div className="grid gap-3">
+              {collaboratedLists.map((list: any) => (
+                <div key={list.id} className={"rounded-xl border transition-colors " + cardBg}>
+                  <a href={"/lists/" + list.id} className="block p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-semibold text-base">{list.project_name}</h3>
+                          <span className="text-xs bg-blue-950 text-blue-400 px-2.5 py-0.5 rounded-full font-medium">Collaborating</span>
+                        </div>
+                        <p className={"text-sm mt-0.5 " + mutedText}>{list.production_co}</p>
+                        <div className={"flex gap-3 mt-1.5 text-xs flex-wrap " + dimText}>
+                          {list.shoot_start && <span>{new Date(list.shoot_start).toLocaleDateString('en-AU')}</span>}
+                          {list.shoot_days && <span>{list.shoot_days} days</span>}
+                          {list._invitedBy?.full_name && <span>DOP: {list._invitedBy.full_name}</span>}
+                        </div>
+                      </div>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={darkMode ? 'text-zinc-700 mt-1' : 'text-gray-300 mt-1'}>
+                        <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </main>

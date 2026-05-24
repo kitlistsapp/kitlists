@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import SaveAsTemplate from "./SaveAsTemplate"
+import InviteCollaborator from "./InviteCollaborator"
 import { redirect } from "next/navigation"
 
 export default async function ListPage({ params }: { params: Promise<{ id: string }> }) {
@@ -103,6 +104,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
           <div className="flex gap-2 flex-wrap mt-4">
             <a href={`/lists/${id}/share`} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
             <a href={`/lists/${id}/edit`} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm transition-colors">Edit details</a>
+            <InviteCollaborator listId={id} />
             <SaveAsTemplate listId={id} />
           </div>
         </div>
