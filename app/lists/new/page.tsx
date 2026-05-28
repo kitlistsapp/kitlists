@@ -164,7 +164,7 @@ export default function NewListPage() {
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
               <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)}
