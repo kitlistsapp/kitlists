@@ -148,7 +148,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
       <div className="space-y-3">
         {entries.map((entry, idx) => (
           <div key={entry.id}>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center min-w-0">
               <div className="flex-1">
                 <SearchablePicker items={items} value={entry.itemId}
                   onChange={(id, name) => { updateEntry(setFn, entry.id, 'itemId', id); updateEntry(setFn, entry.id, 'itemName', name) }}
@@ -157,7 +157,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
               <input type="number" min="1" placeholder="Qty"
                 value={entry.quantity === 0 ? '' : entry.quantity}
                 onChange={e => updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0)}
-                className="w-16 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
               <button onClick={() => removeEntry(setFn, entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
             </div>
             {entry.itemId && (

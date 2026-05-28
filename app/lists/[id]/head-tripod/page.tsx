@@ -146,7 +146,7 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
           {entries.map(entry => (
             <div key={entry.id}>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center min-w-0">
                 <div className="flex-1">
                   <SearchablePicker items={allItems} value={entry.itemId}
                     onChange={(id, name) => { update(entry.id, 'itemId', id); update(entry.id, 'itemName', name) }}
@@ -155,7 +155,7 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
                 <input type="number" min="1" placeholder="Qty"
                   value={entry.quantity === 0 ? '' : entry.quantity}
                   onChange={e => update(entry.id, 'quantity', parseInt(e.target.value) || 0)}
-                  className="w-16 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
                 <button onClick={() => remove(entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
               </div>
               {entry.itemId && (

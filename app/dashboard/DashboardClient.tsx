@@ -159,10 +159,10 @@ export default function DashboardClient({ user, initialLists, initialShares, col
           <a href="/lists/new" className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">+ New List</a>
         </div>
 
-        <div className="flex gap-1 mb-5 overflow-x-auto pb-1">
+        <div className="flex gap-1 mb-5 overflow-x-auto pb-1 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
           {tabs.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={"px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap " + (tab === t.key ? tabActive : tabInactive)}>
+              className={"px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 whitespace-nowrap sm:px-3 sm:py-2 sm:text-sm sm:gap-1.5 " + (tab === t.key ? tabActive : tabInactive)}>
               {t.label}
               {t.count > 0 && <span className={"text-xs px-1.5 py-0.5 rounded-full " + (tab === t.key ? 'bg-black/20 text-black' : darkMode ? 'bg-zinc-800 text-zinc-500' : 'bg-gray-100 text-zinc-400')}>{t.count}</span>}
             </button>
