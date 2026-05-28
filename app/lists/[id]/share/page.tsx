@@ -68,13 +68,14 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
 
   const createShare = async () => {
     setCreating(true)
-    const { data } = await supabase.from('list_shares').insert({
+    await supabase.from('list_shares').insert({
       list_id: listId,
       recipient_email: newEmail.trim() || null,
       role: newRole,
       view_mode: newMode
-    }).select().single()
-    if (data) { setShares(prev => [...prev, data]); setNewEmail('') }
+    })
+    setNewEmail('')
+    await loadShares(listId)
     setCreating(false)
   }
 
