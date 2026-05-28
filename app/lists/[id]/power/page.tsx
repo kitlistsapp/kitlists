@@ -83,6 +83,14 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const [acdcEntries, setAcdcEntries] = useState<Entry[]>([])
   const [sectionNotes, setSectionNotes] = useState('')
   const [notesId, setNotesId] = useState<string | null>(null)
+  const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const onboardRef = useRef<Entry[]>([])
+  const blockRef = useRef<Entry[]>([])
+  const acdcRef = useRef<Entry[]>([])
+  const listIdRef = useRef('')
+  const userIdRef = useRef('')
+  const notesRef = useRef('')
+  const notesIdRef = useRef<string | null>(null)
 
   useEffect(() => {
     params.then(p => { setListId(p.id); loadData(p.id) })
@@ -98,6 +106,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     ])
     if (eq) setAllItems(eq)
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
+    listIdRef.current = lid
     if (existing && existing.length > 0) {
       setOnboardEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
       setBlockEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
@@ -105,30 +114,45 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     }
   }
 
+  useEffect(() => { onboardRef.current = onboardEntries }, [onboardEntries])
+  useEffect(() => { blockRef.current = blockEntries }, [blockEntries])
+  useEffect(() => { acdcRef.current = acdcEntries }, [acdcEntries])
+  useEffect(() => { notesRef.current = sectionNotes }, [sectionNotes])
+  useEffect(() => { notesIdRef.current = notesId }, [notesId])
+  useEffect(() => { listIdRef.current = listId }, [listId])
+  useEffect(() => { userIdRef.current = userId }, [userId])
+
+  const triggerAutoSave = (delay = 600) => {
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => save(), delay)
+  }
+
   const save = async () => {
-    const allEntries = [...onboardEntries, ...blockEntries, ...acdcEntries]
-    const invalid = allEntries.filter(e => e.itemId && (e.quantity < 1 || !e.quantity))
-    if (invalid.length > 0) {
-      alert('Please enter a quantity of at least 1 for all items.')
-      return
-    }
+    const ob = onboardRef.current
+    const bl = blockRef.current
+    const ac = acdcRef.current
+    const lid = listIdRef.current
+    const uid = userIdRef.current
+    const notes = notesRef.current
+    const nid = notesIdRef.current
+    const allEntries = [...ob, ...bl, ...ac]
     setSaving(true)
-    await supabase.from('list_items').delete().eq('list_id', listId).eq('section', 'power')
+    await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'power')
     const rows: any[] = []
     const addRows = (entries: Entry[], idx_offset: number) => entries.filter(e => e.itemId).forEach((e, i) => rows.push({
-      list_id: listId, owner_id: userId, section: 'power',
+      list_id: lid, owner_id: uid, section: 'power',
       item_id: e.itemId.startsWith('custom:') ? null : e.itemId,
       custom_label: e.itemId.startsWith('custom:') ? e.itemName : null,
       quantity: e.quantity || 1, source: e.source, sort_order: idx_offset + i
     }))
-    addRows(onboardEntries, 0)
-    addRows(blockEntries, 100)
-    addRows(acdcEntries, 200)
+    addRows(ob, 0)
+    addRows(bl, 100)
+    addRows(ac, 200)
     if (rows.length > 0) await supabase.from('list_items').insert(rows)
-    if (notesId) {
-      await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
-    } else if (sectionNotes.trim()) {
-      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: listId, owner_id: userId, section: 'power', notes: sectionNotes }).select().single()
+    if (nid) {
+      await supabase.from('list_section_notes').update({ notes }).eq('id', nid)
+    } else if (notes.trim()) {
+      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'power', notes }).select().single()
       if (newNote) setNotesId(newNote.id)
     }
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
@@ -151,20 +175,20 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
             <div className="flex gap-2 items-center min-w-0">
               <div className="flex-1">
                 <SearchablePicker items={items} value={entry.itemId}
-                  onChange={(id, name) => { updateEntry(setFn, entry.id, 'itemId', id); updateEntry(setFn, entry.id, 'itemName', name) }}
+                  onChange={(id, name) => { updateEntry(setFn, entry.id, 'itemId', id); updateEntry(setFn, entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
                   placeholder={"Search " + label.toLowerCase() + "..."} />
               </div>
               <input type="number" min="1" placeholder="Qty"
                 value={entry.quantity === 0 ? '' : entry.quantity}
-                onChange={e => updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0)}
+                onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
                 className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
               <button onClick={() => removeEntry(setFn, entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
             </div>
             {entry.itemId && (
               <div className="flex gap-1 mt-1.5 ml-1">
                 {['rental', 'dop_owned', 'ac_owned'].map(s => (
-                  <button key={s} onClick={() => updateEntry(setFn, entry.id, 'source', s)}
-                    className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
+                  <button key={s}
+                    className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')} onClick={() => { updateEntry(setFn, entry.id, 'source', s); triggerAutoSave(300) }}>
                     {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
                   </button>
                 ))}
@@ -185,7 +209,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
         <div className="flex items-center gap-3">
-          {saved && <span className="text-green-400 text-sm">Saved</span>}
+          {saved && <span className="text-green-400 text-sm">✓ Saved</span>}
           <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
             {saving ? 'Saving...' : 'Save'}
           </button>

@@ -189,7 +189,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
 
           {sectionCard("Power", `/lists/${id}/power`, powerItems, "Not configured", getSectionNotes("power"))}
           {sectionCard("Head & Tripod", `/lists/${id}/head-tripod`, headTripodItems, "Not configured", getSectionNotes("head_tripod"))}
-          {sectionCard("Grip", `/lists/${id}/grip`, gripItems, "Not configured", getSectionNotes("grip"))}
+          {sectionCard("Gimbals", `/lists/${id}/grip`, gripItems, "Not configured", getSectionNotes("grip"))}
           {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems, "Not configured", getSectionNotes("filtration"))}
           {sectionCard("AKS", `/lists/${id}/aks`, aksItems, "Not configured", getSectionNotes("aks"))}
 
