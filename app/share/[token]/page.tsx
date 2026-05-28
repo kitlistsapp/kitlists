@@ -62,7 +62,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></h1>
+        <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
         <span className="text-zinc-600 text-xs uppercase tracking-widest">
           {isProduction ? 'Production view' : share.role === 'rental' ? 'Rental house view' : 'Crew view'}
         </span>
@@ -290,7 +290,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               </div>
             </div>
           )}
-          <p className="text-zinc-700 text-xs">Powered by KitList</p>
+          <p className="text-zinc-700 text-xs">Powered by KitLists</p>
         </div>
 
       </main>

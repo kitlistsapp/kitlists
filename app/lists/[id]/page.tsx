@@ -84,7 +84,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
         <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Dashboard</a>
       </nav>
 

@@ -90,7 +90,7 @@ export default function InvitePage() {
   if (error && !invite) return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="text-center">
-        <h1 className="text-xl font-bold text-white mb-2">Kit<span className="text-[#FFE135]">List</span></h1>
+        <h1 className="text-xl font-bold text-white mb-2">Kit<span className="text-[#FFE135]">Lists</span></h1>
         <p className="text-zinc-400 text-sm mt-6">{error}</p>
         <a href="/dashboard" className="mt-4 inline-block text-[#FFE135] text-sm hover:underline">Go to dashboard</a>
       </div>
@@ -103,7 +103,7 @@ export default function InvitePage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-white mb-1">Kit<span className="text-[#FFE135]">List</span></h1>
+        <h1 className="text-2xl font-bold text-white mb-1">Kit<span className="text-[#FFE135]">Lists</span></h1>
         <p className="text-zinc-500 text-xs mb-8">Camera equipment management</p>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-6">

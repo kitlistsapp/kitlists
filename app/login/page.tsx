@@ -50,7 +50,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
           <h1 className="text-white text-4xl font-bold tracking-tight">
-            Kit<span className="text-[#FFE135]">List</span>
+            Kit<span className="text-[#FFE135]">Lists</span>
           </h1>
           <p className="text-zinc-500 text-sm mt-2 tracking-widest uppercase">
             Camera Equipment Platform
@@ -116,7 +116,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-zinc-700 text-xs text-center mt-8">
-          KitList · Built for DOPs & Camera Crew
+          KitLists · Built for DOPs & Camera Crew
         </p>
       </div>
     </div>

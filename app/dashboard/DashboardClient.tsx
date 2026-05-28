@@ -131,7 +131,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   return (
     <div className={"min-h-screen " + bg}>
       <nav className={"border-b px-4 py-4 flex items-center justify-between " + navBg}>
-        <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></h1>
+        <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
         <div className="flex items-center gap-3">
           <a href="/profile" className="flex items-center gap-2 group">
             {user?.logo_url && (

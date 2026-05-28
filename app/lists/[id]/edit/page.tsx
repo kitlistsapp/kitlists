@@ -52,7 +52,7 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
         <a href={"/lists/" + listId} className="text-zinc-400 hover:text-white text-sm">Cancel</a>
       </nav>
       <main className="max-w-2xl mx-auto px-4 py-8">

@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   const ownerLabel = (source: string, viewMode: string) => {
     if (viewMode !== 'full') return ''
-    if (source === 'dop_owned') return ' <span style="background:#431407;color:#fb923c;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:bold;">DOP</span>'
+    if (source === 'dop_owned') return ' <span style="background:#431407;color:#FFE135;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:bold;">DOP</span>'
     if (source === 'ac_owned') return ' <span style="background:#1e3a5f;color:#60a5fa;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:bold;">AC</span>'
     return ''
   }
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
   const sectionHeader = (title: string) => `
     <tr>
-      <td colspan='2' style='padding: 16px 12px 4px; color: #fb923c; font-size: 11px; font-weight: bold; letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid #27272a;'>${title}</td>
+      <td colspan='2' style='padding: 16px 12px 4px; color: #FFE135; font-size: 11px; font-weight: bold; letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid #27272a;'>${title}</td>
     </tr>`
 
   let tableRows = ''
@@ -120,16 +120,16 @@ export async function POST(request: Request) {
 
   const html = `
     <div style='font-family: helvetica, arial, sans-serif; max-width: 640px; margin: 0 auto; background: #09090b; color: #fff; padding: 32px;'>
-      <h1 style='font-size: 22px; font-weight: bold; margin: 0 0 4px;'>Kit<span style='color: #fb923c;'>List</span></h1>
+      <h1 style='font-size: 22px; font-weight: bold; margin: 0 0 4px;'>Kit<span style='color: #FFE135;'>Lists</span></h1>
       <p style='color: #71717a; font-size: 11px; margin: 0 0 24px; letter-spacing: 0.1em; text-transform: uppercase;'>Camera Equipment Platform</p>
       <hr style='border: none; border-top: 1px solid #27272a; margin: 0 0 24px;' />
       <p style='color: #a1a1aa; font-size: 13px; margin: 0 0 4px;'>${dopName}${companyName ? ' &middot; ' + companyName : ''} has sent you a gear list.</p>
       <table style='width: 100%; border-collapse: collapse; margin: 16px 0 24px;'>
         <tbody>${tableRows}</tbody>
       </table>
-      <a href='${shareUrl}' style='display: inline-block; background: #fb923c; color: #000; font-weight: bold; font-size: 13px; padding: 12px 24px; border-radius: 8px; text-decoration: none;'>View online</a>
+      <a href='${shareUrl}' style='display: inline-block; background: #FFE135; color: #000; font-weight: bold; font-size: 13px; padding: 12px 24px; border-radius: 8px; text-decoration: none;'>View online</a>
       <hr style='border: none; border-top: 1px solid #27272a; margin: 32px 0 16px;' />
-      <p style='color: #3f3f46; font-size: 11px; margin: 0;'>Powered by KitList</p>
+      <p style='color: #3f3f46; font-size: 11px; margin: 0;'>Powered by KitLists</p>
     </div>
   `
 

@@ -29,12 +29,12 @@ export async function POST(request: Request) {
   const company = profile?.company_name ? ` (${profile.company_name})` : ''
 
   await resend.emails.send({
-    from: 'KitList <onboarding@resend.dev>',
+    from: 'KitLists <onboarding@resend.dev>',
     to: invitedEmail,
     subject: `${dopName} invited you to collaborate on ${list.project_name}`,
     html: `
       <div style="font-family:sans-serif;max-width:520px;margin:0 auto;background:#000;color:#fff;padding:32px;border-radius:12px;">
-        <h1 style="font-size:24px;font-weight:bold;margin-bottom:4px;">Kit<span style="color:#fb923c;">List</span></h1>
+        <h1 style="font-size:24px;font-weight:bold;margin-bottom:4px;">Kit<span style="color:#FFE135;">Lists</span></h1>
         <p style="color:#71717a;font-size:13px;margin-top:0;">Camera equipment management</p>
         <hr style="border:none;border-top:1px solid #27272a;margin:24px 0;">
         <h2 style="font-size:18px;font-weight:600;margin-bottom:8px;">You have been invited to collaborate</h2>
@@ -42,12 +42,12 @@ export async function POST(request: Request) {
           <strong style="color:#fff;">${dopName}${company}</strong> has invited you to collaborate on the kit list for <strong style="color:#fff;">${list.project_name}</strong>.
         </p>
         <p style="color:#a1a1aa;font-size:14px;">As a collaborator you will have full access to view and edit the list.</p>
-        <a href="${inviteUrl}" style="display:inline-block;margin-top:24px;background:#fb923c;color:#000;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;font-size:14px;">
+        <a href="${inviteUrl}" style="display:inline-block;margin-top:24px;background:#FFE135;color:#000;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;font-size:14px;">
           Accept invitation
         </a>
         <p style="color:#52525b;font-size:12px;margin-top:32px;">Or copy this link: ${inviteUrl}</p>
         <hr style="border:none;border-top:1px solid #27272a;margin:24px 0;">
-        <p style="color:#52525b;font-size:11px;">Powered by KitList</p>
+        <p style="color:#52525b;font-size:11px;">Powered by KitLists</p>
       </div>
     `
   })
