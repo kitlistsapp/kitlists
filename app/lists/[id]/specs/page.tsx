@@ -97,10 +97,10 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <div className="flex items-center gap-4">
           {saved && <span className="text-green-400 text-sm">Saved</span>}
-          <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
+          <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
           <a href={`/lists/${listId}`} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
         </div>
       </nav>
@@ -112,22 +112,22 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Format / Codec</label>
             <input type="text" value={format} onChange={e => setFormat(e.target.value)} placeholder="e.g. ARRIRAW, ProRes 4444, X-OCN XT"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Resolution</label>
             <input type="text" value={resolution} onChange={e => setResolution(e.target.value)} placeholder="e.g. 4.6K, 8K, 4K LF"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Project frame rate</label>
             <input type="text" value={fps} onChange={e => setFps(e.target.value)} placeholder="e.g. 25fps"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 mb-2" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] mb-2" />
             <div className="flex gap-2 flex-wrap">
               {fpsOptions.map(o => (
-                <button key={o} onClick={() => setFps(o)} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ fps === o ? 'bg-orange-400 border-orange-400 text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
+                <button key={o} onClick={() => setFps(o)} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ fps === o ? 'bg-[#FFE135] border-[#FFE135] text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
               ))}
             </div>
           </div>
@@ -135,10 +135,10 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Aspect ratio</label>
             <input type="text" value={aspectRatio} onChange={e => setAspectRatio(e.target.value)} placeholder="e.g. 2.39:1"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 mb-2" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] mb-2" />
             <div className="flex gap-2 flex-wrap">
               {aspectOptions.map(o => (
-                <button key={o} onClick={() => setAspectRatio(o)} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ aspectRatio === o ? 'bg-orange-400 border-orange-400 text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
+                <button key={o} onClick={() => setAspectRatio(o)} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ aspectRatio === o ? 'bg-[#FFE135] border-[#FFE135] text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
               ))}
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
                   <button key={l.id} onClick={() => addProfileLut(l)}
                     className={`w-full text-left px-4 py-2.5 text-sm border-b border-zinc-800 last:border-0 transition-colors ${ listLuts.find(ll => ll.profile_lut_id === l.id) ? 'text-zinc-600 cursor-default' : 'text-zinc-300 hover:bg-zinc-800' }`}>
                     {l.name}
-                    {listLuts.find(ll => ll.profile_lut_id === l.id) && <span className="text-orange-400 ml-2 text-xs">✓ added</span>}
+                    {listLuts.find(ll => ll.profile_lut_id === l.id) && <span className="text-[#FFE135] ml-2 text-xs">✓ added</span>}
                   </button>
                 ))}
               </div>
@@ -190,7 +190,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
             <textarea value={jobNotes} onChange={e => setJobNotes(e.target.value)}
               placeholder="Car rigs, remote heads, cranes, special requirements..."
               rows={4}
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
           </div>
         </div>
       </main>

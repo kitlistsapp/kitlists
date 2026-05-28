@@ -115,7 +115,7 @@ export default function NewListPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm transition-colors">Back to dashboard</a>
       </nav>
 
@@ -132,17 +132,17 @@ export default function NewListPage() {
               <label className="text-zinc-400 text-sm mb-2 block">Start from</label>
               <div className="flex gap-2 mb-3">
                 <button onClick={() => setMode('scratch')}
-                  className={"px-4 py-2 rounded-lg text-sm font-medium transition-colors " + (mode === 'scratch' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700')}>
+                  className={"px-4 py-2 rounded-lg text-sm font-medium transition-colors " + (mode === 'scratch' ? 'bg-[#FFE135] text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700')}>
                   Scratch
                 </button>
                 <button onClick={() => setMode('template')}
-                  className={"px-4 py-2 rounded-lg text-sm font-medium transition-colors " + (mode === 'template' ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700')}>
+                  className={"px-4 py-2 rounded-lg text-sm font-medium transition-colors " + (mode === 'template' ? 'bg-[#FFE135] text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700')}>
                   Template
                 </button>
               </div>
               {mode === 'template' && (
                 <select value={selectedTemplate} onChange={e => setSelectedTemplate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400">
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]">
                   <option value="">Select a template...</option>
                   {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
@@ -151,36 +151,36 @@ export default function NewListPage() {
           )}
 
           <div>
-            <label className="text-zinc-400 text-sm mb-1.5 block">Project name <span className="text-orange-400">*</span></label>
+            <label className="text-zinc-400 text-sm mb-1.5 block">Project name <span className="text-[#FFE135]">*</span></label>
             <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)}
               placeholder="e.g. Heartbreak High S3"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Production company</label>
             <input type="text" value={productionCo} onChange={e => setProductionCo(e.target.value)}
               placeholder="e.g. Fremantle Australia"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
               <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             </div>
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Shoot days</label>
               <input type="number" min="1" value={shootDays} onChange={e => setShootDays(e.target.value)}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             </div>
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Rental house</label>
             <select value={houseId} onChange={e => setHouseId(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400">
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]">
               <option value="">Select rental house (optional)</option>
               {rentalHouses.map((h: any) => (
                 <option key={h.id} value={h.id}>{h.name}{h.city ? " — " + h.city : ""}</option>
@@ -194,7 +194,7 @@ export default function NewListPage() {
               <div className="flex gap-2 flex-wrap">
                 {[1,2,3,4,5,6].map(n => (
                   <button key={n} onClick={() => setNumCameras(String(n))}
-                    className={"w-12 h-12 rounded-lg text-sm font-semibold transition-colors " + (numCameras === String(n) ? "bg-orange-400 text-black" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700")}>
+                    className={"w-12 h-12 rounded-lg text-sm font-semibold transition-colors " + (numCameras === String(n) ? "bg-[#FFE135] text-black" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700")}>
                     {n}
                   </button>
                 ))}
@@ -208,7 +208,7 @@ export default function NewListPage() {
           {error && <p className="text-red-400 text-sm">{error}</p>}
 
           <button onClick={handleCreate} disabled={loading}
-            className="w-full bg-orange-400 hover:bg-orange-300 text-black font-semibold rounded-lg py-3 text-sm disabled:opacity-50">
+            className="w-full bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold rounded-lg py-3 text-sm disabled:opacity-50">
             {loading ? "Creating..." : "Create gear list"}
           </button>
         </div>

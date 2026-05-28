@@ -60,7 +60,7 @@ function CategoryPicker({ value, onChange }: { value: string; onChange: (v: stri
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        className={"w-full text-left bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors flex items-center justify-between " + (value ? "text-white" : "text-zinc-500")}
+        className={"w-full text-left bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors flex items-center justify-between " + (value ? "text-white" : "text-zinc-500")}
       >
         {value || "Select category..."}
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="flex-shrink-0 text-zinc-500"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -70,7 +70,7 @@ function CategoryPicker({ value, onChange }: { value: string; onChange: (v: stri
           {TOP_CATEGORIES.map(cat => (
             <button key={cat}
               onClick={() => { onChange(cat); setOpen(false) }}
-              className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (value === cat ? "bg-[#1a1000] text-orange-400" : "text-zinc-200 hover:bg-zinc-800")}>
+              className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (value === cat ? "bg-[#2a2000] text-[#FFE135]" : "text-zinc-200 hover:bg-zinc-800")}>
               {cat}
             </button>
           ))}
@@ -120,7 +120,7 @@ function ItemPicker({ items, topCategory, value, onChange }: {
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => setOpen(true)}
         placeholder={"Search " + topCategory.toLowerCase() + "..."}
-        className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400"
+        className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]"
       />
       {value && (
         <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>
@@ -128,7 +128,7 @@ function ItemPicker({ items, topCategory, value, onChange }: {
       {open && (
         <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl max-h-64 overflow-y-auto">
           {filtered.length === 0 ? (
-            <button className="w-full text-left px-4 py-3 text-sm text-orange-400 hover:bg-zinc-800"
+            <button className="w-full text-left px-4 py-3 text-sm text-[#FFE135] hover:bg-zinc-800"
               onClick={() => { onChange('custom:' + query, query); setOpen(false) }}>
               + Add "{query}" as custom
             </button>
@@ -149,7 +149,7 @@ function ItemPicker({ items, topCategory, value, onChange }: {
                 </div>
               ))}
               {query && !filtered.find(i => i.name.toLowerCase() === query.toLowerCase()) && (
-                <button className="w-full text-left px-4 py-3 text-sm text-orange-400 hover:bg-zinc-800 border-t border-zinc-800"
+                <button className="w-full text-left px-4 py-3 text-sm text-[#FFE135] hover:bg-zinc-800 border-t border-zinc-800"
                   onClick={() => { onChange('custom:' + query, query); setOpen(false) }}>
                   + Add "{query}" as custom
                 </button>
@@ -219,10 +219,10 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <div className="flex items-center gap-3">
           {saved && <span className="text-green-400 text-sm">Saved</span>}
-          <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
+          <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
             {saving ? 'Saving...' : 'Save'}
           </button>
           <a href={"/lists/" + listId} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
@@ -245,7 +245,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                 <input type="number" min="1" placeholder="Qty"
                   value={entry.quantity === 0 ? '' : entry.quantity}
                   onChange={e => update(entry.id, 'quantity', parseInt(e.target.value) || 0)}
-                  className="w-16 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-orange-400 mt-0" />
+                  className="w-16 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#FFE135] mt-0" />
                 <button onClick={() => remove(entry.id)} className="text-zinc-600 hover:text-red-400 text-lg mt-2.5">×</button>
               </div>
               {entry.itemId && (
@@ -253,7 +253,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                   <div className="flex gap-1">
                     {['rental', 'dop_owned', 'ac_owned'].map(s => (
                       <button key={s} onClick={() => update(entry.id, 'source', s)}
-                        className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
+                        className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
                         {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
                       </button>
                     ))}
@@ -261,7 +261,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                   {(() => { const item = allItems.find(i => i.id === entry.itemId); return item?.notes ? <p className="text-xs text-amber-500/80 px-1">{item.notes}</p> : null })()}
                   <input type="text" value={entry.notes} onChange={e => update(entry.id, 'notes', e.target.value)}
                     placeholder="Notes (optional)..."
-                    className="w-full bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-orange-400" />
+                    className="w-full bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#FFE135]" />
                 </div>
               )}
             </div>

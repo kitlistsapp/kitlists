@@ -90,9 +90,9 @@ export default function InvitePage() {
   if (error && !invite) return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="text-center">
-        <h1 className="text-xl font-bold text-white mb-2">Kit<span className="text-orange-400">List</span></h1>
+        <h1 className="text-xl font-bold text-white mb-2">Kit<span className="text-[#FFE135]">List</span></h1>
         <p className="text-zinc-400 text-sm mt-6">{error}</p>
-        <a href="/dashboard" className="mt-4 inline-block text-orange-400 text-sm hover:underline">Go to dashboard</a>
+        <a href="/dashboard" className="mt-4 inline-block text-[#FFE135] text-sm hover:underline">Go to dashboard</a>
       </div>
     </div>
   )
@@ -103,7 +103,7 @@ export default function InvitePage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-white mb-1">Kit<span className="text-orange-400">List</span></h1>
+        <h1 className="text-2xl font-bold text-white mb-1">Kit<span className="text-[#FFE135]">List</span></h1>
         <p className="text-zinc-500 text-xs mb-8">Camera equipment management</p>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-6">
@@ -130,19 +130,19 @@ export default function InvitePage() {
             {mode === 'signup' && (
               <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
                 placeholder="Full name"
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             )}
             <input type="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="Email"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             {error && <p className="text-red-400 text-xs">{error}</p>}
             <button
               onClick={mode === 'login' ? handleLogin : handleSignup}
               disabled={submitting}
-              className="w-full bg-orange-400 hover:bg-orange-300 text-black font-semibold py-3 rounded-lg text-sm disabled:opacity-50 transition-colors">
+              className="w-full bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold py-3 rounded-lg text-sm disabled:opacity-50 transition-colors">
               {submitting ? 'Accepting...' : mode === 'login' ? 'Log in & accept' : 'Create account & accept'}
             </button>
           </div>

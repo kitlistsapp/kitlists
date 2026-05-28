@@ -123,7 +123,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const bg = darkMode ? 'bg-black text-white' : 'bg-gray-50 text-zinc-900'
   const navBg = darkMode ? 'border-zinc-800 bg-black' : 'border-gray-200 bg-white'
   const cardBg = darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-gray-200 hover:border-gray-300'
-  const tabActive = 'bg-orange-400 text-black'
+  const tabActive = 'bg-[#FFE135] text-black'
   const tabInactive = darkMode ? 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800' : 'bg-white text-zinc-500 hover:bg-gray-100 border border-gray-200'
   const mutedText = darkMode ? 'text-zinc-500' : 'text-zinc-500'
   const dimText = darkMode ? 'text-zinc-600' : 'text-zinc-400'
@@ -131,7 +131,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   return (
     <div className={"min-h-screen " + bg}>
       <nav className={"border-b px-4 py-4 flex items-center justify-between " + navBg}>
-        <h1 className="text-xl font-bold">Kit<span className="text-orange-400">List</span></h1>
+        <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></h1>
         <div className="flex items-center gap-3">
           <a href="/profile" className="flex items-center gap-2 group">
             {user?.logo_url && (
@@ -156,7 +156,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
             <h2 className="text-xl font-bold">My Gear Lists</h2>
             <p className={"text-sm mt-0.5 " + mutedText}>Create and manage your camera equipment lists</p>
           </div>
-          <a href="/lists/new" className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">+ New List</a>
+          <a href="/lists/new" className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">+ New List</a>
         </div>
 
         <div className="flex gap-1 mb-5 overflow-x-auto pb-1">
@@ -172,7 +172,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
         {filtered.length === 0 ? (
           <div className={"border border-dashed rounded-2xl p-16 text-center " + (darkMode ? 'border-zinc-700' : 'border-gray-300')}>
             <p className={"text-lg mb-2 " + mutedText}>No lists here</p>
-            {tab === 'active' && <a href="/lists/new" className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-6 py-3 rounded-lg text-sm inline-block mt-4">Create your first list</a>}
+            {tab === 'active' && <a href="/lists/new" className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-6 py-3 rounded-lg text-sm inline-block mt-4">Create your first list</a>}
           </div>
         ) : (
           <div className="grid gap-3">
@@ -188,7 +188,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
                         <div className="flex items-center gap-2 flex-wrap">
                           <h3 className="font-semibold text-base">{list.project_name}</h3>
                           <span className={"text-xs px-2.5 py-0.5 rounded-full font-medium " + statusColor(list.status)}>{list.status}</span>
-                          {shareCount > 0 && <span className="text-xs bg-orange-950 text-orange-400 px-2.5 py-0.5 rounded-full font-medium">{shareCount} shared</span>}
+                          {shareCount > 0 && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-2.5 py-0.5 rounded-full font-medium">{shareCount} shared</span>}
                         </div>
                         <p className={"text-sm mt-0.5 " + mutedText}>{list.production_co}</p>
                         <div className={"flex gap-3 mt-1.5 text-xs flex-wrap " + dimText}>

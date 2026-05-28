@@ -162,10 +162,10 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <div className="flex items-center gap-3">
           {saved && <span className="text-green-400 text-sm">Saved</span>}
-          <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
+          <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
             {saving ? 'Saving...' : 'Save'}
           </button>
           <a href={"/lists/" + listId} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
@@ -194,7 +194,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setTimeout(() => setSearchFocused(false), 150)}
                 placeholder="Search any lens, e.g. arri master 50mm"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-400 transition-colors"
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#FFE135] transition-colors"
               />
               {searchQuery && (
                 <button onClick={() => { setSearchQuery(''); searchRef.current?.focus() }} className="absolute right-3 top-3.5 text-zinc-500 hover:text-zinc-300 text-xs">✕</button>
@@ -210,13 +210,13 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                       const inSaved = savedKeys.has(key)
                       return (
                         <button key={key} onMouseDown={() => togglePending(item)}
-                          className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between gap-2 border-b border-zinc-800 last:border-0 transition-colors ${inSaved ? 'text-zinc-600 cursor-default' : inPending ? 'bg-[#1a1000] text-orange-400' : 'text-zinc-200 hover:bg-zinc-800'}`}>
+                          className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between gap-2 border-b border-zinc-800 last:border-0 transition-colors ${inSaved ? 'text-zinc-600 cursor-default' : inPending ? 'bg-[#2a2000] text-[#FFE135]' : 'text-zinc-200 hover:bg-zinc-800'}`}>
                           <span>
                             <span className="text-zinc-500 text-xs mr-1.5">{item.category}</span>
                             {item.manufacturer} {item.series} <span className="font-medium">{item.focalLength}</span>
                           </span>
                           {inSaved && <span className="text-zinc-600 text-xs flex-none">already added</span>}
-                          {inPending && !inSaved && <span className="text-orange-400 text-xs flex-none">✓ added</span>}
+                          {inPending && !inSaved && <span className="text-[#FFE135] text-xs flex-none">✓ added</span>}
                         </button>
                       )
                     })
@@ -230,7 +230,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             <div className="flex-none w-[130px] min-w-[130px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Category</div>
               {categories.map(cat => (
-                <button key={cat} onClick={() => handleCategorySelect(cat)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedCategory === cat ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
+                <button key={cat} onClick={() => handleCategorySelect(cat)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedCategory === cat ? 'bg-[#2a2000] text-[#FFE135] border-r-2 border-[#FFE135]' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
                   {cat}
                 </button>
               ))}
@@ -240,7 +240,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
               {!selectedCategory ? (
                 <div className="px-3 py-3 text-xs text-zinc-600">← Pick a category</div>
               ) : manufacturers.map(mfr => (
-                <button key={mfr} onClick={() => handleManufacturerSelect(mfr)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedManufacturer === mfr ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
+                <button key={mfr} onClick={() => handleManufacturerSelect(mfr)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedManufacturer === mfr ? 'bg-[#2a2000] text-[#FFE135] border-r-2 border-[#FFE135]' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
                   {mfr}
                 </button>
               ))}
@@ -250,7 +250,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
               {!selectedManufacturer ? (
                 <div className="px-3 py-3 text-xs text-zinc-600">← Pick a manufacturer</div>
               ) : seriesList.map(series => (
-                <button key={series} onClick={() => setSelectedSeries(series)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedSeries === series ? 'bg-[#1a1000] text-orange-400 border-r-2 border-orange-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
+                <button key={series} onClick={() => setSelectedSeries(series)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedSeries === series ? 'bg-[#2a2000] text-[#FFE135] border-r-2 border-[#FFE135]' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
                   {series}
                 </button>
               ))}
@@ -270,7 +270,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                     const inSaved = savedKeys.has(key)
                     return (
                       <button key={fl} onClick={() => togglePending(lens)}
-                        className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${inSaved ? 'bg-zinc-800 border-zinc-700 text-zinc-600 cursor-default' : inPending ? 'bg-[#1a1000] border-orange-400 text-orange-400' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white'}`}>
+                        className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${inSaved ? 'bg-zinc-800 border-zinc-700 text-zinc-600 cursor-default' : inPending ? 'bg-[#2a2000] border-[#FFE135] text-[#FFE135]' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white'}`}>
                         {fl}
                       </button>
                     )
@@ -283,11 +283,11 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
           {pendingCount > 0 && (
             <div className="px-6 py-3 border-t border-zinc-800 flex items-center justify-between">
               <span className="text-sm text-zinc-400">
-                <span className="text-orange-400 font-semibold">{pendingCount}</span> {pendingCount === 1 ? 'lens' : 'lenses'} pending
+                <span className="text-[#FFE135] font-semibold">{pendingCount}</span> {pendingCount === 1 ? 'lens' : 'lenses'} pending
               </span>
               <div className="flex items-center gap-3">
                 <button onClick={() => setPendingKit(new Map())} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear</button>
-                <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-1.5 rounded-lg text-sm disabled:opacity-50">
+                <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-4 py-1.5 rounded-lg text-sm disabled:opacity-50">
                   {saving ? 'Saving...' : 'Save'}
                 </button>
               </div>
@@ -306,7 +306,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                     <div key={lens.id}>
                       <div className="flex gap-2 items-center">
                         <div className="flex-1 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm">
-                          {lens.manufacturer} {lens.series} <span className="text-orange-400 font-medium">{lens.focal_length}</span>
+                          {lens.manufacturer} {lens.series} <span className="text-[#FFE135] font-medium">{lens.focal_length}</span>
                         </div>
                         <button onClick={() => removeSaved(lens.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
                       </div>
@@ -314,7 +314,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                         {(['rental', 'dop_owned', 'ac_owned'] as const).map(s => (
                           <button key={s} onClick={() => updateSavedSource(lens.id, s)}
                             className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (lens.source === s
-                              ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-blue-500 text-white')
+                              ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white')
                               : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
                             {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
                           </button>
@@ -333,7 +333,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
           <textarea value={sectionNotes} onChange={e => setSectionNotes(e.target.value)}
             placeholder="Any notes about lenses..."
             rows={3}
-            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
         </div>
       </main>
     </div>

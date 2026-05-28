@@ -28,17 +28,17 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const getSectionNotes = (section: string) => (sectionNotesList || []).find((n: any) => n.section === section)?.notes || ''
 
   const arrow = (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-orange-400 transition-colors flex-shrink-0">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-zinc-600 group-hover:text-[#FFE135] transition-colors flex-shrink-0">
       <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )
 
   const dot = (active: boolean) => (
-    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${ active ? "bg-orange-400" : "bg-zinc-700" }`} />
+    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${ active ? "bg-[#FFE135]" : "bg-zinc-700" }`} />
   )
 
   const badge = (source: string) => {
-    if (source === "dop_owned") return <span className="text-xs bg-orange-950 text-orange-400 px-1 py-0.5 rounded-full">DOP</span>
+    if (source === "dop_owned") return <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1 py-0.5 rounded-full">DOP</span>
     if (source === "ac_owned") return <span className="text-xs bg-blue-950 text-blue-400 px-1 py-0.5 rounded-full">AC</span>
     return null
   }
@@ -49,7 +49,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
         <div className="flex items-center gap-3">
           {dot(items.length > 0)}
           <div>
-            <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">{title}</h3>
+            <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">{title}</h3>
             {items.length > 0 ? (
               <p className="text-zinc-500 text-xs mt-0.5">{items.length} item{items.length !== 1 ? "s" : ""}</p>
             ) : (
@@ -84,7 +84,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Dashboard</a>
       </nav>
 
@@ -102,7 +102,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             <span className={`text-xs px-3 py-1 rounded-full font-medium ${ list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400" }`}>{list.status}</span>
           </div>
           <div className="flex gap-2 flex-wrap mt-4">
-            <a href={`/lists/${id}/share`} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
+            <a href={`/lists/${id}/share`} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
             <a href={`/lists/${id}/edit`} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm transition-colors">Edit details</a>
             <InviteCollaborator listId={id} />
             <SaveAsTemplate listId={id} />
@@ -126,7 +126,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                   <div className="flex items-center gap-3">
                     {dot(!!bodyName)}
                     <div>
-                      <p className="text-white text-sm font-medium group-hover:text-orange-400 transition-colors">{cam.label}</p>
+                      <p className="text-white text-sm font-medium group-hover:text-[#FFE135] transition-colors">{cam.label}</p>
                       {bodyName ? (
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="text-zinc-500 text-xs">{bodyName}</span>
@@ -148,7 +148,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="flex items-center gap-3">
                 {dot((lensRows || []).length > 0)}
                 <div>
-                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Lenses</h3>
+                  <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Lenses</h3>
                   {(lensRows || []).length > 0 ? (
                     <p className="text-zinc-500 text-xs mt-0.5">{(lensRows || []).length} lens{(lensRows || []).length !== 1 ? "es" : ""}</p>
                   ) : (
@@ -162,7 +162,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
                 {(lensRows || []).map((l: any) => (
                   <div key={l.id} className="flex items-center gap-1.5">
-                    <span className="text-zinc-400 text-xs">{l.manufacturer} {l.series} <span className="text-orange-400">{l.focal_length}</span></span>
+                    <span className="text-zinc-400 text-xs">{l.manufacturer} {l.series} <span className="text-[#FFE135]">{l.focal_length}</span></span>
                     {badge(l.source)}
                   </div>
                 ))}
@@ -190,7 +190,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="flex items-center gap-3">
                 {dot(!!specs)}
                 <div>
-                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Shoot specs</h3>
+                  <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Shoot specs</h3>
                   {specs ? (
                     <p className="text-zinc-500 text-xs mt-0.5">{[specs.format, specs.resolution, specs.fps, specs.aspect_ratio, ...(listLuts && listLuts.length > 0 ? [listLuts.map((l: any) => l.name).join(", ")] : [])].filter(Boolean).join(" · ")}</p>
                   ) : (
@@ -207,7 +207,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="flex items-center gap-3">
                 {dot(files !== null && files.length > 0)}
                 <div>
-                  <h3 className="text-white font-semibold group-hover:text-orange-400 transition-colors">Files</h3>
+                  <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Files</h3>
                   <p className="text-zinc-600 text-xs mt-0.5">{files && files.length > 0 ? `${files.length} file${files.length !== 1 ? "s" : ""}` : "No files attached"}</p>
                 </div>
               </div>

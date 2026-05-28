@@ -50,7 +50,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
           <h1 className="text-white text-4xl font-bold tracking-tight">
-            Kit<span className="text-orange-400">List</span>
+            Kit<span className="text-[#FFE135]">List</span>
           </h1>
           <p className="text-zinc-500 text-sm mt-2 tracking-widest uppercase">
             Camera Equipment Platform
@@ -69,19 +69,19 @@ export default function LoginPage() {
                   <label className="text-zinc-400 text-sm mb-1.5 block">Full name</label>
                   <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
                     placeholder="e.g. John Smith ACS"
-                    className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
+                    className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
                 </div>
                 <div>
                   <label className="text-zinc-400 text-sm mb-1.5 block">Company name</label>
                   <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)}
                     placeholder="e.g. My Company Pty Ltd"
-                    className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
+                    className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
                 </div>
                 <div>
                   <label className="text-zinc-400 text-sm mb-1.5 block">Phone</label>
                   <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
                     placeholder="e.g. 0400 000 000"
-                    className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
+                    className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
                 </div>
               </>
             )}
@@ -90,7 +90,7 @@ export default function LoginPage() {
               <label className="text-zinc-400 text-sm mb-1.5 block">Email</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
             </div>
 
             <div>
@@ -98,14 +98,14 @@ export default function LoginPage() {
               <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition-colors" />
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
             </div>
           </div>
 
-          {message && <p className="mt-4 text-sm text-orange-400">{message}</p>}
+          {message && <p className="mt-4 text-sm text-[#FFE135]">{message}</p>}
 
           <button onClick={handleAuth} disabled={loading}
-            className="w-full mt-5 bg-orange-400 hover:bg-orange-300 text-black font-semibold rounded-lg py-3 text-sm transition-colors disabled:opacity-50">
+            className="w-full mt-5 bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold rounded-lg py-3 text-sm transition-colors disabled:opacity-50">
             {loading ? 'Please wait...' : isSignUp ? 'Create account' : 'Sign in'}
           </button>
 

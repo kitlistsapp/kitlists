@@ -54,10 +54,10 @@ export default function SaveAsTemplate({ listId }: { listId: string }) {
         onKeyDown={e => e.key === 'Enter' && save()}
         placeholder="Template name..."
         autoFocus
-        className="bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-orange-400 w-40"
+        className="bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#FFE135] w-40"
       />
       <button onClick={save} disabled={saving || !name.trim()}
-        className="text-sm bg-orange-400 hover:bg-orange-300 text-black font-medium px-3 py-1.5 rounded-lg disabled:opacity-50">
+        className="text-sm bg-[#FFE135] hover:bg-[#FFD700] text-black font-medium px-3 py-1.5 rounded-lg disabled:opacity-50">
         {saving ? '...' : 'Save'}
       </button>
       <button onClick={() => setShowInput(false)} className="text-zinc-500 hover:text-zinc-300 text-sm">Cancel</button>

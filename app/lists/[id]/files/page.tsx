@@ -75,7 +75,7 @@ export default function FilesPage({ params }: { params: Promise<{ id: string }> 
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <a href={`/lists/${listId}`} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
       </nav>
 
@@ -119,7 +119,7 @@ export default function FilesPage({ params }: { params: Promise<{ id: string }> 
               }}
             />
             <button onClick={() => fileInputRef.current?.click()} disabled={uploading}
-              className="w-full border border-dashed border-zinc-700 hover:border-orange-400 rounded-xl py-8 text-zinc-500 hover:text-orange-400 transition-colors text-sm">
+              className="w-full border border-dashed border-zinc-700 hover:border-[#FFE135] rounded-xl py-8 text-zinc-500 hover:text-[#FFE135] transition-colors text-sm">
               {uploading ? 'Uploading...' : '+ Click to upload files (or drag and drop)'}
             </button>
           </div>

@@ -156,7 +156,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Back to dashboard</a>
       </nav>
 
@@ -167,7 +167,7 @@ export default function ProfilePage() {
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-5">Your details</h3>
           <div className="flex gap-4 mb-5">
             <div className="flex-shrink-0">
-              <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden cursor-pointer hover:border-orange-400 transition-colors" onClick={() => logoInputRef.current?.click()}>
+              <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#FFE135] transition-colors" onClick={() => logoInputRef.current?.click()}>
                 {logoUrl ? <img src={logoUrl} alt="Logo" className="w-full h-full object-contain p-1" /> : <span className="text-zinc-600 text-xs text-center px-1">Logo</span>}
               </div>
               <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && uploadLogo(e.target.files[0])} />
@@ -177,11 +177,11 @@ export default function ProfilePage() {
             <div className="flex-1 space-y-3">
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Full name</label>
-                <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. Aaron McKlisky ACS" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. Aaron McKlisky ACS" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Company name</label>
-                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. McLisky Camera Co" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. McLisky Camera Co" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
               </div>
             </div>
           </div>
@@ -192,39 +192,39 @@ export default function ProfilePage() {
             </div>
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Phone</label>
-              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. 0400 000 000" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. 0400 000 000" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
             </div>
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">ABN / Company Number</label>
-              <input type="text" value={abn} onChange={e => setAbn(e.target.value)} placeholder="e.g. 12 345 678 901" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+              <input type="text" value={abn} onChange={e => setAbn(e.target.value)} placeholder="e.g. 12 345 678 901" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
             </div>
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Billing address</label>
               <div className="space-y-2">
-                <input type="text" value={street1} onChange={e => setStreet1(e.target.value)} placeholder="Street address" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
-                <input type="text" value={street2} onChange={e => setStreet2(e.target.value)} placeholder="Street address line 2 (optional)" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                <input type="text" value={street1} onChange={e => setStreet1(e.target.value)} placeholder="Street address" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
+                <input type="text" value={street2} onChange={e => setStreet2(e.target.value)} placeholder="Street address line 2 (optional)" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
                 <div className="grid grid-cols-2 gap-2">
-                  <input type="text" value={suburb} onChange={e => setSuburb(e.target.value)} placeholder="Suburb" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
-                  <input type="text" value={state} onChange={e => setState(e.target.value)} placeholder="State" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="text" value={suburb} onChange={e => setSuburb(e.target.value)} placeholder="Suburb" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  <input type="text" value={state} onChange={e => setState(e.target.value)} placeholder="State" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <input type="text" value={postcode} onChange={e => setPostcode(e.target.value)} placeholder="Postcode" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
-                  <input type="text" value={country} onChange={e => setCountry(e.target.value)} placeholder="Country" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="text" value={postcode} onChange={e => setPostcode(e.target.value)} placeholder="Postcode" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  <input type="text" value={country} onChange={e => setCountry(e.target.value)} placeholder="Country" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
                 </div>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-3 mt-4">
-            <button onClick={saveProfile} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save profile'}</button>
+            <button onClick={saveProfile} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save profile'}</button>
             {saved && <span className="text-green-400 text-sm">Saved</span>}
           </div>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Camera user preferences</h3>
-          <textarea value={camPrefs.notes || ''} onChange={e => setCamPrefs((p: any) => ({ ...p, notes: e.target.value }))} placeholder="Add any personal preferences, notes or defaults you want to remember across jobs..." rows={4} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+          <textarea value={camPrefs.notes || ''} onChange={e => setCamPrefs((p: any) => ({ ...p, notes: e.target.value }))} placeholder="Add any personal preferences, notes or defaults you want to remember across jobs..." rows={4} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
           <div className="flex items-center gap-3 mt-4">
-            <button onClick={saveProfile} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save preferences'}</button>
+            <button onClick={saveProfile} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save preferences'}</button>
             {saved && <span className="text-green-400 text-sm">Saved</span>}
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function ProfilePage() {
           </div>
           <div className="border border-zinc-700 rounded-xl p-4">
             <label className="text-zinc-500 text-xs mb-2 block">Upload LUT file — filename becomes the LUT name</label>
-            <input ref={lutInputRef} type="file" accept=".cube,.3dl,.lut,.clf,.aml,.alf4" onChange={e => e.target.files?.[0] && uploadLut(e.target.files[0])} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm file:mr-3 file:bg-orange-400 file:text-black file:border-0 file:rounded file:px-3 file:py-1 file:text-xs file:font-medium" />
+            <input ref={lutInputRef} type="file" accept=".cube,.3dl,.lut,.clf,.aml,.alf4" onChange={e => e.target.files?.[0] && uploadLut(e.target.files[0])} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm file:mr-3 file:bg-[#FFE135] file:text-black file:border-0 file:rounded file:px-3 file:py-1 file:text-xs file:font-medium" />
             {lutUploading && <p className="text-zinc-500 text-xs mt-2">Uploading...</p>}
           </div>
         </div>
@@ -273,11 +273,11 @@ export default function ProfilePage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-zinc-500 text-xs mb-1 block">Name *</label>
-                  <input type="text" value={newContact.full_name} onChange={e => setNewContact(p => ({ ...p, full_name: e.target.value }))} placeholder="Full name" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="text" value={newContact.full_name} onChange={e => setNewContact(p => ({ ...p, full_name: e.target.value }))} placeholder="Full name" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135]" />
                 </div>
                 <div>
                   <label className="text-zinc-500 text-xs mb-1 block">Role</label>
-                  <select value={newContact.role} onChange={e => setNewContact(p => ({ ...p, role: e.target.value }))} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400">
+                  <select value={newContact.role} onChange={e => setNewContact(p => ({ ...p, role: e.target.value }))} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135]">
                     {roles.map(r => <option key={r} value={r}>{r}</option>)}
                   </select>
                 </div>
@@ -285,15 +285,15 @@ export default function ProfilePage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-zinc-500 text-xs mb-1 block">Email</label>
-                  <input type="email" value={newContact.email} onChange={e => setNewContact(p => ({ ...p, email: e.target.value }))} placeholder="email@example.com" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="email" value={newContact.email} onChange={e => setNewContact(p => ({ ...p, email: e.target.value }))} placeholder="email@example.com" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135]" />
                 </div>
                 <div>
                   <label className="text-zinc-500 text-xs mb-1 block">Phone</label>
-                  <input type="tel" value={newContact.phone} onChange={e => setNewContact(p => ({ ...p, phone: e.target.value }))} placeholder="0400 000 000" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-orange-400" />
+                  <input type="tel" value={newContact.phone} onChange={e => setNewContact(p => ({ ...p, phone: e.target.value }))} placeholder="0400 000 000" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135]" />
                 </div>
               </div>
               <div className="flex gap-2">
-                <button onClick={saveContact} disabled={savingContact} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-4 py-2 rounded-lg text-sm disabled:opacity-50">{savingContact ? 'Saving...' : 'Save contact'}</button>
+                <button onClick={saveContact} disabled={savingContact} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm disabled:opacity-50">{savingContact ? 'Saving...' : 'Save contact'}</button>
                 <button onClick={() => setAddingContact(false)} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm">Cancel</button>
               </div>
             </div>

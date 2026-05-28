@@ -48,7 +48,7 @@ export default function InviteCollaborator({ listId }: { listId: string }) {
                   onKeyDown={e => e.key === 'Enter' && sendInvite()}
                   placeholder="Email address"
                   autoFocus
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]"
                 />
                 {error && <p className="text-red-400 text-xs">{error}</p>}
                 <div className="flex gap-2">
@@ -57,7 +57,7 @@ export default function InviteCollaborator({ listId }: { listId: string }) {
                     Cancel
                   </button>
                   <button onClick={sendInvite} disabled={sending || !email.trim()}
-                    className="flex-1 bg-orange-400 hover:bg-orange-300 text-black font-semibold py-2.5 rounded-lg text-sm disabled:opacity-50 transition-colors">
+                    className="flex-1 bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold py-2.5 rounded-lg text-sm disabled:opacity-50 transition-colors">
                     {sending ? 'Sending...' : 'Send invite'}
                   </button>
                 </div>

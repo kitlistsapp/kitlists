@@ -92,7 +92,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <a href={`/lists/${listId}`} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
       </nav>
 
@@ -108,7 +108,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
               <label className="text-zinc-400 text-sm mb-1.5 block">Recipient email (optional)</label>
               <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)}
                 placeholder="e.g. rentals@southerncrosscameras.com"
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             </div>
 
             <div>
@@ -116,7 +116,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
               <div className="flex gap-2 flex-wrap">
                 {['rental', 'ac', 'production'].map(r => (
                   <button key={r} onClick={() => { setNewRole(r); if (r === 'production') { setNewMode('production_clean') } else { setNewMode('full') } }}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${ newRole === r ? 'bg-orange-400 text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' }`}>
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${ newRole === r ? 'bg-[#FFE135] text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' }`}>
                     {r === 'ac' ? 'Focus puller / AC' : r === 'rental' ? 'Rental house' : 'Production'}
                   </button>
                 ))}
@@ -141,7 +141,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
             </div>
 
             <button onClick={createShare} disabled={creating}
-              className="w-full bg-orange-400 hover:bg-orange-300 text-black font-semibold rounded-lg py-3 text-sm disabled:opacity-50">
+              className="w-full bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold rounded-lg py-3 text-sm disabled:opacity-50">
               {creating ? 'Creating...' : 'Generate share link'}
             </button>
           </div>
@@ -168,7 +168,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
                     </button>
                   {share.recipient_email && (
                     <button onClick={e => { e.stopPropagation(); sendEmail(share) }} disabled={sending === share.id}
-                      className="bg-orange-400 hover:bg-orange-300 text-black text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50">
+                      className="bg-[#FFE135] hover:bg-[#FFD700] text-black text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50">
                       {sending === share.id ? 'Sending...' : sent === share.id ? 'Sent!' : 'Send email'}
                     </button>
                   )}
@@ -209,7 +209,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
               <div className="px-5 py-4 border-t border-gray-200 flex items-center justify-between">
                 <p className="text-zinc-500 text-xs">To: {previewShare.recipient_email}</p>
                 <button onClick={() => { sendEmail(previewShare); setPreviewShare(null) }} disabled={sending === previewShare.id}
-                  className="bg-orange-400 hover:bg-orange-300 text-black text-xs font-semibold px-4 py-2 rounded-lg disabled:opacity-50">
+                  className="bg-[#FFE135] hover:bg-[#FFD700] text-black text-xs font-semibold px-4 py-2 rounded-lg disabled:opacity-50">
                   {sending === previewShare.id ? 'Sending...' : 'Send now'}
                 </button>
               </div>

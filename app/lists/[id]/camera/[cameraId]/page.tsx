@@ -34,13 +34,13 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
           onChange={e => { setQuery(e.target.value); setOpen(true) }}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400" />
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
         {value && <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>}
       </div>
       {open && (
         <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl max-h-64 overflow-y-auto">
           {Object.keys(grouped).length === 0 ? (
-            <button className="w-full text-left px-4 py-3 text-sm text-orange-400 hover:bg-zinc-800"
+            <button className="w-full text-left px-4 py-3 text-sm text-[#FFE135] hover:bg-zinc-800"
               onClick={() => { onChange('custom:' + query, query); setOpen(false) }}>
               + Add "{query}" as custom
             </button>
@@ -59,7 +59,7 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
                 </div>
               ))}
               {query && !filtered.find(i => i.name.toLowerCase() === query.toLowerCase()) && (
-                <button className="w-full text-left px-4 py-3 text-sm text-orange-400 hover:bg-zinc-800 border-t border-zinc-800"
+                <button className="w-full text-left px-4 py-3 text-sm text-[#FFE135] hover:bg-zinc-800 border-t border-zinc-800"
                   onClick={() => { onChange('custom:' + query, query); setOpen(false) }}>
                   + Add "{query}" as custom
                 </button>
@@ -122,10 +122,10 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-orange-400">List</span></a>
+        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">List</span></a>
         <div className="flex items-center gap-3">
           {saved && <span className="text-green-400 text-sm">Saved</span>}
-          <button onClick={save} disabled={saving} className="bg-orange-400 hover:bg-orange-300 text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
+          <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
             {saving ? 'Saving...' : 'Save'}
           </button>
           <a href={"/lists/" + listId} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
@@ -138,8 +138,8 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-zinc-400 text-xs uppercase tracking-widest">Camera body</h3>
             <div className="flex gap-1 bg-zinc-800 rounded-lg p-1">
-              <button onClick={() => setCameraFormat('digital')} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'digital' ? 'bg-orange-400 text-black' : 'text-zinc-400 hover:text-white')}>Digital</button>
-              <button onClick={() => setCameraFormat('film')} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'film' ? 'bg-orange-400 text-black' : 'text-zinc-400 hover:text-white')}>Film</button>
+              <button onClick={() => setCameraFormat('digital')} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'digital' ? 'bg-[#FFE135] text-black' : 'text-zinc-400 hover:text-white')}>Digital</button>
+              <button onClick={() => setCameraFormat('film')} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'film' ? 'bg-[#FFE135] text-black' : 'text-zinc-400 hover:text-white')}>Film</button>
             </div>
           </div>
           <SearchablePicker items={bodies} value={selectedBody} onChange={id => setSelectedBody(id)} placeholder="Search camera bodies..." />
@@ -147,7 +147,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
             <div className="flex gap-2 mt-3">
               {['rental', 'dop_owned', 'ac_owned'].map(s => (
                 <button key={s} onClick={() => setBodySource(s)}
-                  className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-orange-400 text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
+                  className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
                   {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
                 </button>
               ))}
@@ -160,7 +160,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
           <textarea value={cameraNotes} onChange={e => setCameraNotes(e.target.value)}
             placeholder="e.g. Steadicam, Ronin, handheld, operator notes..."
             rows={3}
-            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
         </div>
       </main>
     </div>
