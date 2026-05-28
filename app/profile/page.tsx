@@ -156,8 +156,12 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
-        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Back to dashboard</a>
+        <a href="/dashboard" className="text-xl font-bold text-white">Kit<span className="text-[#FFE135]">Lists</span></a>
+        <div className="flex items-center gap-4">
+          <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm transition-colors hidden sm:block">Dashboard</a>
+          <a href="/profile" className="text-white text-sm font-medium transition-colors hidden sm:block">My Profile</a>
+          <a href="/auth/signout" className="text-zinc-400 hover:text-white text-sm transition-colors">Sign out</a>
+        </div>
       </nav>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">

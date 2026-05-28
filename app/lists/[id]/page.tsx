@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import SaveAsTemplate from "./SaveAsTemplate"
 import InviteCollaborator from "./InviteCollaborator"
 import { redirect } from "next/navigation"
+import NavBar from "@/app/components/NavBar"
 
 export default async function ListPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -93,10 +94,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
-        <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
-        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm">Dashboard</a>
-      </nav>
+      <NavBar />
 
       <main className="max-w-3xl mx-auto px-4 py-6">
         <div className="mb-5">
