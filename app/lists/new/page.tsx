@@ -16,7 +16,7 @@ export default function NewListPage() {
   const [projectName, setProjectName] = useState("")
   const [productionCo, setProductionCo] = useState("")
   const [shootStart, setShootStart] = useState("")
-  const [shootDays, setShootDays] = useState("1")
+  const [shootDays, setShootDays] = useState("")
   const [numCameras, setNumCameras] = useState("1")
   const [houseId, setHouseId] = useState("")
   const [rentalHouses, setRentalHouses] = useState<any[]>([])
@@ -167,7 +167,7 @@ export default function NewListPage() {
           <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
-              <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)}
+              <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)} min={new Date().toISOString().split("T")[0]}
                 className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
             </div>
             <div>

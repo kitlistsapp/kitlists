@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
   const [companyName, setCompanyName] = useState('')
@@ -55,6 +56,12 @@ export default function LoginPage() {
           <p className="text-zinc-500 text-sm mt-2 tracking-widest uppercase">
             Camera Equipment Platform
           </p>
+          <p className="text-zinc-400 text-xs mt-3 tracking-widest uppercase">
+            Create · Edit · Collaborate · Share
+          </p>
+          <p className="text-zinc-600 text-xs mt-3 leading-relaxed max-w-xs mx-auto">
+            The smarter way to manage your camera kit. Build lists, collaborate with your team and share with rental houses from anywhere — no more back-and-forth emails or clunky spreadsheets.
+          </p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
@@ -68,13 +75,13 @@ export default function LoginPage() {
                 <div>
                   <label className="text-zinc-400 text-sm mb-1.5 block">Full name</label>
                   <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
-                    placeholder="e.g. John Smith ACS"
+                    placeholder="e.g. Jane Smith ACS"
                     className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
                 </div>
                 <div>
                   <label className="text-zinc-400 text-sm mb-1.5 block">Company name</label>
                   <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)}
-                    placeholder="e.g. My Company Pty Ltd"
+                    placeholder="e.g. My Film Pty Ltd"
                     className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
                 </div>
                 <div>
@@ -95,10 +102,27 @@ export default function LoginPage() {
 
             <div>
               <label className="text-zinc-400 text-sm mb-1.5 block">Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
-                onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
+              <div className="relative">
+                <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  onKeyDown={e => e.key === 'Enter' && handleAuth()}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 pr-11 text-sm focus:outline-none focus:border-[#FFE135] transition-colors" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors">
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -116,7 +140,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-zinc-700 text-xs text-center mt-8">
-          KitLists · Built for DOPs & Camera Crew
+          KitLists · Built for DOPs, ACs, Rental Houses and Production
         </p>
       </div>
     </div>

@@ -177,11 +177,11 @@ export default function ProfilePage() {
             <div className="flex-1 space-y-3">
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Full name</label>
-                <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. Aaron McKlisky ACS" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
+                <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. Jane Smith ACS" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Company name</label>
-                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. McLisky Camera Co" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
+                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. My Film Pty Ltd" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFE135]" />
               </div>
             </div>
           </div>

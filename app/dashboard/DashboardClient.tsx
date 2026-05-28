@@ -141,7 +141,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
               {user?.full_name && <p className={"text-sm font-medium transition-colors " + (darkMode ? 'text-zinc-300 group-hover:text-white' : 'text-zinc-600 group-hover:text-zinc-900')}>{user.full_name}</p>}
               {user?.company_name && <p className={"text-xs transition-colors " + (darkMode ? 'text-zinc-500 group-hover:text-zinc-400' : 'text-zinc-400 group-hover:text-zinc-600')}>{user.company_name}</p>}
             </div>
-            {!user?.full_name && <span className={"text-sm transition-colors " + (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900')}>{user?.email}</span>}
+            {!user?.full_name && <span className={"text-sm transition-colors " + (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900')}>My Profile</span>}
           </a>
           <button onClick={toggleTheme} className={"w-9 h-9 rounded-lg flex items-center justify-center transition-colors " + (darkMode ? 'bg-zinc-800 hover:bg-zinc-700' : 'bg-gray-100 hover:bg-gray-200')}>
             {darkMode ? '☀️' : '🌙'}
