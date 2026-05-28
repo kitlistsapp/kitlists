@@ -12,13 +12,23 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const { data: list } = await supabase.from("gear_lists").select("*").eq("id", id).single()
   if (!list) redirect("/dashboard")
 
-  const { data: cameras } = await supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order")
-  const { data: lensRows } = await supabase.from("list_lenses").select("*").eq("list_id", id).order("sort_order")
-  const { data: specs } = await supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle()
-  const { data: files } = await supabase.from("list_files").select("*").eq("list_id", id).order("created_at")
-  const { data: listLuts } = await supabase.from("list_lut_files").select("*").eq("list_id", id).order("created_at")
-  const { data: listItems } = await supabase.from("list_items").select("*, equipment_items(name, subcategory, category)").eq("list_id", id).order("sort_order")
-  const { data: sectionNotesList } = await supabase.from("list_section_notes").select("*").eq("list_id", id)
+  const [
+    { data: cameras },
+    { data: lensRows },
+    { data: specs },
+    { data: files },
+    { data: listLuts },
+    { data: listItems },
+    { data: sectionNotesList }
+  ] = await Promise.all([
+    supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order"),
+    supabase.from("list_lenses").select("*").eq("list_id", id).order("sort_order"),
+    supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle(),
+    supabase.from("list_files").select("*").eq("list_id", id).order("created_at"),
+    supabase.from("list_lut_files").select("*").eq("list_id", id).order("created_at"),
+    supabase.from("list_items").select("*, equipment_items(name, subcategory, category)").eq("list_id", id).order("sort_order"),
+    supabase.from("list_section_notes").select("*").eq("list_id", id)
+  ])
 
   const powerItems = (listItems || []).filter((i: any) => i.section === "power")
   const headTripodItems = (listItems || []).filter((i: any) => i.section === "head_tripod")
