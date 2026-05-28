@@ -67,9 +67,21 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   const [searchQuery, setSearchQuery] = useState('')
   const [searchFocused, setSearchFocused] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
+  const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const listIdRef = useRef('')
+  const savedLensesRef = useRef<SavedLens[]>([])
+  const pendingKitRef = useRef<Map<string, SelectedLens>>(new Map())
+  const notesRef = useRef('')
+  const notesIdRef = useRef<string | null>(null)
+
+  useEffect(() => { listIdRef.current = listId }, [listId])
+  useEffect(() => { savedLensesRef.current = savedLenses }, [savedLenses])
+  useEffect(() => { pendingKitRef.current = pendingKit }, [pendingKit])
+  useEffect(() => { notesRef.current = sectionNotes }, [sectionNotes])
+  useEffect(() => { notesIdRef.current = notesId }, [notesId])
 
   useEffect(() => {
-    params.then(p => { setListId(p.id); loadData(p.id) })
+    params.then(p => { setListId(p.id); listIdRef.current = p.id; loadData(p.id) })
   }, [])
 
   const loadData = async (lid: string) => {
@@ -90,7 +102,16 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   const categories = useMemo(() => Object.keys(data).sort(), [])
   const manufacturers = useMemo(() => selectedCategory ? Object.keys(data[selectedCategory]).sort() : [], [selectedCategory])
   const seriesList = useMemo(() => selectedCategory && selectedManufacturer ? Object.keys(data[selectedCategory][selectedManufacturer]).sort() : [], [selectedCategory, selectedManufacturer])
-  const focalLengths = useMemo(() => selectedCategory && selectedManufacturer && selectedSeries ? data[selectedCategory][selectedManufacturer][selectedSeries] : [], [selectedCategory, selectedManufacturer, selectedSeries])
+  const focalLengths = useMemo(() => {
+    if (!selectedCategory || !selectedManufacturer || !selectedSeries) return []
+    const fls = data[selectedCategory][selectedManufacturer][selectedSeries]
+    return [...fls].sort((a, b) => {
+      const numA = parseFloat(a.replace(/[^0-9.]/g, ''))
+      const numB = parseFloat(b.replace(/[^0-9.]/g, ''))
+      if (!isNaN(numA) && !isNaN(numB)) return numA - numB
+      return a.localeCompare(b)
+    })
+  }, [selectedCategory, selectedManufacturer, selectedSeries])
 
   const breadcrumb = [selectedCategory, selectedManufacturer, selectedSeries].filter(Boolean).join(' › ')
   const isModuleCategory = selectedCategory ? MODULE_CATEGORIES.includes(selectedCategory) : false
@@ -102,7 +123,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     setPendingKit(prev => {
       const next = new Map(prev)
       if (next.has(key)) next.delete(key)
-      else next.set(key, lens)
+      else { next.set(key, lens); triggerAutoSave(800) }
       return next
     })
   }
@@ -111,6 +132,45 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   const handleManufacturerSelect = (mfr: string) => { setSelectedManufacturer(mfr); setSelectedSeries(null) }
   const updateSavedSource = (id: string, source: string) => setSavedLenses(prev => prev.map(l => l.id === id ? { ...l, source } : l))
   const removeSaved = (id: string) => setSavedLenses(prev => prev.filter(l => l.id !== id))
+
+  const triggerAutoSave = (delay = 800) => {
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => saveWithRefs(), delay)
+  }
+
+  const saveWithRefs = async () => {
+    const lid = listIdRef.current
+    const savedL = savedLensesRef.current
+    const pending = pendingKitRef.current
+    const notes = notesRef.current
+    const nid = notesIdRef.current
+    if (!lid) return
+    setSaving(true)
+    const currentIds = new Set(savedL.map(l => l.id).filter(Boolean))
+    const { data: dbLenses } = await supabase.from('list_lenses').select('id').eq('list_id', lid)
+    if (dbLenses) {
+      const toDelete = dbLenses.filter(l => !currentIds.has(l.id)).map(l => l.id)
+      if (toDelete.length > 0) await supabase.from('list_lenses').delete().in('id', toDelete)
+    }
+    for (const lens of savedL) {
+      await supabase.from('list_lenses').update({ source: lens.source }).eq('id', lens.id)
+    }
+    if (pending.size > 0) {
+      const rows = Array.from(pending.values()).map((lens, i) => ({
+        list_id: lid, category: lens.category, manufacturer: lens.manufacturer,
+        series: lens.series, focal_length: lens.focalLength, source: 'rental', sort_order: savedL.length + i,
+      }))
+      const { data: inserted, error } = await supabase.from('list_lenses').insert(rows).select()
+      if (!error && inserted) { setSavedLenses(prev => [...prev, ...inserted]); setPendingKit(new Map()) }
+    }
+    if (nid) {
+      await supabase.from('list_section_notes').update({ notes }).eq('id', nid)
+    } else if (notes.trim()) {
+      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, section: 'lenses', notes }).select().single()
+      if (newNote) setNotesId(newNote.id)
+    }
+    setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
+  }
 
   const save = async () => {
     setSaving(true)
