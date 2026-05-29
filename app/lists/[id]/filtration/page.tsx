@@ -110,7 +110,7 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
     if (existing && existing.length > 0) {
       setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })))
     } else {
-      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+      setEntries([{ id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' }])
     }
   }
 

@@ -36,6 +36,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   const gripItems = (listItems || []).filter((i: any) => i.section === "grip")
   const filtrationItems = (listItems || []).filter((i: any) => i.section === "filtration")
   const aksItems = (listItems || []).filter((i: any) => i.section === "aks")
+  const vtrItems = (listItems || []).filter((i: any) => i.section === "vtr")
   const getSectionNotes = (section: string) => (sectionNotesList || []).find((n: any) => n.section === section)?.notes || ''
 
   const arrow = (
@@ -151,7 +152,11 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             })}
           </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+
+
+          {sectionCard("Power", `/lists/${id}/power`, powerItems, "Not configured", getSectionNotes("power"))}
+
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <a href={`/lists/${id}/lenses`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
               <div className="flex items-center gap-3">
                 {dot((lensRows || []).length > 0)}
@@ -186,14 +191,18 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               </details>
             )}
           </div>
-
-          {sectionCard("Power", `/lists/${id}/power`, powerItems, "Not configured", getSectionNotes("power"))}
           {sectionCard("Head & Legs", `/lists/${id}/head-tripod`, headTripodItems, "Not configured", getSectionNotes("head_tripod"))}
           {sectionCard("Gimbals", `/lists/${id}/grip`, gripItems, "Not configured", getSectionNotes("grip"))}
           {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems, "Not configured", getSectionNotes("filtration"))}
           {sectionCard("AKS", `/lists/${id}/aks`, aksItems, "Not configured", getSectionNotes("aks"))}
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems, "Not configured", getSectionNotes("filtration"))}
+          {sectionCard("AKS", `/lists/${id}/aks`, aksItems, "Not configured", getSectionNotes("aks"))}
+          {sectionCard("Head & Legs", `/lists/${id}/head-tripod`, headTripodItems, "Not configured", getSectionNotes("head_tripod"))}
+          {sectionCard("Gimbals", `/lists/${id}/grip`, gripItems, "Not configured", getSectionNotes("grip"))}
+          {sectionCard("VTR", `/lists/${id}/vtr`, vtrItems, "Not configured", getSectionNotes("vtr"))}
+
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <a href={`/lists/${id}/specs`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
               <div className="flex items-center gap-3">
                 {dot(!!specs)}
