@@ -237,10 +237,11 @@ export default function VTRPage({ params }: { params: Promise<{ id: string }> })
               className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-medium transition-colors">
               ← Gimbals
             </a>
-          <a href={"/lists/" + listId}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#FFE135] hover:bg-[#FFD700] text-black text-sm font-semibold transition-colors">
-              Back to list ✓
-            </a>
+          <button onClick={async () => { await save(); window.location.href = "/lists/" + listIdRef.current + "/specs" }}
+            disabled={saving}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#FFE135] hover:bg-[#FFD700] text-black text-sm font-semibold transition-colors disabled:opacity-50">
+            Shoot Specs →
+          </button>
         </div>
       </main>
     </div>

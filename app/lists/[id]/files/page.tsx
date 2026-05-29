@@ -124,6 +124,16 @@ export default function FilesPage({ params }: { params: Promise<{ id: string }> 
             </button>
           </div>
         </div>
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
+          <a href={"/lists/" + listId + "/specs"}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-medium transition-colors">
+            ← Shoot Specs
+          </a>
+          <a href={"/lists/" + listId + "/other-kit"}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#FFE135] hover:bg-[#FFD700] text-black text-sm font-semibold transition-colors">
+            Other Kit →
+          </a>
+        </div>
       </main>
     </div>
   )

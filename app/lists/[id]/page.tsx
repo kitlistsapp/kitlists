@@ -232,6 +232,19 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
             )}
           </a>
 
+          <a href={`/lists/${id}/other-kit`} className="block bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-xl overflow-hidden transition-colors group">
+            <div className="flex items-center justify-between px-6 py-4">
+              <div className="flex items-center gap-3">
+                {dot(!!getSectionNotes("other_kit"))}
+                <div>
+                  <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Other Kit</h3>
+                  <p className="text-zinc-600 text-xs mt-0.5">{getSectionNotes("other_kit") ? "Notes added" : "Anything else not covered above"}</p>
+                </div>
+              </div>
+              {arrow}
+            </div>
+          </a>
+
         </div>
       </main>
     </div>
