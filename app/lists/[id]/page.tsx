@@ -200,7 +200,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                     <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <a href={`/lists/${id}/specs`} className="flex items-center justify-between px-6 py-4 hover:bg-zinc-800 transition-colors group">
               <div className="flex items-center gap-3">
-                {dot(!!specs)}
+                {dot(!!specs || (listLuts !== null && listLuts.length > 0))}
                 <div>
                   <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Shoot specs</h3>
                   {specs ? (

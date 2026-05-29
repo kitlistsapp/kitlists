@@ -9,6 +9,17 @@ interface ListLut { id: string; name: string; source: string; profile_lut_id?: s
 export default function ShootSpecsPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient()
   const lutFileRef = useRef<HTMLInputElement>(null)
+  const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const isSavingRef = useRef(false)
+  const formatRef = useRef('')
+  const resolutionRef = useRef('')
+  const fpsRef = useRef('')
+  const aspectRatioRef = useRef('')
+  const jobNotesRef = useRef('')
+  const specIdRef = useRef<string | null>(null)
+  const listIdRef = useRef('')
+  const userIdRef = useRef('')
+  const listLutsRef = useRef<ListLut[]>([])
   const [listId, setListId] = useState('')
   const [userId, setUserId] = useState('')
   const [saving, setSaving] = useState(false)
@@ -24,8 +35,18 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
   const [showLutPicker, setShowLutPicker] = useState(false)
   const [lutUploading, setLutUploading] = useState(false)
 
+  useEffect(() => { formatRef.current = format }, [format])
+  useEffect(() => { resolutionRef.current = resolution }, [resolution])
+  useEffect(() => { fpsRef.current = fps }, [fps])
+  useEffect(() => { aspectRatioRef.current = aspectRatio }, [aspectRatio])
+  useEffect(() => { jobNotesRef.current = jobNotes }, [jobNotes])
+  useEffect(() => { specIdRef.current = specId }, [specId])
+  useEffect(() => { listIdRef.current = listId }, [listId])
+  useEffect(() => { userIdRef.current = userId }, [userId])
+  useEffect(() => { listLutsRef.current = listLuts }, [listLuts])
+
   useEffect(() => {
-    params.then(p => { setListId(p.id); loadData(p.id) })
+    params.then(p => { setListId(p.id); listIdRef.current = p.id; loadData(p.id) })
   }, [])
 
   const loadData = async (lid: string) => {
@@ -49,15 +70,25 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
     if (listLutData) setListLuts(listLutData)
   }
 
+  const triggerAutoSave = (delay = 800) => {
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => save(), delay)
+  }
+
   const save = async () => {
+    if (isSavingRef.current) return
+    isSavingRef.current = true
     setSaving(true)
-    const payload = { list_id: listId, format, resolution, fps, lut: listLuts.map(l => l.name).join(', '), aspect_ratio: aspectRatio, job_notes: jobNotes }
-    if (specId) {
-      await supabase.from('shoot_specs').update(payload).eq('id', specId)
+    const lid = listIdRef.current
+    const sid = specIdRef.current
+    const payload = { list_id: lid, format: formatRef.current, resolution: resolutionRef.current, fps: fpsRef.current, lut: listLutsRef.current.map(l => l.name).join(', '), aspect_ratio: aspectRatioRef.current, job_notes: jobNotesRef.current }
+    if (sid) {
+      await supabase.from('shoot_specs').update(payload).eq('id', sid)
     } else {
       const { data } = await supabase.from('shoot_specs').insert(payload).select().single()
-      if (data) setSpecId(data.id)
+      if (data) { setSpecId(data.id); specIdRef.current = data.id }
     }
+    isSavingRef.current = false
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
@@ -99,7 +130,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
       <nav className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
         <div className="flex items-center gap-4">
-          {saved && <span className="text-green-400 text-sm">Saved</span>}
+          {saved && <span className="text-green-400 text-sm">✓ Saved</span>}
           <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
           <a href={`/lists/${listId}`} className="text-zinc-400 hover:text-white text-sm">Back to list</a>
         </div>
@@ -111,34 +142,34 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
 
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Format / Codec</label>
-            <input type="text" value={format} onChange={e => setFormat(e.target.value)} placeholder="e.g. ARRIRAW, ProRes 4444, X-OCN XT"
+            <input type="text" value={format} onChange={e => { setFormat(e.target.value); triggerAutoSave() }} placeholder="e.g. ARRIRAW, ProRes 4444, X-OCN XT"
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Resolution</label>
-            <input type="text" value={resolution} onChange={e => setResolution(e.target.value)} placeholder="e.g. 4.6K, 8K, 4K LF"
+            <input type="text" value={resolution} onChange={e => { setResolution(e.target.value); triggerAutoSave() }} placeholder="e.g. 4.6K, 8K, 4K LF"
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Project frame rate</label>
-            <input type="text" value={fps} onChange={e => setFps(e.target.value)} placeholder="e.g. 25fps"
+            <input type="text" value={fps} onChange={e => { setFps(e.target.value); triggerAutoSave() }} placeholder="e.g. 25fps"
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] mb-2" />
             <div className="flex gap-2 flex-wrap">
               {fpsOptions.map(o => (
-                <button key={o} onClick={() => setFps(o)} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ fps === o ? 'bg-[#FFE135] border-[#FFE135] text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
+                <button key={o} onClick={() => { setFps(o); triggerAutoSave(300) }} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ fps === o ? 'bg-[#FFE135] border-[#FFE135] text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
               ))}
             </div>
           </div>
 
           <div>
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Aspect ratio</label>
-            <input type="text" value={aspectRatio} onChange={e => setAspectRatio(e.target.value)} placeholder="e.g. 2.39:1"
+            <input type="text" value={aspectRatio} onChange={e => { setAspectRatio(e.target.value); triggerAutoSave() }} placeholder="e.g. 2.39:1"
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] mb-2" />
             <div className="flex gap-2 flex-wrap">
               {aspectOptions.map(o => (
-                <button key={o} onClick={() => setAspectRatio(o)} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ aspectRatio === o ? 'bg-[#FFE135] border-[#FFE135] text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
+                <button key={o} onClick={() => { setAspectRatio(o); triggerAutoSave(300) }} className={`px-3 py-1 rounded-full text-xs border transition-colors ${ aspectRatio === o ? 'bg-[#FFE135] border-[#FFE135] text-black' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500' }`}>{o}</button>
               ))}
             </div>
           </div>
@@ -187,7 +218,7 @@ export default function ShootSpecsPage({ params }: { params: Promise<{ id: strin
 
           <div className="border-t border-zinc-800 pt-6">
             <label className="text-zinc-400 text-xs uppercase tracking-widest mb-2 block">Shoot spec notes</label>
-            <textarea value={jobNotes} onChange={e => setJobNotes(e.target.value)}
+            <textarea value={jobNotes} onChange={e => { setJobNotes(e.target.value); triggerAutoSave() }}
               placeholder="Car rigs, remote heads, cranes, special requirements..."
               rows={4}
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
