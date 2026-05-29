@@ -231,6 +231,17 @@ export default function VTRPage({ params }: { params: Promise<{ id: string }> })
             rows={3}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
         </div>
+
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
+          <a href={"/lists/" + listId + "/grip"}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-sm font-medium transition-colors">
+              ← Gimbals
+            </a>
+          <a href={"/lists/" + listId}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#FFE135] hover:bg-[#FFD700] text-black text-sm font-semibold transition-colors">
+              Back to list ✓
+            </a>
+        </div>
       </main>
     </div>
   )

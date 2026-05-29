@@ -121,17 +121,18 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
         <div className="space-y-3">
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-zinc-800">
+            <a href={`/lists/${id}/camera`} className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between hover:bg-zinc-800 transition-colors group">
               <div className="flex items-center gap-3">
                 {dot((cameras || []).some((c: any) => c.equipment_items?.name))}
-                <h3 className="text-white font-semibold">Camera Body</h3>
+                <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Camera Body</h3>
               </div>
-            </div>
+              {arrow}
+            </a>
             {(cameras || []).map((cam: any, idx: number) => {
               const bodyName = cam.equipment_items?.name
               return (
-                <a key={cam.id} href={`/lists/${id}/camera/${cam.id}`}
-                  className={`flex items-center justify-between px-6 py-3 hover:bg-zinc-800 transition-colors group ${idx < (cameras || []).length - 1 ? "border-b border-zinc-800" : ""}`}>
+                <a key={cam.id} href={`/lists/${id}/camera`}
+                  className={`flex items-center px-6 py-3 ${idx < (cameras || []).length - 1 ? "border-b border-zinc-800" : ""}`}>
                   <div className="flex items-center gap-3">
                     {dot(!!bodyName)}
                     <div>
@@ -146,7 +147,6 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                       )}
                     </div>
                   </div>
-                  {arrow}
                 </a>
               )
             })}
@@ -191,11 +191,6 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               </details>
             )}
           </div>
-          {sectionCard("Head & Legs", `/lists/${id}/head-tripod`, headTripodItems, "Not configured", getSectionNotes("head_tripod"))}
-          {sectionCard("Gimbals", `/lists/${id}/grip`, gripItems, "Not configured", getSectionNotes("grip"))}
-          {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems, "Not configured", getSectionNotes("filtration"))}
-          {sectionCard("AKS", `/lists/${id}/aks`, aksItems, "Not configured", getSectionNotes("aks"))}
-
           {sectionCard("Filtration", `/lists/${id}/filtration`, filtrationItems, "Not configured", getSectionNotes("filtration"))}
           {sectionCard("AKS", `/lists/${id}/aks`, aksItems, "Not configured", getSectionNotes("aks"))}
           {sectionCard("Head & Legs", `/lists/${id}/head-tripod`, headTripodItems, "Not configured", getSectionNotes("head_tripod"))}
