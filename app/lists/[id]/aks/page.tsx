@@ -156,12 +156,22 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
   const [listId, setListId] = useState('')
   const [userId, setUserId] = useState('')
   const [saving, setSaving] = useState(false)
+  const [qtyWarning, setQtyWarning] = useState(false)
   const [saved, setSaved] = useState(false)
   const [allItems, setAllItems] = useState<Item[]>([])
   const [entries, setEntries] = useState<Entry[]>([])
+  const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const isSavingRef = useRef(false)
+  const entriesRef = useRef<Entry[]>([])
+  const listIdRef = useRef('')
+  const userIdRef = useRef('')
+
+  useEffect(() => { entriesRef.current = entries }, [entries])
+  useEffect(() => { listIdRef.current = listId }, [listId])
+  useEffect(() => { userIdRef.current = userId }, [userId])
 
   useEffect(() => {
-    params.then(p => { setListId(p.id); loadData(p.id) })
+    params.then(p => { setListId(p.id); listIdRef.current = p.id; loadData(p.id) })
   }, [])
 
   const loadData = async (lid: string) => {
@@ -176,41 +186,55 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
       setEntries(existing.map((i: any) => {
         const subcat = i.equipment_items?.subcategory || ''
         const topCat = SUBCATEGORY_TO_TOP[subcat] || (i.equipment_items?.category === 'misc' ? 'Miscellaneous' : '')
-        return { id: i.id, topCategory: topCat, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 0, source: i.source || 'rental', notes: i.notes || '' }
+        return { id: i.id, topCategory: topCat, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental', notes: i.notes || '' }
       }))
     } else {
-      setEntries([{ id: '1', topCategory: '', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '' }])
+      setEntries([{ id: '1', topCategory: '', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }])
     }
   }
 
+  const triggerAutoSave = (delay = 600) => {
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => save(), delay)
+  }
+
   const save = async () => {
+    if (isSavingRef.current) return
+    const ents = entriesRef.current
+    const lid = listIdRef.current
+    const uid = userIdRef.current
     const invalid = entries.filter(e => e.itemId && (e.quantity < 1 || !e.quantity))
     if (invalid.length > 0) {
-      alert('Please enter a quantity of at least 1 for all items.')
+      setQtyWarning(true)
+      setTimeout(() => setQtyWarning(false), 3000)
       return
     }
+    setQtyWarning(false)
+    isSavingRef.current = true
     setSaving(true)
-    await supabase.from('list_items').delete().eq('list_id', listId).eq('section', 'aks')
-    const rows = entries.filter(e => e.itemId).map((e, i) => ({
-      list_id: listId, owner_id: userId, section: 'aks',
+    await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'aks')
+    const rows = ents.filter(e => e.itemId).map((e, i) => ({
+      list_id: lid, owner_id: uid, section: 'aks',
       item_id: e.itemId.startsWith('custom:') ? null : e.itemId,
       custom_label: e.itemId.startsWith('custom:') ? e.itemName : null,
       quantity: e.quantity || 1, source: e.source, notes: e.notes, sort_order: i
     }))
     if (rows.length > 0) await supabase.from('list_items').insert(rows)
+    isSavingRef.current = false
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
   const update = (id: string, field: string, value: any) => setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   const remove = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
-  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), topCategory: '', itemId: '', itemName: '', quantity: 0, source: 'rental', notes: '' }])
+  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), topCategory: '', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }])
 
   return (
     <div className="min-h-screen bg-black text-white">
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
         <div className="flex items-center gap-3">
-          {saved && <span className="text-green-400 text-sm">Saved</span>}
+          {qtyWarning && <span className="text-red-400 text-sm">Please enter qty for all items</span>}
+          {saved && <span className="text-green-400 text-sm">✓ Saved</span>}
           <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
             {saving ? 'Saving...' : 'Save'}
           </button>
@@ -228,7 +252,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                   <CategoryPicker value={entry.topCategory} onChange={v => { update(entry.id, 'topCategory', v); update(entry.id, 'itemId', ''); update(entry.id, 'itemName', '') }} />
                   {entry.topCategory && (
                     <ItemPicker items={allItems} topCategory={entry.topCategory} value={entry.itemId}
-                      onChange={(id, name) => { update(entry.id, 'itemId', id); update(entry.id, 'itemName', name) }} />
+                      onChange={(id, name) => { update(entry.id, 'itemId', id); update(entry.id, 'itemName', name); if (id) triggerAutoSave(600) }} />
                   )}
                 </div>
                 <input type="number" min="1" placeholder="Qty"
@@ -241,7 +265,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                 <div className="ml-1 space-y-1.5">
                   <div className="flex gap-1">
                     {['rental', 'dop_owned', 'ac_owned'].map(s => (
-                      <button key={s} onClick={() => update(entry.id, 'source', s)}
+                      <button key={s} onClick={() => { update(entry.id, 'source', s); triggerAutoSave(300) }}
                         className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
                         {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
                       </button>

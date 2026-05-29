@@ -84,6 +84,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const [sectionNotes, setSectionNotes] = useState('')
   const [notesId, setNotesId] = useState<string | null>(null)
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const isSavingRef = useRef(false)
   const onboardRef = useRef<Entry[]>([])
   const blockRef = useRef<Entry[]>([])
   const acdcRef = useRef<Entry[]>([])
@@ -108,9 +109,9 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
     listIdRef.current = lid
     if (existing && existing.length > 0) {
-      setOnboardEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
-      setBlockEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
-      setAcdcEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'acdc').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
+      setOnboardEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })))
+      setBlockEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })))
+      setAcdcEntries(existing.filter((i: any) => i.equipment_items?.subcategory === 'acdc').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })))
     }
   }
 
@@ -128,6 +129,8 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   }
 
   const save = async () => {
+    if (isSavingRef.current) return
+    isSavingRef.current = true
     const ob = onboardRef.current
     const bl = blockRef.current
     const ac = acdcRef.current
@@ -155,10 +158,12 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
       const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'power', notes }).select().single()
       if (newNote) setNotesId(newNote.id)
     }
+    isSavingRef.current = false
+    isSavingRef.current = false
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
-  const newEntry = () => ({ id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental' })
+  const newEntry = () => ({ id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' })
   const updateEntry = (setFn: any, id: string, field: string, value: any) => setFn((prev: Entry[]) => prev.map((e: Entry) => e.id === id ? { ...e, [field]: value } : e))
   const removeEntry = (setFn: any, id: string) => setFn((prev: Entry[]) => prev.filter((e: Entry) => e.id !== id))
 

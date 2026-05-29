@@ -84,6 +84,19 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
   const [selectedBody, setSelectedBody] = useState('')
   const [bodySource, setBodySource] = useState('rental')
   const [cameraNotes, setCameraNotes] = useState('')
+  const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const isSavingRef = useRef(false)
+  const selectedBodyRef = useRef('')
+  const bodySourceRef = useRef('rental')
+  const cameraNotesRef = useRef('')
+  const cameraIdRef = useRef('')
+  const cameraFormatRef = useRef('digital')
+
+  useEffect(() => { selectedBodyRef.current = selectedBody }, [selectedBody])
+  useEffect(() => { bodySourceRef.current = bodySource }, [bodySource])
+  useEffect(() => { cameraNotesRef.current = cameraNotes }, [cameraNotes])
+  useEffect(() => { cameraIdRef.current = cameraId }, [cameraId])
+  useEffect(() => { cameraFormatRef.current = cameraFormat }, [cameraFormat])
 
   useEffect(() => {
     params.then(p => { setListId(p.id); setCameraId(p.cameraId); loadData(p.id, p.cameraId) })
@@ -104,14 +117,27 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
     if (eq) setAllItems(eq)
   }
 
+  const triggerAutoSave = (delay = 600) => {
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => save(), delay)
+  }
+
   const save = async () => {
+    if (isSavingRef.current) return
+    isSavingRef.current = true
     setSaving(true)
+    const body = selectedBodyRef.current
+    const source = bodySourceRef.current
+    const notes = cameraNotesRef.current
+    const cid = cameraIdRef.current
+    const fmt = cameraFormatRef.current
     await supabase.from('camera_pages').update({
-      camera_body_id: selectedBody && !selectedBody.startsWith('custom:') ? selectedBody : null,
-      camera_body_source: bodySource,
-      camera_notes: cameraNotes,
-      camera_format: cameraFormat
-    }).eq('id', cameraId)
+      camera_body_id: body && !body.startsWith('custom:') ? body : null,
+      camera_body_source: source,
+      camera_notes: notes,
+      camera_format: fmt
+    }).eq('id', cid)
+    isSavingRef.current = false
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
@@ -124,7 +150,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
       <nav className="border-b border-zinc-800 px-4 py-4 flex items-center justify-between sticky top-0 bg-black z-40">
         <a href="/dashboard" className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></a>
         <div className="flex items-center gap-3">
-          {saved && <span className="text-green-400 text-sm">Saved</span>}
+          {saved && <span className="text-green-400 text-sm">✓ Saved</span>}
           <button onClick={save} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50">
             {saving ? 'Saving...' : 'Save'}
           </button>
@@ -138,15 +164,15 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-zinc-400 text-xs uppercase tracking-widest">Camera body</h3>
             <div className="flex gap-1 bg-zinc-800 rounded-lg p-1">
-              <button onClick={() => setCameraFormat('digital')} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'digital' ? 'bg-[#FFE135] text-black' : 'text-zinc-400 hover:text-white')}>Digital</button>
-              <button onClick={() => setCameraFormat('film')} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'film' ? 'bg-[#FFE135] text-black' : 'text-zinc-400 hover:text-white')}>Film</button>
+              <button onClick={() => { setCameraFormat('digital'); triggerAutoSave(600) }} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'digital' ? 'bg-[#FFE135] text-black' : 'text-zinc-400 hover:text-white')}>Digital</button>
+              <button onClick={() => { setCameraFormat('film'); triggerAutoSave(600) }} className={"px-3 py-1 rounded text-xs font-medium transition-colors " + (cameraFormat === 'film' ? 'bg-[#FFE135] text-black' : 'text-zinc-400 hover:text-white')}>Film</button>
             </div>
           </div>
-          <SearchablePicker items={bodies} value={selectedBody} onChange={id => setSelectedBody(id)} placeholder="Search camera bodies..." />
+          <SearchablePicker items={bodies} value={selectedBody} onChange={(id, name) => { setSelectedBody(id); if (id) triggerAutoSave(600) }} placeholder="Search camera bodies..." />
           {selectedBody && (
             <div className="flex gap-2 mt-3">
               {['rental', 'dop_owned', 'ac_owned'].map(s => (
-                <button key={s} onClick={() => setBodySource(s)}
+                <button key={s} onClick={() => { setBodySource(s); triggerAutoSave(300) }}
                   className={"px-3 py-1.5 rounded-lg text-xs font-medium transition-colors " + (bodySource === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
                   {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
                 </button>

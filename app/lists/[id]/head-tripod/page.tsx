@@ -87,6 +87,7 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
   const [sectionNotes, setSectionNotes] = useState('')
   const [notesId, setNotesId] = useState<string | null>(null)
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const isSavingRef = useRef(false)
   const entriesRef = useRef<Entry[]>([])
   const listIdRef = useRef('')
   const userIdRef = useRef('')
@@ -115,9 +116,9 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
     if (eq) setAllItems(eq)
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
     if (existing && existing.length > 0) {
-      setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 0, source: i.source || 'rental' })))
+      setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })))
     } else {
-      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 0, source: 'rental' }])
+      setEntries([{ id: '1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
     }
   }
 
@@ -127,6 +128,8 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
   }
 
   const save = async () => {
+    if (isSavingRef.current) return
+    isSavingRef.current = true
     const ents = entriesRef.current
     const lid = listIdRef.current
     const uid = userIdRef.current
@@ -147,12 +150,14 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
       const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'head_tripod', notes }).select().single()
       if (newNote) setNotesId(newNote.id)
     }
+    isSavingRef.current = false
+    isSavingRef.current = false
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
   const update = (id: string, field: string, value: any) => setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   const remove = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
-  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 0, source: 'rental' }])
+  const add = () => setEntries(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' }])
 
   return (
     <div className="min-h-screen bg-black text-white">
