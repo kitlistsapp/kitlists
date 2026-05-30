@@ -101,14 +101,13 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
         <div className="mb-5">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold">{list.project_name}</h2>
-              <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
-              <div className="flex gap-4 mt-2 text-xs text-zinc-600">
-                {list.director_name && <span>Director: {list.director_name}</span>}
-                {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}{list.shoot_days ? ` (${list.shoot_days} days)` : ''}</span>}
+              <h2 className="text-2xl font-bold">{list.project_name}{list.production_co ? <span className="text-zinc-500 font-normal text-xl"> · {list.production_co}</span> : ''}</h2>
+              {list.director_name && <p className="text-zinc-500 text-sm mt-0.5">Dir: {list.director_name}</p>}
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-zinc-600">
+                {list.testing_date && <span>Testing: {new Date(list.testing_date).toLocaleDateString("en-AU")}</span>}
                 {list.pre_light_date && <span>Pre-light: {new Date(list.pre_light_date).toLocaleDateString("en-AU")}</span>}
                 {list.gear_check_date && <span>Gear check: {new Date(list.gear_check_date).toLocaleDateString("en-AU")}</span>}
-                {list.testing_date && <span>Testing: {new Date(list.testing_date).toLocaleDateString("en-AU")}</span>}
+                {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}{list.shoot_days ? ` (${list.shoot_days} days)` : ''}</span>}
                 {list.post_return_date && <span>Post/return: {new Date(list.post_return_date).toLocaleDateString("en-AU")}</span>}
               </div>
             </div>

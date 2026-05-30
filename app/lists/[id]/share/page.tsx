@@ -99,11 +99,11 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
       </nav>
 
       <main className="max-w-2xl mx-auto px-4 py-6">
-        <h2 className="text-2xl font-bold mb-1">Share — {listName}</h2>
-        {listSchedule?.production_co && <p className="text-zinc-500 text-sm mb-2">{listSchedule.production_co}</p>}
+        <h2 className="text-2xl font-bold mb-0.5">Share — {listName}{listSchedule?.production_co ? <span className="text-zinc-500 font-normal text-xl"> · {listSchedule.production_co}</span> : ''}</h2>
+        {listSchedule?.director_name && <p className="text-zinc-500 text-sm mb-2">Dir: {listSchedule.director_name}</p>}
         {listSchedule && (
           <div className="flex flex-wrap gap-3 mb-4 text-xs text-zinc-500">
-            {listSchedule.director_name && <span>Director: {listSchedule.director_name}</span>}
+            {listSchedule.director_name && <span></span>}
             {listSchedule.shoot_start && <span>Shoot: {new Date(listSchedule.shoot_start).toLocaleDateString("en-AU")}{listSchedule.shoot_days ? ` (${listSchedule.shoot_days} days)` : ''}</span>}
             {listSchedule.pre_light_date && <span>Pre-light: {new Date(listSchedule.pre_light_date).toLocaleDateString("en-AU")}</span>}
             {listSchedule.gear_check_date && <span>Gear check: {new Date(listSchedule.gear_check_date).toLocaleDateString("en-AU")}</span>}

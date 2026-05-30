@@ -1,8 +1,45 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+
+
+function RentalHousePicker({ houses, value, onChange }: {
+  houses: any[]; value: string; onChange: (id: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const selected = houses.find(h => h.id === value)
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" onClick={() => setOpen(!open)}
+        className="w-full bg-zinc-800 border border-zinc-700 text-left rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] flex items-center justify-between">
+        <span className={selected ? 'text-white' : 'text-zinc-500'}>{selected ? selected.name : 'Select rental house (optional)'}</span>
+        <svg className="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden">
+          <button type="button" onClick={() => { onChange(''); setOpen(false) }}
+            className="w-full text-left px-4 py-2.5 text-sm text-zinc-500 hover:bg-zinc-800 border-b border-zinc-800">
+            No rental house
+          </button>
+          {houses.map(h => (
+            <button type="button" key={h.id} onClick={() => { onChange(h.id); setOpen(false) }}
+              className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (value === h.id ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-800')}>
+              {h.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function NewListPage() {
   const router = useRouter()
@@ -31,7 +68,7 @@ export default function NewListPage() {
   useEffect(() => {
     const supabase2 = createClient()
     Promise.all([
-      supabase2.from('rental_houses').select('*').order('name'),
+      supabase2.from('rental_houses').select('*').order('sort_order'),
       supabase2.from('templates').select('*').order('name')
     ]).then(([{ data: houses }, { data: tmpls }]) => {
       if (houses) setRentalHouses(houses)
@@ -164,32 +201,26 @@ export default function NewListPage() {
             <label className="text-zinc-400 text-sm mb-1.5 block">Project name <span className="text-[#FFE135]">*</span></label>
             <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)}
               placeholder="e.g. Heartbreak High S3"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Production company</label>
             <input type="text" value={productionCo} onChange={e => setProductionCo(e.target.value)}
               placeholder="e.g. Fremantle Australia"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Director</label>
             <input type="text" value={directorName} onChange={e => setDirectorName(e.target.value)}
               placeholder="e.g. Sandy Doe"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Rental house</label>
-            <select value={houseId} onChange={e => setHouseId(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]">
-              <option value="">Select rental house (optional)</option>
-              {rentalHouses.map((h: any) => (
-                <option key={h.id} value={h.id}>{h.name}{h.city ? " — " + h.city : ""}</option>
-              ))}
-            </select>
+            <RentalHousePicker houses={rentalHouses} value={houseId} onChange={setHouseId} />
           </div>
 
           <div className="border-t border-zinc-700 pt-5">
@@ -198,32 +229,32 @@ export default function NewListPage() {
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Testing date</label>
                 <input type="date" value={testingDate} onChange={e => setTestingDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Pre-light date</label>
                 <input type="date" value={preLightDate} onChange={e => setPreLightDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Gear check date</label>
                 <input type="date" value={gearCheckDate} onChange={e => setGearCheckDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
                 <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)} min={new Date().toISOString().split("T")[0]}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot days</label>
                 <input type="number" min="1" value={shootDays} onChange={e => setShootDays(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Post / return date</label>
                 <input type="date" value={postReturnDate} onChange={e => setPostReturnDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
             </div>
           </div>
