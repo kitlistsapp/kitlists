@@ -33,6 +33,8 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   const powerItems = (listItems || []).filter((i: any) => i.section === 'power')
   const headTripodItems = (listItems || []).filter((i: any) => i.section === 'head_tripod')
   const gripItems = (listItems || []).filter((i: any) => i.section === 'grip')
+  const gimbalItems = gripItems
+  const vtrItems = (listItems || []).filter((i: any) => i.section === 'vtr')
   const filtrationItems = (listItems || []).filter((i: any) => i.section === 'filtration')
   const aksItems = (listItems || []).filter((i: any) => i.section === 'aks')
   const getSectionNote = (section: string) => (sectionNotesList || []).find((n: any) => n.section === section)?.notes || ''
@@ -92,19 +94,6 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
           <DownloadButtons listData={listData} dopName={dop?.full_name || ''} companyName={dop?.company_name || ''} luts={lutsWithUrls} />
         </div>
 
-        {specs && (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-4">
-            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Shoot specs</h3>
-            <div className="flex flex-wrap gap-2">
-              {specs.format && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.format}</span>}
-              {specs.resolution && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.resolution}</span>}
-              {specs.fps && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.fps}</span>}
-              {lutsWithUrls && lutsWithUrls.length > 0 && lutsWithUrls.map((l: any) => <span key={l.id} className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{l.name}</span>)}
-              {specs.aspect_ratio && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.aspect_ratio}</span>}
-            </div>
-            {specs.job_notes && <p className="text-zinc-500 text-sm mt-3">{specs.job_notes}</p>}
-          </div>
-        )}
 
         <div className="space-y-4">
 
@@ -122,6 +111,24 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               {share.role === 'rental' && <div className="mt-3 pt-3 border-t border-zinc-800"><p className="text-zinc-500 text-xs uppercase tracking-widest mb-1">Rental house notes</p><p className="text-zinc-400 text-sm">{cam.rental_notes || 'No notes added'}</p></div>}
             </div>
           ))}
+
+          {/* Power */}
+          {powerItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Power</h3>
+              <div className="space-y-2">
+                {powerItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('power') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('power')}</p>}
+            </div>
+          )}
 
           {/* Lenses */}
           {(lensRows || []).length > 0 && (
@@ -147,60 +154,6 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                 ))}
               </div>
               {getSectionNote('lenses') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('lenses')}</p>}
-            </div>
-          )}
-
-          {/* Power */}
-          {powerItems.length > 0 && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <h3 className="font-semibold text-lg mb-4">Power</h3>
-              <div className="space-y-2">
-                {powerItems.map((i: any) => (
-                  <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
-                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
-                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
-                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
-                  </div>
-                ))}
-              </div>
-              {getSectionNote('power') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('power')}</p>}
-            </div>
-          )}
-
-          {/* Head & Tripod */}
-          {headTripodItems.length > 0 && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <h3 className="font-semibold text-lg mb-4">Head & Tripod</h3>
-              <div className="space-y-2">
-                {headTripodItems.map((i: any) => (
-                  <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
-                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
-                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
-                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
-                  </div>
-                ))}
-              </div>
-              {getSectionNote('head_tripod') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('head_tripod')}</p>}
-            </div>
-          )}
-
-          {/* Grip */}
-          {gripItems.length > 0 && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <h3 className="font-semibold text-lg mb-4">Grip</h3>
-              <div className="space-y-2">
-                {gripItems.map((i: any) => (
-                  <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
-                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
-                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
-                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
-                  </div>
-                ))}
-              </div>
-              {getSectionNote('grip') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('grip')}</p>}
             </div>
           )}
 
@@ -240,8 +193,76 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             </div>
           )}
 
-        </div>
+          {/* Head & Legs */}
+          {headTripodItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Head & Legs</h3>
+              <div className="space-y-2">
+                {headTripodItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('head_tripod') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('head_tripod')}</p>}
+            </div>
+          )}
 
+          {/* Gimbals */}
+          {gimbalItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Gimbals</h3>
+              <div className="space-y-2">
+                {gimbalItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('grip') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('grip')}</p>}
+            </div>
+          )}
+
+          {/* VTR */}
+          {vtrItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">VTR</h3>
+              <div className="space-y-2">
+                {vtrItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
+              {getSectionNote('vtr') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('vtr')}</p>}
+            </div>
+          )}
+
+          {/* Shoot Specs */}
+          {specs && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+              <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Shoot specs</h3>
+              <div className="flex flex-wrap gap-2">
+                {specs.format && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.format}</span>}
+                {specs.resolution && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.resolution}</span>}
+                {specs.fps && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.fps}</span>}
+                {lutsWithUrls && lutsWithUrls.length > 0 && lutsWithUrls.map((l: any) => <span key={l.id} className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{l.name}</span>)}
+                {specs.aspect_ratio && <span className="bg-zinc-800 text-zinc-300 text-xs px-3 py-1 rounded-full">{specs.aspect_ratio}</span>}
+              </div>
+              {specs.job_notes && <p className="text-zinc-500 text-sm mt-3">{specs.job_notes}</p>}
+            </div>
+          )}
+
+          {/* LUT Files — AC only */}
           {isAC && lutsWithUrls && lutsWithUrls.length > 0 && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-4">LUT Files</h3>
@@ -249,18 +270,14 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                 {lutsWithUrls.map((lut: any) => (
                   <div key={lut.id} className="flex items-center justify-between">
                     <span className="text-zinc-300 text-sm">{lut.name}</span>
-                    {lut.signedUrl && (
-                      <a href={lut.signedUrl} download
-                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-[#FFE135] px-3 py-1.5 rounded-lg transition-colors">
-                        Download
-                      </a>
-                    )}
+                    {lut.signedUrl && <a href={lut.signedUrl} download className="text-xs bg-zinc-800 hover:bg-zinc-700 text-[#FFE135] px-3 py-1.5 rounded-lg transition-colors">Download</a>}
                   </div>
                 ))}
               </div>
             </div>
           )}
 
+          {/* Files — AC only */}
           {isAC && filesWithUrls && filesWithUrls.length > 0 && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-4">Files</h3>
@@ -268,31 +285,18 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                 {filesWithUrls.map((file: any) => (
                   <div key={file.id} className="flex items-center justify-between">
                     <span className="text-zinc-300 text-sm">{file.name}</span>
-                    {file.signedUrl && (
-                      <a href={file.signedUrl} download
-                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-[#FFE135] px-3 py-1.5 rounded-lg transition-colors">
-                        Download
-                      </a>
-                    )}
+                    {file.signedUrl && <a href={file.signedUrl} download className="text-xs bg-zinc-800 hover:bg-zinc-700 text-[#FFE135] px-3 py-1.5 rounded-lg transition-colors">Download</a>}
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-        <div className="mt-10 pt-6 border-t border-zinc-800 flex items-center justify-between">
-          {dop && (
-            <div className="flex items-center gap-3">
-              {logoUrl && <img src={logoUrl} alt="Logo" className="w-8 h-8 rounded-lg object-contain bg-zinc-900 p-0.5 border border-zinc-800" />}
-              <div>
-                {dop.full_name && <p className="text-zinc-500 text-xs">{dop.full_name}</p>}
-                {dop.company_name && <p className="text-zinc-600 text-xs">{dop.company_name}</p>}
-              </div>
-            </div>
-          )}
-          <p className="text-zinc-700 text-xs">Powered by KitLists</p>
         </div>
 
+        <div className="mt-10 pt-6 border-t border-zinc-800">
+          <p className="text-zinc-700 text-xs text-center">Powered by KitLists</p>
+        </div>
       </main>
     </div>
   )
