@@ -34,13 +34,13 @@ export default function ProfilePage() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const [luts, setLuts] = useState<Lut[]>([])
   const [templates, setTemplates] = useState<Template[]>([])
-  const [newContact, setNewContact] = useState({ full_name: '', email: '', phone: '', role: 'Focus Puller' })
+  const [newContact, setNewContact] = useState({ full_name: '', email: '', phone: '', role: 'Production' })
   const [addingContact, setAddingContact] = useState(false)
   const [savingContact, setSavingContact] = useState(false)
   const [lutUploading, setLutUploading] = useState(false)
   const [camPrefs, setCamPrefs] = useState<any>({ notes: '' })
 
-  const roles = ['Focus Puller', '2nd AC', 'DIT', 'Gaffer', 'Key Grip', 'Sound Recordist', 'Producer', 'Director', 'Other']
+  const roles = ['Production', 'Rental House', '1st AC', 'Director', 'Other']
 
   useEffect(() => { loadProfile() }, [])
 
@@ -143,7 +143,7 @@ export default function ProfilePage() {
     const uid = userIdRef.current || userId
     const { data } = await supabase.from('contacts').insert({ ...newContact, owner_id: uid }).select().single()
     if (data) setContacts(prev => [...prev, data])
-    setNewContact({ full_name: '', email: '', phone: '', role: 'Focus Puller' })
+    setNewContact({ full_name: '', email: '', phone: '', role: 'Production' })
     setAddingContact(false)
     setSavingContact(false)
   }
@@ -277,7 +277,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-zinc-500 text-xs mb-1 block">Name *</label>
-                  <input type="text" value={newContact.full_name} onChange={e => setNewContact(p => ({ ...p, full_name: e.target.value }))} placeholder="Full name" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135]" />
+                  <input type="text" value={newContact.full_name} onChange={e => setNewContact(p => ({ ...p, full_name: e.target.value }))} placeholder="Name / Company" className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135]" />
                 </div>
                 <div>
                   <label className="text-zinc-500 text-xs mb-1 block">Role</label>

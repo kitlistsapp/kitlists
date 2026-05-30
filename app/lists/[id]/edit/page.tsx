@@ -49,8 +49,8 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
   const [projectName, setProjectName] = useState('')
   const [productionCo, setProductionCo] = useState('')
   const [directorName, setDirectorName] = useState('')
-  const [houseId, setHouseId] = useState('')
-  const [rentalHouses, setRentalHouses] = useState<any[]>([])
+  const [rentalHouse, setRentalHouse] = useState('')
+  // const [rentalHouses, setRentalHouses] = useState<any[]>([])
   const [testingDate, setTestingDate] = useState('')
   const [preLightDate, setPreLightDate] = useState('')
   const [gearCheckDate, setGearCheckDate] = useState('')
@@ -68,14 +68,14 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
   const loadData = async (lid: string) => {
     const [{ data: list }, { data: houses }, { data: cams }] = await Promise.all([
       supabase.from('gear_lists').select('*').eq('id', lid).single(),
-      supabase.from('rental_houses').select('*').order('sort_order'),
+      supabase.from('rental_houses').select('*').order('sort_order').limit(0),
       supabase.from('camera_pages').select('*').eq('list_id', lid).order('sort_order')
     ])
     if (list) {
       setProjectName(list.project_name || '')
       setProductionCo(list.production_co || '')
       setDirectorName(list.director_name || '')
-      setHouseId(list.house_id || '')
+      setRentalHouse(list.rental_house || '')
       setShootStart(list.shoot_start || '')
       setShootDays(String(list.shoot_days || ''))
       setTestingDate(list.testing_date || '')
@@ -83,7 +83,7 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
       setGearCheckDate(list.gear_check_date || '')
       setPostReturnDate(list.post_return_date || '')
     }
-    if (houses) setRentalHouses(houses)
+    // rental houses removed
     if (cams) { setCameras(cams); setNumCameras(cams.length) }
   }
 
@@ -94,7 +94,7 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
       project_name: projectName.trim(),
       production_co: productionCo.trim(),
       director_name: directorName.trim() || null,
-      house_id: houseId || null,
+      rental_house: rentalHouse.trim() || null,
       shoot_start: shootStart || null,
       shoot_days: shootDays ? parseInt(shootDays) : null,
       testing_date: testingDate || null,
@@ -146,7 +146,9 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
           </div>
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Rental house</label>
-            <RentalHousePicker houses={rentalHouses} value={houseId} onChange={setHouseId} />
+            <input type="text" value={rentalHouse} onChange={e => setRentalHouse(e.target.value)}
+              placeholder="e.g. Panavision Sydney"
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div className="border-t border-zinc-700 pt-5">

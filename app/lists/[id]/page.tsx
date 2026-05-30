@@ -102,7 +102,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold">{list.project_name}{list.production_co ? <span className="text-zinc-500 font-normal text-xl"> · {list.production_co}</span> : ''}</h2>
-              {list.director_name && <p className="text-zinc-500 text-sm mt-0.5">Dir: {list.director_name}</p>}
+              {(list.director_name || list.rental_house) && <p className="text-zinc-500 text-sm mt-0.5">{list.director_name ? `Dir: ${list.director_name}` : ''}{list.director_name && list.rental_house ? ' · ' : ''}{list.rental_house || ''}</p>}
               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-zinc-600">
                 {list.testing_date && <span>Testing: {new Date(list.testing_date).toLocaleDateString("en-AU")}</span>}
                 {list.pre_light_date && <span>Pre-light: {new Date(list.pre_light_date).toLocaleDateString("en-AU")}</span>}

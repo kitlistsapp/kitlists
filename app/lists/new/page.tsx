@@ -55,8 +55,8 @@ export default function NewListPage() {
   const [shootStart, setShootStart] = useState("")
   const [shootDays, setShootDays] = useState("")
   const [numCameras, setNumCameras] = useState("1")
-  const [houseId, setHouseId] = useState("")
-  const [rentalHouses, setRentalHouses] = useState<any[]>([])
+  const [rentalHouse, setRentalHouse] = useState("")
+  // const [rentalHouses, setRentalHouses] = useState<any[]>([])
   const [directorName, setDirectorName] = useState("")
   const [preLightDate, setPreLightDate] = useState("")
   const [gearCheckDate, setGearCheckDate] = useState("")
@@ -68,10 +68,10 @@ export default function NewListPage() {
   useEffect(() => {
     const supabase2 = createClient()
     Promise.all([
-      supabase2.from('rental_houses').select('*').order('sort_order'),
+      // rental houses removed
       supabase2.from('templates').select('*').order('name')
     ]).then(([{ data: houses }, { data: tmpls }]) => {
-      if (houses) setRentalHouses(houses)
+      // rental houses removed
       if (tmpls) setTemplates(tmpls)
     })
   }, [])
@@ -92,7 +92,7 @@ export default function NewListPage() {
         production_co: productionCo.trim(),
         shoot_start: shootStart || null,
         shoot_days: parseInt(shootDays),
-        house_id: houseId || null,
+        rental_house: rentalHouse.trim() || null,
         status: "draft",
         director_name: directorName.trim() || null,
         pre_light_date: preLightDate || null,
@@ -220,7 +220,9 @@ export default function NewListPage() {
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Rental house</label>
-            <RentalHousePicker houses={rentalHouses} value={houseId} onChange={setHouseId} />
+            <input type="text" value={rentalHouse} onChange={e => setRentalHouse(e.target.value)}
+              placeholder="e.g. Panavision Sydney"
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div className="border-t border-zinc-700 pt-5">
