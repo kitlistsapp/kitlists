@@ -15,6 +15,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [checkEmail, setCheckEmail] = useState(false)
+  const [showForgot, setShowForgot] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [forgotSent, setForgotSent] = useState(false)
+  const [forgotLoading, setForgotLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -50,6 +54,53 @@ export default function LoginPage() {
     }
     setLoading(false)
   }
+
+  const handleForgot = async () => {
+    if (!forgotEmail.trim()) return
+    setForgotLoading(true)
+    await supabase.auth.resetPasswordForEmail(forgotEmail.trim(), {
+      redirectTo: window.location.origin + '/auth/reset-password'
+    })
+    setForgotLoading(false)
+    setForgotSent(true)
+  }
+
+  if (showForgot) return (
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <h1 className="text-white text-4xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
+        </div>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
+          {forgotSent ? (
+            <div className="text-center">
+              <div className="text-4xl mb-4">📧</div>
+              <h2 className="text-white text-xl font-bold mb-2">Check your email</h2>
+              <p className="text-zinc-400 text-sm mb-4">We sent a password reset link to <span className="text-white font-medium">{forgotEmail}</span></p>
+              <button onClick={() => { setShowForgot(false); setForgotSent(false) }} className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">Back to sign in</button>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-white text-xl font-bold mb-2">Reset your password</h2>
+              <p className="text-zinc-400 text-sm mb-6">Enter your email and we'll send you a reset link.</p>
+              <div className="space-y-4">
+                <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+                <button onClick={handleForgot} disabled={forgotLoading}
+                  className="w-full bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold rounded-lg py-3 text-sm disabled:opacity-50">
+                  {forgotLoading ? 'Sending...' : 'Send reset link'}
+                </button>
+                <button onClick={() => setShowForgot(false)} className="w-full text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
+                  Back to sign in
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
 
   if (checkEmail) return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
@@ -146,6 +197,8 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
+          {isSignUp && <p className="text-zinc-600 text-xs mt-2">Min 8 characters, including uppercase, number and symbol</p>}
+          {!isSignUp && <div className="text-right mt-1"><button type="button" onClick={() => setShowForgot(true)} className="text-zinc-500 hover:text-zinc-300 text-xs transition-colors">Forgot password?</button></div>}
 
           {message && <p className="mt-4 text-sm text-[#FFE135]">{message}</p>}
 
