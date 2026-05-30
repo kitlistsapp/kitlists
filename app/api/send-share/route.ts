@@ -154,7 +154,7 @@ export async function POST(request: Request) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'KitLists <onboarding@resend.dev>',
+      from: 'KitLists <noreply@kitlists.app>',
       to: [recipientEmail],
       subject: `DP Equipment Request — ${dopName} — ${list?.project_name || listName}`,
       html,

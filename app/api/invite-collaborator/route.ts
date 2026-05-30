@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   const company = profile?.company_name ? ` (${profile.company_name})` : ''
 
   await resend.emails.send({
-    from: 'KitLists <onboarding@resend.dev>',
+    from: 'KitLists <noreply@kitlists.app>',
     to: invitedEmail,
     subject: `${dopName} invited you to collaborate on ${list.project_name}`,
     html: `
