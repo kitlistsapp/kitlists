@@ -105,6 +105,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   const focalLengths = useMemo(() => {
     if (!selectedCategory || !selectedManufacturer || !selectedSeries) return []
     const fls = data[selectedCategory][selectedManufacturer][selectedSeries]
+    if (!Array.isArray(fls)) return []
     return [...fls].sort((a, b) => {
       const numA = parseFloat(a.replace(/[^0-9.]/g, ''))
       const numB = parseFloat(b.replace(/[^0-9.]/g, ''))
@@ -287,7 +288,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
           </div>
 
           <div className="flex overflow-x-auto" style={{height: '320px'}}>
-            <div className="flex-none w-[130px] min-w-[130px] border-r border-zinc-800 overflow-y-auto">
+            <div className="flex-1 min-w-[120px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Category</div>
               {categories.map(cat => (
                 <button key={cat} onClick={() => handleCategorySelect(cat)} className={`w-full text-left px-3 py-2 text-xs leading-snug transition-colors ${selectedCategory === cat ? 'bg-[#2a2000] text-[#FFE135] border-r-2 border-[#FFE135]' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
@@ -295,7 +296,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 </button>
               ))}
             </div>
-            <div className="flex-none w-[140px] min-w-[140px] border-r border-zinc-800 overflow-y-auto">
+            <div className="flex-1 min-w-[120px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Manufacturer</div>
               {!selectedCategory ? (
                 <div className="px-3 py-3 text-xs text-zinc-600">← Pick a category</div>
@@ -305,7 +306,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 </button>
               ))}
             </div>
-            <div className="flex-none w-[150px] min-w-[150px] border-r border-zinc-800 overflow-y-auto">
+            <div className="flex-1 min-w-[120px] border-r border-zinc-800 overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">Series</div>
               {!selectedManufacturer ? (
                 <div className="px-3 py-3 text-xs text-zinc-600">← Pick a manufacturer</div>
@@ -315,14 +316,14 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                 </button>
               ))}
             </div>
-            <div className="flex-1 min-w-[170px] overflow-y-auto">
+            <div className="flex-1 min-w-[120px] overflow-y-auto">
               <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-600 sticky top-0 bg-zinc-900 z-10">
-                {isModuleCategory ? 'Modules' : 'Focal Lengths'}
+                'Focal Lengths'
               </div>
               {!selectedSeries ? (
                 <div className="px-3 py-3 text-xs text-zinc-600">← Pick a series</div>
               ) : (
-                <div className="px-3 py-3 flex flex-wrap gap-1.5">
+                <div className="py-1">
                   {focalLengths.map(fl => {
                     const lens: SelectedLens = { category: selectedCategory!, manufacturer: selectedManufacturer!, series: selectedSeries!, focalLength: fl }
                     const key = lensKey(lens)
@@ -330,8 +331,8 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                     const inSaved = savedKeys.has(key)
                     return (
                       <button key={fl} onClick={() => togglePending(lens)}
-                        className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${inSaved ? 'bg-zinc-800 border-zinc-700 text-zinc-600 cursor-default' : inPending ? 'bg-[#2a2000] border-[#FFE135] text-[#FFE135]' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white'}`}>
-                        {fl}
+                        className={`w-full text-left px-3 py-2 text-xs font-medium border-b border-zinc-800 last:border-0 transition-colors ${inSaved ? 'text-zinc-600 cursor-default' : inPending ? 'bg-[#2a2000] text-[#FFE135]' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}>
+                        {inPending && !inSaved ? '✓ ' : ''}{fl}
                       </button>
                     )
                   })}

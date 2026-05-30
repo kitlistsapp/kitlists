@@ -1,1 +1,4234 @@
-{"16mm Primes":{"Angenieux":{"S2000":["6mm"]},"Arri / Zeiss":{"Standard Speed":["8mm"],"Superspeed Mk. 3":["10mm","12mm","16mm","25mm","50mm"],"Ultra 16":["10mm","12mm","14mm","18mm","25mm","35mm","50mm","6mm","8mm"]},"Century":{"Kinetal":["2mm","4mm"],"S2000":["6mm"]},"Cinema Products":{"Ultra T":["13mm","16mm","25mm","9mm"]},"Cooke":{"Kinetal":["100mm","13mm","150mm","18mm","25mm","38mm","50mm","75mm","9mm"],"SK4":["10mm","12mm","6mm"]},"Elite":{"S2000":["20mm","5mm","7mm"]},"Hawk":{"Ultra T":["7mm"]},"Kinoptik":{"Grand angle":["13mm","18mm","9mm"],"Grand angle \"N\"":["9mm"],"T\u00e9g\u00e9a":["5mm","6mm"]},"Optar":{"Illumina S16":["10mm","12mm","16mm","25mm","50mm","8mm"]},"Optex":{"Kinetal":["4mm","6mm","8mm"]},"Panther":{"Grand angle":["35mm","7mm","8mm"]},"Schneider":{"Cine-Tele-Xenar":["100mm","150mm","75mm"],"Cine-Xenon":["16mm","25mm","50mm"],"Cinegon":["10mm"]}},"16mm Zooms":{"Angenieux":{"HEC":["12 - 120mm","12 - 240mm","15 - 150mm","15 - 300mm","16 - 44mm","17.5 - 70mm","9.5 - 57mm","9.5 - 95mm"],"HR":["10 - 120mm","10 - 150mm","11 - 138mm","11 - 66mm","11.5 - 138mm","7 - 81mm"]},"Arri / Zeiss":{"Arri / Zeiss":["10 - 100mm","11 - 110mm","11.5 - 115mm","12 - 120mm"]},"Canon":{"SC10x6.6":["6.6 - 66mm"],"SC11x15":["11 - 165mm"],"SC12x11.5":["11.5 - 138mm"],"SC17x10.6":["10.6 - 180mm"],"SC20x11":["11 - 220mm"],"SC8x8":["8 - 64mm"],"SC9x7":["7 - 63mm"]},"Century":{"Canon / Optex":["11.5 - 210mm"]},"Cooke":{"conversion":["10.4 - 52mm","10.6 - 52mm","10.8 - 60mm","9.5 - 53mm"],"Varokinetal":["9 - 50mm"],"Varopanchro":["10 - 30mm"]},"Fujinon":{"Canon / Optex":["10 - 40mm"]},"Optex":{"Canon / Optex":["10.3 - 216mm","10.5 - 210mm","14.5 - 480mm"]}},"35mm Primes":{"Arri / Zeiss":{"B-Speeds":["25mm","35mm","50mm","85mm"],"Arri Macro":["100mm","16mm","200mm","24mm","32mm","40mm","50mm","60mm"],"LDS Ultra Prime":["100mm","12mm","135mm","14mm","16mm","180mm","20mm","24mm","28mm","32mm","40mm","50mm","65mm","85mm"],"Master Macro":["100mm"],"Master Prime":["100mm","12mm","135mm","14mm","150mm","16mm","18mm","21mm","25mm","27mm","32mm","35mm","40mm","50mm","65mm","75mm"],"Standard Primes MKI":["100mm","135mm","16mm","24mm","32mm","50mm","85mm"],"Standard Primes MKII":["100mm","10mm","12mm","135mm","14mm","16mm","180mm","20mm","24mm","28mm","300mm","32mm","40mm","50mm","60mm","85mm"],"Super Speeds MKI":["18mm"],"Super Speeds MKII/III":["18mm","25mm","35mm","50mm","65mm","85mm"],"Ultra Prime":["100mm","10mm","12mm","135mm","14mm","16mm","180mm","20mm","24mm","28mm","32mm","40mm","50mm","65mm","85mm","8mm"]},"Bausch & Lomb":{"Super Baltar":["100mm","152mm","20mm","229mm","25mm","35mm","50mm","75mm"],"Super Speed Baltar":["55mm","85mm"]},"Canon":{"K35 mkII":["18mm","24mm","55mm"],"K35 mkIII":["18mm","25mm","35mm","50mm","85mm"]},"Century":{"Canon S2000":["200mm","300mm","400mm"],"Kinoptic":["9.8mm"],"Nikkor S2000":["8mm"]},"Cineovision":{"Contax / Zeiss conversion":["28mm","35mm","50mm","85mm"],"Olympus stills conversion":["20mm","24mm","35mm","50mm","85mm"]},"Clairmont":{"Canon":["1000mm","14mm"]},"Cooke":{"Cooke":["25mm"],"Modern S2/3":["100mm","152mm","25mm","32mm","40mm","50mm","75mm"],"or earlier S4 version":["100mm","135mm","14mm","150mm","16mm","180mm","18mm","21mm","25mm","27mm","300mm","32mm","35mm","40mm","50mm","65mm","75mm"],"Uncoated versions":["100mm","135mm","32mm","40mm","50mm","65mm","75mm"],"5/i":["100mm","135mm","18mm","25mm","32mm","40mm","50mm","65mm","75mm"],"Century S2000 Panchro":["100mm","152mm","18mm","25mm","32mm","40mm","50mm","75mm"],"Deep Field Panchro":["100mm"],"miniS4/i":["18mm"],"Panchro/i Classic":["18mm"],"S4/i":["12mm"],"Speed Panchro (S1)":["108mm","24mm","28mm","32mm","35mm","40mm","50mm","75mm"],"Speed Panchro (S2)":["18mm","25mm","32mm","40mm","50mm","75mm"],"Speed Panchro (S3)":["18mm","25mm"],"Telepanchro":["152mm","203mm","318mm","406mm","558mm"],"TLS Speed Panchro":["100mm","152mm","18mm","203mm","25mm","32mm","40mm","50mm","75mm"]},"Duclos":{"Entaniya HAL 220":["220 degree"],"Entaniya HAL 250":["250 degree"]},"Gecko Cam":{"recoated Zeiss Ultra":["100mm","135mm","16mm","180mm","20mm","24mm","28mm","32mm","40mm","50mm","65mm","85mm"],"Vintage Ultra Prime":["14mm"]},"GL Optics":{"Canon":["135mm","200mm","300mm"],"Canon Macro":["200mm"],"Laowa":["12mm"],"Sigma":["35mm","50mm"],"Tokina":["100mm"]},"Kinoptik":{"Aplanat":["500mm"],"Apochromat":["100mm","150mm","28mm","35mm","40mm","50mm","75mm"],"Grand angle":["18mm"],"Kinoptar":["1000mm"],"Sp\u00e9cial cin\u00e9":["210mm","300mm"],"T\u00e9g\u00e9a":["9.8mm"]},"Kowa":{"Cine Prominar":["100mm","15mm","20mm","32mm","40mm","50mm","75mm"]},"Leica":{"Summicron-C":["100mm","135mm","15mm","18mm","21mm","25mm","29mm","35mm","40mm","50mm","75mm"],"Summilux-C":["100mm","135mm","16mm","18mm","21mm","25mm","29mm","35mm","40mm","50mm","65mm","75mm"]},"Lomo":{"Standard Speeds":["1000mm","100mm","10mm","12mm","14mm","150mm","16mm","18mm","200mm","22mm","250mm","28mm","300mm","35mm","500mm","50mm","750mm","75mm","8.5mm","9.5mm"],"Standard Speeds SOFT":["100mm","50mm","75mm"],"Super Speeds":["14mm","18mm","22mm","28mm","35mm","50mm","75mm"]},"LumaTech":{"Illumina Super 35":["135mm","18mm","25mm","35mm","50mm","85mm"]},"Meike":{"Summicron-C":["105mm","18mm","25mm","35mm","50mm","75mm"]},"Oppenheimer":{"OppCam / Nikkor":["8mm"],"OppCam / Zeiss":["100mm","60mm"]},"Optar":{"Illumina Super 35":["14mm"]},"Optex":{"Canon FD":["100mm","135mm","14mm"],"Leica macro":["60mm"],"macro":["100mm"],"Zeiss":["10.5mm"]},"Optica Elite":{"S35":["100mm","12mm","135mm","14mm","16mm","18mm","200mm","20mm","22mm","24mm","28mm","300mm","35mm","50mm","75mm","9.6mm"],"S35 Digital":["100mm","18mm","24mm","35mm","50mm","75mm"]},"Panavision":{"Updated Ultra Speed II":["100mm","17mm","24mm","29mm","35mm","40mm","50mm","75mm"],"Close Focus / Macro":["100mm","17mm","20mm","24mm","28mm","35mm","40mm","60mm","90mm"],"Leitz macro":["100mm","135mm","180mm","19mm","21mm","24mm","35mm","50mm","60mm","80mm","90mm"],"Normal Speed MKII":["100mm","150mm","16mm","20mm","24mm","28mm","32mm","35mm","400mm","40mm","500mm","50mm","6mm fisheye","75mm","8mm","8mm distortion","9.8mm"],"Panavision Macro":["100mm","200mm","50mm","90mm"],"Primo":["100mm","10mm","125mm","14.5mm","150mm","17.5mm","21mm","27mm","35mm","40mm","50mm","65mm","75mm","85mm"],"Primo Classic":["100mm","125mm (SE)","21mm","24mm (SE)","27mm","30mm (SE)","35mm","50mm","65mm (SE)","85mm (SE)"],"Primo Close Focus":["14.5mm","17.5mm","21mm","24mm","27mm","30mm","35mm"],"Primo V (digital only)":["100mm","14.5mm","17.5mm","21mm","27mm","35mm","40mm","50mm","75mm"],"PVintage":["14mm"],"Super Speed MKII":["24mm","28mm","35mm","50mm","55mm"],"Super Speed Zeiss":["100mm","135mm","14mm","180mm","24mm","29mm","35mm","50mm","85mm"],"Ultra Speed MKII":["100mm","125mm","14mm","150mm","17mm","200mm","20mm","24mm","29mm","300mm","35mm","40mm","50mm","75mm"],"Ultra Speed Zeiss":["100mm","135mm","14mm","180mm","24mm","29mm","35mm","50mm","65mm","85mm"]},"Peleng":{"Tokina":["8mm"]},"Red":{"Pro Primes":["100mm","18mm","25mm","300mm","35mm","50mm","85mm"]},"Schneider":{"Cine-Tele-Xenar":["150mm","200mm","360mm"],"Cine-Xenar MKI/II":["25mm","35mm","50mm","75mm","95mm"],"Cine-Xenar MKIII":["14mm","18mm","25mm","35mm","50mm","75mm","95mm"],"Cine-Xenon":["100mm","125mm","28mm","35mm","40mm","50mm","75mm"],"Cine-Xenotar":["150mm"],"Cinegon":["20mm"]},"Sony":{"PL Primes MKI":["35mm","50mm","85mm"],"PL Primes MKII":["135mm","20mm","25mm","35mm","50mm","85mm"]},"TLS":{"NEO Super Baltar":["100mm","152mm","20mm","25mm","35mm","50mm","75mm"]},"Ultracam":{"Zeiss stills conversion":["135mm","18mm","24mm","28mm","35mm","50mm","85mm"],"Ultranon":["14mm"]},"Uniq Optics":{"Signature Series":["100mm","18mm","25mm","35mm","50mm","85mm"]},"Van Diemen":{"Canon macro":["100mm","135mm","200mm"],"Canon tele":["135mm","200mm","300mm","400mm","500mm","600mm"],"Leica":["15mm","19mm","24mm","50mm","60mm"],"Leica compact macro":["24mm","28mm","35mm","50mm","75mm","80mm"],"Leica macro":["100mm","135mm","180mm","60mm","80mm","90mm"],"Nikkor tele":["300mm"],"Pentax tele":["135mm","200mm","300mm","600mm"]},"Vantage":{"Leica Macro":["135mm","180mm","19mm","21mm","24mm","28mm","35mm","60mm","90mm"],"MiniHawk":["100mm","135mm","180mm","35mm","40mm","50mm","65mm","75mm"],"Vantage One":["120mm","17.5mm","21mm","25mm","32mm","40mm","50mm","65mm","90mm"]},"Whitepoint Optics":{"Neo Super Baltar":["100mm","152mm","20mm","229mm","25mm","35mm","50mm","75mm"]}},"35mm Zooms":{"Angenieux":{"EZ-1 S35":["30 - 90mm"],"EZ-2 S35":["15 - 40mm"],"EZ-3 S35":["45 - 165mm"],"HP":["20 - 120mm","25 - 250mm","25 - 625mm","35 - 140mm"],"HR":["17 - 102mm","25 - 250mm"],"Optimo":["15 - 40mm","17 - 80mm","19.5 - 94mm","24 - 290mm","28 - 340mm","28 - 76mm","45 - 120mm"],"Optimo DP":["16 - 42mm","30 - 80mm"],"Optimo Style":["16 - 40mm","25 - 250mm","30 - 76mm","48 - 130mm"],"Optimo Ultra 12x S35":["24 - 290mm"],"Optimo Ultra 12x U35":["26 - 320mm"],"Optimo Ultra Compact Standard":["28 - 76mm"],"Optimo Ultra Compact Wide Angle":["16 - 42mm"]},"Arri / Fujinon":{"Alura":["15.5 - 45mm","18 - 80mm","30 - 80mm","45 - 250mm"]},"Arri / Zeiss":{"Master Zoom":["16.5 - 110mm"],"Ultra Wide Zoom":["9.5 - 18mm"],"Vario-Sonnar":["17 - 35mm","22 - 154mm"],"VP1":["16 - 30mm"],"VP2":["29 - 60mm"],"VP3":["55 - 105mm"]},"Canon":{"Cine-Servo":["11 - 55mm","15 - 120mm","17 - 120mm","25 - 250mm","40 - 1200mm","50 - 1000mm"],"Compact Servo":["18 - 80mm","70 - 200mm"],"Compact Zoom":["15.5 - 47mm","30 - 105mm"],"Flex":["14 - 35mm","31.5 - 95mm"],"K-35 K5x25":["25-120mm"],"Zoom":["14.5 - 60mm","30 - 300mm"]},"Century":{"Angenieux":["23 - 460mm"],"S2000":["150 - 600mm"],"S2000 Compact":["17 - 35mm","28 - 70mm"]},"Cinema Products":{"Cine Pro":["24 - 480mm"]},"Clairmont":{"Canon":["150 - 600mm"]},"Cooke":{"Cine Varotal":["25 - 250mm"],"Cinetal":["25 - 250mm"],"Compact":["18 - 100mm"],"CXX":["15 - 40mm"],"Super Cine Varotal":["25 - 250mm"],"Varopanchro":["20 - 60mm"],"Varotal":["18 - 100mm","20 - 100mm"],"WA Varotal":["14 - 70mm"]},"Duclos Lenses":{"Nikkor":["70 - 200mm"],"Tokina":["11 - 16mm"]},"DZO Film":{"Pictor":["12 - 25mm","14 - 30mm","20 - 55mm","50 - 125mm"],"Tango":["18 - 90mm","25 - 300mm","65 - 280mm"]},"Fujinon":{"HK Premier":["14.5 - 45mm","18 - 85mm","24 - 180mm","75 - 400mm"],"HZK Duvo":["14 - 100mm","24 - 300mm","25 - 1000mm"],"XK Cabrio":["20 - 120mm"],"ZK Cabrio":["14 - 35mm","19 - 90mm","25 - 300mm","85 - 300mm"]},"GL Optics":{"Angenieux":["45 - 90mm"],"Canon":["70 - 200mm"],"Leica":["80 - 200mm"],"Sigma":["18 - 35mm","50 - 100mm"],"Tokina":["11 - 20mm","16 - 28mm"]},"Hawk":{"Tokina":["10 - 24mm","150 - 450mm","17 - 35mm"]},"Laowa":{"Nanomorph (1.5x squeeze)":["28 - 55mm","50 - 100mm"],"OOOM":["20 - 85mm","25 - 100mm"],"Ranger":["11 - 18mm","17 - 50mm","50 - 130mm"],"Ultima":["12 - 120mm"]},"Lomo":{"Nanomorph (1.5x squeeze)":["20 - 120mm","25 - 100mm","25 - 150mm","25 - 250mm","25 - 500mm","25 - 80mm"]},"Musashi":{"Takumi":["23.9 - 195mm"]},"Optar Illumina":{"Takumi":["25 - 80mm"]},"Optex":{"Canon":["150 - 600mm"]},"Optica Elite":{"Canon":["120 - 520mm","17 - 35mm","24 - 82mm"]},"Panavision":{"LWZ":["27 - 68mm"],"LWZ2":["17.5 - 34mm"],"LWZ3":["85 - 200mm"],"Nova":["15 - 40mm","27 - 75mm","60 - 125mm"],"Pana-Angenieux":["20 - 120mm"],"Pana-Canon":["150 - 600mm"],"Pana-Cooke":["20 - 100mm","25 - 250mm"],"Primo":["135 - 420mm","17.5 - 75mm","24 - 275mm"],"Primo Compact":["19 - 90mm"],"Primo Macro":["14.5 - 50mm"],"Spherical Telephoto Zoom":["70 - 200mm"]},"Red":{"Pro Zoom":["17 - 50mm","18 - 85mm","50 - 150mm"]},"Sigma":{"Cine Lens":["18 - 35mm","50 - 100mm"]},"Sony":{"SCL-P11X15":["11 - 16mm"]},"Technovision":{"Techno-Cooke":["18 - 90mm","18.5 - 55.5mm","25 - 250mm"]},"Tokina":{"Cinema ATX":["11 - 16mm","11 - 20mm","25 - 75mm","50 - 135mm"]},"Van Diemen":{"Canon":["17 - 35mm"],"Nikkor":["50 - 300mm"],"Pentax":["250 - 600mm"]},"Zeiss":{"LWZ.2":["15.5 - 45mm"],"LWZ.3":["21 - 100mm"]},"Zunow":{"LWZ.3":["14 - 25mm"]}},"65mm Lenses":{"ALPA":{"macro":["120mm","140mm","210mm"],"Switar":["24mm","35mm","45mm","55mm","80mm"]},"Arri / Fujinon":{"Prime 65":["24mm"]},"Arri / IB/E":{"Prime 65 S":["120mm","150mm","35mm","45mm","55mm","75mm","90mm"]},"Arri / Zeiss":{"765 system":["30mm"]},"Arri Rental":{"Prime DNA":["110mm","150mm","200mm","28mm","35mm","45mm","50mm","55mm","60mm","65mm","70mm","80mm"]},"Cooke":{"Panchro 65/i":["100mm","152mm","30mm","40mm","55mm","75mm"]},"Gecko Cam":{"Genesis G65":["110mm","145mm","24mm","32mm","40mm","50mm","60mm","80mm"]},"Hasselblad":{"765 system":["100mm","110mm","40mm","50mm","60mm","80mm"],"Cooke":["38 - 210mm"],"macro":["120mm","150mm","250mm","350mm"],"Prime 65":["100mm","150mm","28mm","300mm","35mm","50mm","80mm"],"WPO TS70":["40mm"],"Zoom 65":["35 - 90mm","50 - 110mm"]},"IB/E":{"K70":["135mm","19mm","24mm","28mm","35mm","50mm","75mm"]},"Leica":{"Thalia":["100mm","120mm","180mm","20mm","24mm","30mm","35mm","45mm","55mm","70mm","90mm"]},"Masterbuilt":{"Ultra-65":["21mm","24mm","29mm","35mm","40mm","55mm"]},"Nisi":{"65 Prime":["16mm"]},"Otto Nemenz":{"Ottoblad":["100mm","110mm","120mm","150mm","180mm","250mm","30mm","40mm","50mm","60mm","80mm"]},"Panavision":{"1.25x anamorphic":["100mm","135mm","180mm","290mm","400mm","40mm","50mm","65mm","75mm"],"1.3x anamorphic":["100mm","135mm","180mm","290mm","300mm","400mm","40mm","50mm","65mm","75mm","85mm"],"1.65x anamorphic":["100mm","150mm","40mm","50mm","65mm","75mm"],"Auto Panatar":["35mm"],"fisheye":["19mm","24mm"],"lightweight":["100mm","150mm","180mm","300mm","400mm","75mm"],"lightweight zoom":["35 - 68mm","50 - 150mm"],"macro":["55mm"],"slant focus":["35mm","45mm"],"Sphero 65":["100mm","135mm","180mm","24mm","300mm","35mm","40mm","50mm","75mm"],"Super PV 70":["100mm","150mm","28mm","300mm","35mm","50mm","75mm"],"System 65":["24mm","35mm","40mm","50mm","75mm"],"System 65 zoom":["150 - 600mm","60 - 360mm"],"Ultra Panatar":["35mm"],"Ultra Panatar II":["35mm"],"Ultra PV 70":["35mm"],"Ultra Vista":["35mm"]},"Servicevision":{"UltraScorpio 70":["105mm","18mm","25mm","35mm","50mm","85mm"]},"Vantage":{"1.3x anamorphic":["120mm","150mm","200mm","280mm","45mm","50mm","60mm","70mm","80mm","95mm"],"Hawk 65":["40mm"]},"Whitepoint Optics":{"WPO TS70":["100mm","120mm","150mm","250mm","30mm","500mm","50mm","60mm","80mm"]}},"Anamorphic":{"Angenieux":{"A2S":["30 - 72mm","42 - 420mm","44 - 440mm","56 - 152mm"]},"Arri / Zeiss":{"AUWZ":["19 - 36mm"],"Master Anamorphic":["100mm","135mm","180mm","28mm","35mm","40mm","50mm","60mm","75mm"]},"Arriscope":{"AUWZ":["100mm","135mm","32mm","40mm","50mm","75mm"]},"Atlas":{"Orion":["100mm","135mm","18mm","200mm","21mm","25mm","28mm","32mm","40mm","50mm","65mm","80mm"]},"Caldwell":{"1.79X squeeze":["100mm","150mm","40mm","50mm","60mm","75mm"],"Chameleon SC":["32mm"]},"Cineovision":{"1.79X squeeze":["100mm","25mm","32mm","35mm","40mm","50mm","85mm"]},"Clairmont":{"Canon":["300 - 1200mm"],"Kowa":["100mm","32mm","40mm","50mm","75mm"]},"Cooke":{"Anamorphic zoom":["35 - 140mm","45 - 450mm"],"Anamorphic/i":["100mm","135mm","180mm","25mm","300mm","32mm","40mm","50mm","65mm","75mm"]},"DZO Film":{"Pavo":["100mm","135mm","180mm","28mm","32mm","40mm","55mm","65mm","75mm"]},"Hawk":{"C-Series":["100mm","40mm","50mm","55 - 165mm","60mm","75mm"],"class-X":["110mm","140mm","28mm","35mm","38 - 80mm","45mm","55mm","55mm macro","65mm","80 - 180mm","80mm"],"V-Lite":["110mm","140mm","28mm","35mm","45mm","55mm","65mm","80mm"],"V-Lite 1.3x Squeeze":["110mm","140mm","20mm","24mm","28mm","35mm","45mm","55mm","65mm","80mm"],"V-Lite 16 1.3x":["14mm","18mm","24mm","28mm","35mm"],"V-Lite 16 2x":["14mm","18mm","24mm","28mm","35mm"],"V-Plus":["100mm","120mm","135mm","150mm","35mm","40mm","45 - 90mm","50mm","60mm","65mm","75mm","80 - 180mm","85mm"],"V-Plus 1.3x Squeeze":["30 - 60mm"],"V-Series":["100mm","135mm","180mm","250mm","25mm","300 - 900mm","30mm","350mm","35mm","40mm","46 - 230mm","50mm","60mm","75mm"]},"Kowa":{"Prominar":["100mm","40mm","50mm","75mm"]},"Laowa":{"1.5x squeeze":["35mm","50mm","60mm","65mm","80mm"],"and":["35mm"],"Nanomorph":["27mm"],"Proteus":["28mm"],"Proteus Flex":["100mm","45mm","60mm","85mm"],"Proteus zoom":["26 - 45mm","45 - 85mm"]},"Lomo":{"High Speed":["35mm","50mm","75mm"],"Round Front":["100mm","150mm","300mm","35mm","40 - 120mm","40 - 240mm","500mm","50mm","75mm"],"Square Front":["22mm","30mm","35mm","37 - 140mm","50mm","80mm"]},"Optica-Elite":{"lightweight":["240 - 1040mm","50 - 160mm","50 - 500mm"],"MKV":["100mm","135mm","180mm","24.5mm","250mm","32mm","40mm","50mm","75mm"],"S-7":["100mm","135mm","24.5mm","40mm","50mm","75mm"]},"P+S Technik":{"Evolution 2X":["100mm","135mm","32mm","40mm","50mm","75mm"]},"Panavision":{"JDC Millenium Anamorphic":["100mm","150mm","25mm","300mm","32mm","40mm","50mm","75mm"],"JDC Speedstar Anamorphic":["100mm","135mm","35mm","40mm","50mm","85mm"],"Angenieux":["34 - 204mm","48 - 580mm","50 - 500mm"],"Auto Panatar":["100mm","24mm","35mm","50mm","55mm","75mm"],"B Series":["100mm","35mm","40mm","50mm","75mm"],"C Series":["1000mm","100mm","150mm","180mm","2000mm","20mm","30mm","35mm","360mm","40mm","50mm","60mm","75mm","800mm"],"Canon Telephoto":["1200mm","400mm","600mm"],"Canon Xtal Express":["100mm","24mm","35mm","50mm","85mm"],"Close Focus":["55mm"],"Cooke":["28 - 140mm","36 - 200mm","40 - 200mm","50 - 500mm"],"Cooke Xtal Express":["18mm"],"E Series":["100mm","135mm","180mm","28mm","35mm","40mm","50mm","75mm","85mm"],"Front Anamorphic Zoom":["40 - 80mm","70 - 200mm"],"G Series":["100mm","25mm","30mm","35mm","40mm","50mm","60mm","75mm"],"Insert / Process":["100mm"],"Macro Panatar":["150mm","200mm","250mm"],"Nikon Telephoto":["400mm","600mm"],"Primo":["100mm","35mm","40mm","50mm","75mm"],"Primo Close Focus":["100mm","35mm","40mm","50mm","75mm"],"Primo Zoom":["270 - 840mm","48 - 550mm"],"Slant Focus":["90mm"],"T Series":["100mm","135mm","150mm","180mm","28mm","35mm","40mm","50mm","60mm","75mm"],"T Series Zoom":["37 - 85mm","42 - 425mm"],"Ultra Golden Panatar":["28mm","35mm","50mm"],"Wide Angle Distortion":["25mm"],"Zeiss Xtal Express":["25mm"]},"Powerscope":{"Evolution 2X":["100mm","150mm","22mm","30mm","35mm","40 - 200mm","50mm","75mm"]},"ServiceVision":{"Scorpio Zoom":["138 - 405mm"],"Scorpiolens":["100mm","135mm","150mm","200mm","20mm","250mm","25mm","300mm","30mm","35mm","40mm","50mm","60mm","75mm"]},"SLR Magic":{"Anamorphot Cine (1.33x)":["35mm","50mm","70mm"]},"Technovision":{"Cooke":["100mm","32mm","40mm","50mm","75mm"],"Zeiss Standard Speed":["100mm","200mm","25mm","32mm","40mm","50mm","85mm"],"Zeiss Superspeed":["20mm","35mm","40mm","50mm","85mm"]},"Todd-AO":{"Canon":["24mm","35mm","55mm","85mm"],"Zeiss Standard Speed":["100mm","200mm","28mm","35mm","38mm","50mm","55mm","75mm"]},"Zeiss":{"Ultrascope":["135mm","40mm","50mm","76 - 300mm","85mm"]}},"Effects lenses":{"Clairmont":{"Clairmont Blurtar":["28mm","40mm","50mm","75mm"]},"V3 MOE lenses":{"V3 MOE lenses":["135mm","24mm","35mm","50mm","80mm"]}},"FF Anamorphic":{"Arri Rental":{"ALFA":["108mm","145mm","190mm","32mm","40mm","47mm","60mm","72mm","90mm"]},"Atlas":{"1.5x squeeze":["138mm","27mm","36mm","42mm","54mm","72mm","95mm"],"Mercury":["24mm"]},"Blazar":{"1.33x squeeze":["100mm","135mm","35mm","50mm","75mm"],"1.5x squeeze":["100mm","125mm","35mm","45mm","50mm","65mm","75mm","85mm"],"1.8x squeeze":["50mm","85mm"],"2x squeeze":["125mm","55mm","85mm"],"Cato":["40mm"],"Great Joy":["35mm"],"Mantis":["25mm"],"Remus":["33mm"],"Viper":["35mm"]},"Caldwell":{"1.79X squeeze":["112mm","150mm","225mm","60mm","75mm","90mm"],"Chameleon XC":["48mm"]},"Cooke":{"1.8x Anamorphic/i FF":["100mm","135mm","180mm","32mm","40mm","50mm","75mm","85mm"]},"DZO Film":{"1.5x squeeze":["45mm","75mm"],"Arcana":["32mm"]},"Glaswerk":{"2x squeeze":["32mm"],"also available in One+":["40mm"],"blue flare versions)":["100mm","135mm","180mm","50mm","60mm","75mm"],"Glaswerk One":["25mm"]},"Laowa":{"1.5x squeeze":["42mm","55mm","85mm"],"2x squeeze":["70 - 135mm"],"Nanomorph LF":["32mm"],"Sunlight":["40 - 80mm"]},"P+S Technik":{"1.5x squeeze":["100mm","135mm","150mm","200mm","40 - 70mm","50mm","70 -200mm","75mm"],"Technovision Classic":["40mm"]},"Rokinon":{"Xeen Anamorphic":["50mm"]},"Second Reef":{"1.5x squeeze":["120mm","50mm","75mm","90mm"],"Coral Anamorphic":["35mm"]},"Servicevision":{"1.65x squeeze":["100mm","135mm","150mm","180mm","200mm","250mm","300mm","32mm","40mm","50mm","60mm","75mm"],"2x squeeze":["100mm","135mm","138 - 405mm","150mm","200mm","250mm","25mm","300mm","30mm","35mm","40mm","50mm","60mm","75mm"],"FFA Scorpiolens":["20mm"],"Scorpiorama 70":["25mm"]},"Sirui":{"1.5x squeeze":["100mm","135mm","45mm","60mm","75mm"],"IronStar":["35mm"]},"Spirit Lab":{"Pure First":["40 - 100mm"]},"Vazen":{"1.8XFF":["50mm","85mm"]},"Viltrox":{"1.33x squeeze":["100mm","135mm","21mm","25mm","29mm","35mm","40mm","50mm","65mm","75mm"],"Epic":["18mm"]},"Xelmus":{"Apollo":["100mm","135mm","180mm","24mm","32mm","40mm","50mm","60mm","75mm"]}},"FF Primes":{"Angenieux":{"Optimo":["100mm","135mm","18mm","200mm","21mm","24mm","28mm","32mm","40mm","50mm","60mm","75mm"]},"Arri":{"Ens\u014d":["10.5mm","105mm","14mm","150mm","18mm","21mm","24mm","250mm","28mm","32mm","40mm","47mm","58mm","75mm"],"Signature Primes":["125mm","12mm","150mm","15mm","18mm","200mm","21mm","25mm","280mm","29mm","35mm","40mm","47mm","58mm","75mm","95mm"]},"Arri Rental":{"LF DNA":["100mm","135mm","21mm","25mm","29mm","35mm","50mm","75mm","85mm"],"Moviecam":["100mm","135mm","16mm","20mm","24mm","28mm","35mm","40mm","50mm","60mm","85mm"]},"Bokkeh":{"Bokkelux":["100mm","25mm","35mm","50mm","75mm"]},"Canon":{"Cinema Primes":["135mm","14mm","20mm","24mm","35mm","50mm","85mm"],"Sumire Primes":["135mm","14mm","20mm","24mm","35mm","50mm","85mm"]},"Celere":{"HS Primes":["18.5mm","25mm","36mm","50mm","85mm"]},"Cinescope":{"Leica R":["19mm"]},"Cooke":{"Panchro/i Classic FF":["100mm","135mm","152mm","18mm","21mm","25mm","27mm","32mm","40mm","50mm","65mm","75mm"],"S7/i":["100mm","135mm","16mm","180mm","18mm","21mm","25mm","27mm","32mm","40mm","50mm","65mm","75mm"],"S7/i Macro":["150mm","60mm","90mm"],"S8/i FF":["100mm","135mm","18mm","21mm","25mm","27mm","32mm","35mm","40mm","50mm","65mm","75mm"]},"Dulens":{"APO Miniprime":["120mm","21mm","25mm","31mm","43mm","58mm","85mm"]},"DZO Film":{"Arles":["100mm","25mm","35mm","50mm","75mm"],"Gnosis (macro)":["32mm","65mm","90mm"],"Vespid":["100mm","125mm","16mm","21mm","25mm","35mm","40mm","50mm","75mm","90mm"],"Vespid II":["105mm","18mm","24mm","35mm","50mm","85mm"]},"Gecko Cam":{"recoated Zeiss Supreme":["100mm","29mm","35mm","50mm","85mm"],"Genesis G35":["14.5mm","16mm","20mm","25mm","35mm","50mm","85mm"],"vintage macro":["100mm","135mm"],"Vintage Supreme Prime":["25mm"]},"IB/E":{"Raptor":["110mm","135mm","28mm","40mm","50mm","80mm"],"Raptor (macro)":["100mm","150mm","180mm","60mm"]},"Irix":{"Cine":["11mm","150mm","15mm","21mm","30mm","45mm","65mm"]},"Kinefinity":{"MAVO":["100mm","25mm","35mm","50mm","75mm"]},"Laowa":{"Macro APO Cine":["100mm"],"Sword macro":["100mm","15mm","180mm","25mm","35mm","60mm"],"VV Cine":["9mm"],"Zero-D VV Cine":["10mm","12mm","14mm"]},"Leitz":{"ELSIE":["100mm","125mm","150mm","15mm","18mm","21mm","25mm","29mm","35mm","40mm","50mm","65mm","75mm"],"Hugo":["135mm","18mm","21mm","24mm","28mm","35mm","40mm","50mm","75mm","90mm"],"Hugo II":["66mm","75mm","90mm"],"Leitz Prime":["100mm","135mm","180mm","18mm","21mm","25mm","29mm","350mm","35mm","40mm","50mm","65mm","75mm"]},"Masterbuilt":{"Anastigmat":["110mm","160mm"],"and":["25mm"],"Classic":["18mm"],"Legacy":["135mm","21mm","25mm","32mm","55mm","90mm"],"Portrait":["100mm","32mm","55mm"],"Soft Flare":["105mm","135mm","28mm","35mm","40mm","50mm","65mm","85mm"],"Super Wide":["14.5mm"],"SuperScope":["110mm","13mm","140mm","19mm","200mm","24mm","35mm","50mm","80mm"],"Variable Prescription":["27mm","32mm","40mm","48mm"]},"Meike":{"Variable Prescription":["105mm","135mm","16mm","24mm","35mm","50mm","85mm"]},"NiSi":{"T1 Primes":["35mm"]},"Nitecore":{"Superior Prime":["100mm","25mm","35mm","50mm","75mm"],"Athena":["135mm","14mm","18mm","25mm","35mm","40mm","50mm","85mm"],"Aureus":["18mm","24mm","35mm","50mm","85mm"],"F3 Primes":["18mm"],"T1 Primes":["50mm","75mm"]},"Panavision":{"65mm Vintage":["100mm","135mm","180mm","24mm","29mm","300mm","35mm","40mm","50mm","65mm","80mm"],"H Series":["100mm","12mm","135mm","150mm","180mm","18mm","20mm","24mm","28mm","29mm","300mm","32mm","35mm","40mm","50mm","55mm","65mm","75mm","85mm"],"Panaspeed":["100mm","135mm","17mm","24mm","29mm","35mm","40mm","50mm","65mm","80mm"],"Primo 70":["100mm","125mm","14mm","150mm","200mm","24mm","250mm","27mm","35mm","40mm","50mm","65mm","80mm"],"Primo 70 zoom":["200 - 400mm","28 - 80mm","70 - 185mm"],"Primo Artiste":["100mm","125mm","150mm","200mm","250mm","27mm","35mm","40mm","50mm","65mm","80mm"],"Primo X":["14mm","24 - 70mm","24mm"],"VA":["100mm","135mm","14mm","21mm","24mm","28mm","35mm","40mm","50mm","65mm","80mm"]},"Rokinon":{"Xeen":["135mm","14mm","16mm","20mm","24mm","35mm","50mm","85mm"],"Xeen CF":["135mm","16mm","24mm","35mm","50mm","85mm"],"Xeen Meister":["14mm","24mm","35mm","50mm","85mm"]},"Schneider":{"Cine-Tilt":["100mm","25mm","35mm","50mm","75mm"],"Xenon FF":["100mm","135mm","18mm","25mm","35mm","50mm","75mm"]},"Servicevision":{"NEW K35":["100mm","15mm","18mm"]},"Sigma":{"Aizu Prime":["100mm","125mm","18mm","21mm","25mm","27mm","32mm","35mm","40mm","50mm","65mm","75mm"],"FF Classic Art Prime":["105mm","135mm","14mm","20mm","24mm","28mm","35mm","40mm","50mm","65mm","85mm"],"FF High Speed Prime":["105mm","135mm","14mm","20mm","24mm","28mm","35mm","40mm","50mm","65mm","85mm"]},"Sirui":{"Jupiter Macro":["100mm","24mm","35mm","50mm","75mm"]},"SLR Magic":{"APO HyperPrime":["25mm","32mm","50mm","85mm"],"APO MicroPrime":["25mm","32mm","50mm","85mm"]},"Spirit Lab":{"Cine Primes":["100mm","135mm","15mm","24mm","35mm","50mm","85mm"]},"TLS":{"Leica Noctilux":["50mm"],"Petzval":["58mm","85mm"],"Vega":["105mm","135mm","20mm","24mm","28mm","35mm","50mm","85mm"]},"TLS housings":{"Leica R":["100mm","135mm","180mm","21mm","24mm","28mm","35mm","50mm","60mm","80mm","90mm"]},"Tokina Cinema ATX":{"and":["21mm"],"Macro":["100mm"],"Vista":["18mm"],"Vista-P (detuned)":["105mm","135mm","180mm","25mm","29mm","35mm","40mm","50mm","65mm","85mm"]},"Tribe 7":{"Blackwing7":["107mm","137mm","20.7mm","23.7mm","27mm","37mm","47mm","57mm","77mm"]},"Vantage":{"Hawk MHX":["105mm","135mm","180mm","28mm","35mm","45mm","65mm","85mm"],"One4":["105mm","140mm","22mm","27mm","35mm","50mm","65mm","80mm"]},"Zeiss":{"Aatma":["100mm","135mm","18mm","25mm","35mm","40mm","50mm","65mm","85mm"],"Compact Prime (CP.2)":["100mm","135mm","15mm","18mm","21mm","25mm","28mm","35mm","50mm","50mm macro","85mm"],"Compact Prime (CP.3)":["100mm","135mm","15mm","18mm","21mm","25mm","28mm","35mm","50mm","85mm"],"Nano Prime":["100mm","18mm","24mm","35mm","50mm","75mm"],"Super Speed":["50mm","85mm"],"Supreme Prime":["100mm","135mm","150mm","15mm","18mm","200mm","21mm","25mm","29mm","35mm","40mm","50mm","65mm","85mm"],"Supreme Prime Radiance":["100mm","135mm","18mm","21mm","25mm","29mm","35mm","40mm","50mm","65mm","85mm"]},"Zero Optik":{"Noct-NIKKOR":["58mm"]},"ZY Optics":{"Speedmaster":["50mm"]}},"FF Zooms":{"Angenieux":{"EZ-1 FF":["45 - 135mm"],"EZ-2 FF":["22 - 60mm"],"EZ-3 FF":["68 - 250mm"],"Optimo Ultra 12x FF":["36 - 435mm"],"Optimo Ultra Compact Standard":["37 - 102mm"],"Optimo Ultra Compact Wide Angle":["21 - 56mm"]},"Arri":{"Signature Zoom":["16 - 32mm","24 - 75mm","45 - 135mm","65 - 300mm"]},"Canon":{"Flex":["20 - 50mm","45 - 135mm"]},"Chiopt":{"Extremer":["28 - 85mm"]},"Cooke":{"Varotal/i FF":["19 - 40mm","30 - 95mm","85 - 215mm"]},"Duclos":{"Leica":["70 - 180mm"]},"DZO Film":{"Catta Ace":["18 - 35mm","35 - 80mm","70 - 135mm"]},"Focus Optics":{"Ruby (Nikkor)":["14 - 24mm"]},"Fujinon":{"Premista":["19 - 45mm","28 - 100mm","80 - 250mm"]},"Isco":{"Catta Ace":["140 - 420mm"]},"Laowa":{"Fisheye Zoom":["8 - 15mm"],"Ranger":["16 - 30mm","28 - 75mm","75 - 180mm"]},"Leitz":{"Leitz Zoom":["25 - 75mm","55 - 125mm"]},"Masterbuilt":{"Zoom 5X":["25 - 125mm"],"Zoom CFZ":["13 - 26mm","27 - 60mm"]},"Musashi":{"Takumi":["29 - 120mm","40.6 - 332mm"]},"Sigma":{"Takumi":["24 - 35mm","300 - 800mm"]},"Sirui":{"Jupiter Macro zoom":["28 - 85mm"]},"Spirit Lab":{"Jupiter Macro zoom":["20 - 50mm","70 - 300mm"]},"TLS":{"Aurora (Nikon)":["14-24mm","24-70mm"],"Morpheus (Nikon)":["80 - 200mm"]},"Tokina":{"Cinema ATX":["16 - 28mm (mkI)","16 - 28mm (mkII)"]},"Viltrox":{"Luna":["30 - 300mm"]},"Zeiss":{"Supreme Zoom Radiance":["28 - 80mm","70 - 200mm"],"CZ.2":["15 - 30mm","28 - 80mm","70 - 200mm"],"SZR":["15 - 30mm"]}},"PC / Tilt lenses":{"Arri Shift & Tilt Bellows System":{"Arri Shift & Tilt Bellows System":["110mm","150mm","18mm","20mm","24mm","28mm","35mm","45mm","60mm","80mm","90mm","bellows unit"]},"Arri Tilt Focus Lenses":{"Arri Tilt Focus Lenses":["24mm","45mm","90mm"]},"Century":{"Century Swing Tilt Bellows System":["105mm","135mm","14mm","150mm","18mm","20mm","24mm","28mm","35mm","45mm","55mm","75mm","90mm","bellows unit"],"Century tilt focus":["17mm","24mm","45mm","90mm"]},"Clairmont":{"Clairmont Swing / Shift (bellows) System":["110mm","120mm macro","135mm macro","150mm","18mm","24mm","28mm","35mm","50mm","60mm","80mm","bellows unit"]},"Kardan":{"Kardan Swing Tilt Bellows":["bellows unit"]},"Laowa":{"Laowa":["15mm","20mm"]},"Lensbaby":{"Lensbaby 3G PL":["50mm"],"Lensbaby Composer Pro / Muse PL":["12mm fisheye","35mm","50mm"]},"Panavision":{"Panavision PVB swing / shift system":["105mm","135mm","14mm","150mm","18mm","24mm","28mm","35mm","45mm","55mm","75mm","90mm","bellows unit"],"Panavision slant focus":["24mm","45mm"]}},"Probe / Snorkel":{"Cine Magic":{"Cinewand":["12mm","16mm","20mm","24mm","35mm","40mm","60mm","relay unit"],"Revolution Lens System":["12mm","16mm","20mm","24mm","32mm","40mm","60mm","9.8mm","Mini-PL Borescope","Mini-PL Hor Tracker","Mini-PL Swivel","PL 90\u00b0 Snorkel","PL Borescope","PL Horizon Tracker","PL Snorkel","PL Swivel"]},"Cine Photo Tech":{"Superscope":["10mm","15mm","25mm","32mm","40mm","60mm","8mm","Direct Module"],"Supersnorkel":["10mm","15mm","18mm","20mm","24mm","32mm","360\u00b0 Module","40mm","60mm","8mm"]},"DZO Film":{"X-Tract Probe Zoom":["18 - 28mm"]},"Hyperion":{"Microshot MKII":["10mm","15mm","180\u00b0 attachment","24mm","35mm","45\u00b0 attachment","50mm","75mm","Borescope Module"]},"Innovision":{"16mm Primes for Probe I":["12.5mm","18mm","28mm","40mm","5mm","6.5mm","60mm","9mm"],"16mm Primes for Probe II":["12.5mm","18mm","24mm","5mm","7mm","9.5mm"],"35mm Primes for Probe I":["100mm","10mm","14mm","16mm","24mm","32mm","50mm","75mm"],"35mm Primes for Probe II":["12mm","16mm","20mm","32mm","40mm","9mm"],"HR Primes for Probe II":["12mm","20mm","28mm","40mm","55mm"],"Probe I":["16mm Module","35mm Module","90\u00b0 Module"],"Probe II":["16mm Module","35mm Module"],"Probe II+":["45\u00b0 Module","90\u00b0 Module","Direct Module"]},"Laowa":{"Pro2be":["24mm"],"Probe lens":["24mm"],"Probe Zoom":["15 - 24mm","15 - 35mm","35 degree module","90 degree module","periscope module","probe module"]},"Optex":{"Borescope":["10mm","14mm","24mm","35mm","Probe Extension","Probe Module"],"Excellence":["10mm","14mm","20mm","28mm","40mm","5mm","7mm","90\u00b0 Module","Motion Picture Relay","Probe Extension","Probe Module"]},"P&S Technik":{"T-Rex Superscope":["17 - 36mm","20 - 44mm ball joint","35 - 75mm","5.5 - 20mm fish eye","60 - 125mm","8 - 18mm","Bore Scope","Standard Module","Super Scope","Zoom Module"]},"Panavision":{"Frazier Lens System":["105mm","135mm","14mm","15mm","17mm","20mm","24mm","28mm","35mm","45mm","50mm","85mm","relay unit"]}},"Secondary lenses":{"Angenieux":{"0.75x wide-angle adapter":["N/A"],"Optimo 1.4x":["N/A"],"Optimo 2x":["N/A"]},"Arri":{"Signature Zoom 1.7x Extender":["N/A"]},"Arri / Fujinon":{"Alura 1.4x":["N/A"],"Alura 2x":["N/A"]},"Atlas":{"Orion 1.6x Expander":["N/A"]},"Century":{"1.4x":["N/A"],"2x":["N/A"],"4.5mm double asphere":["N/A"],"fisheye attachment":["N/A"],"low angle prism":["N/A"]},"Digitaloptik":{"1.21x Expander":["N/A"]},"DIOPTERS":{"0.75x Wide Angle Adapter":["N/A"]},"Duclos Optics":{"1.7x Expander":["N/A"]},"DZO Film":{"Marlin 1.6x Expander":["N/A"]},"Hawk":{"0.7x":["N/A"]},"IB/E Optics":{"LPLx2 Expander":["N/A"],"PLx1.4 Extender":["N/A"],"PLx2 Extender":["N/A"],"PLx2 VV Extender":["N/A"],"S35xFF Expander":["N/A"]},"IMAGE ROTATERS & LOW ANGLE PRISMS":{"Spot Diopters +0.5, +1, +1.5":["N/A"]},"Kipon":{"Cine Extender 2x":["N/A"]},"Kish Optics":{"1.2x Expander":["N/A"]},"Laowa":{"1.33x Front Anamorphic Adapter":["N/A"],"1.33x Rear Anamorphic Adapter":["N/A"],"1.4x Expander":["N/A"]},"Leica":{"MacroLux +0.5":["N/A"],"MacroLux +1":["N/A"],"MacroLux +2":["N/A"]},"Musashi":{"TL-FFX2 (2x Extender)":["N/A"],"TL-OM14F (1.4x Expander)":["N/A"],"TL-OMFF (1.7x Expander)":["N/A"],"TL-PLX14 (1.4x Extender)":["N/A"],"TL-PLX2 (2x Extender)":["N/A"]},"Optex":{"2x":["N/A"]},"Panavision":{"0.8x wide angle adapter":["N/A"],"24mm inclining prism":["N/A"],"In-line image rotater":["N/A"],"Primo 1.4x":["N/A"],"Primo 2x":["N/A"],"Primo lens inverter":["N/A"]},"Schneider":{"19 - 14.5mm wide angle adapter":["N/A"]},"Servicevision Scorpio":{"0.8x Wide Angle Converter":["N/A"]},"Tokina":{"1.6x Expander":["N/A"]},"Vantage":{"0.75x wide-angle adapter":["N/A"],"Slide Diopters +0.5, +1, +2":["N/A"],"Spot Diopters +0.5, +1, +1.5":["N/A"],"Squeeze Diopters +1, +2, +3":["N/A"],"Strip Diopters +0.5, +1, +1.5":["N/A"]},"Whitepoint Optics":{"0.7x Speed Converter":["N/A"],"Tilt & Swing Adapter":["N/A"]},"Zeiss":{"Master Diopters +0.5, +1, +2":["N/A"],"Mutar 0.6x wide-angle adapter":["N/A"],"Mutar 2x":["N/A"],"Panspheron 0.78x wide-angle adapter":["N/A"]},"Zunow":{"0.75x Wide Angle Adapter":["N/A"]}}}
+{
+  "16mm Primes": {
+    "Angenieux": {
+      "S2000": [
+        "6mm"
+      ]
+    },
+    "Arri / Zeiss": {
+      "Standard Speed": [
+        "8mm"
+      ],
+      "Superspeed Mk. 3": [
+        "10mm",
+        "12mm",
+        "16mm",
+        "25mm",
+        "50mm"
+      ],
+      "Ultra 16": [
+        "10mm",
+        "12mm",
+        "14mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "6mm",
+        "8mm"
+      ]
+    },
+    "Century": {
+      "Kinetal": [
+        "2mm",
+        "4mm"
+      ],
+      "S2000": [
+        "6mm"
+      ]
+    },
+    "Cinema Products": {
+      "Ultra T": [
+        "13mm",
+        "16mm",
+        "25mm",
+        "9mm"
+      ]
+    },
+    "Cooke": {
+      "Kinetal": [
+        "100mm",
+        "13mm",
+        "150mm",
+        "18mm",
+        "25mm",
+        "38mm",
+        "50mm",
+        "75mm",
+        "9mm"
+      ],
+      "SK4": [
+        "10mm",
+        "12mm",
+        "6mm"
+      ]
+    },
+    "Elite": {
+      "S2000": [
+        "20mm",
+        "5mm",
+        "7mm"
+      ]
+    },
+    "Hawk": {
+      "Ultra T": [
+        "7mm"
+      ]
+    },
+    "Kinoptik": {
+      "Grand angle": [
+        "13mm",
+        "18mm",
+        "9mm"
+      ],
+      "Grand angle \"N\"": [
+        "9mm"
+      ],
+      "Tégéa": [
+        "5mm",
+        "6mm"
+      ]
+    },
+    "Optar": {
+      "Illumina S16": [
+        "10mm",
+        "12mm",
+        "16mm",
+        "25mm",
+        "50mm",
+        "8mm"
+      ]
+    },
+    "Optex": {
+      "Kinetal": [
+        "4mm",
+        "6mm",
+        "8mm"
+      ]
+    },
+    "Panther": {
+      "Grand angle": [
+        "35mm",
+        "7mm",
+        "8mm"
+      ]
+    },
+    "Schneider": {
+      "Cine-Tele-Xenar": [
+        "100mm",
+        "150mm",
+        "75mm"
+      ],
+      "Cine-Xenon": [
+        "16mm",
+        "25mm",
+        "50mm"
+      ],
+      "Cinegon": [
+        "10mm"
+      ]
+    }
+  },
+  "16mm Zooms": {
+    "Angenieux": {
+      "HEC": [
+        "12 - 120mm",
+        "12 - 240mm",
+        "15 - 150mm",
+        "15 - 300mm",
+        "16 - 44mm",
+        "17.5 - 70mm",
+        "9.5 - 57mm",
+        "9.5 - 95mm"
+      ],
+      "HR": [
+        "10 - 120mm",
+        "10 - 150mm",
+        "11 - 138mm",
+        "11 - 66mm",
+        "11.5 - 138mm",
+        "7 - 81mm"
+      ]
+    },
+    "Arri / Zeiss": {
+      "Arri / Zeiss": [
+        "10 - 100mm",
+        "11 - 110mm",
+        "11.5 - 115mm",
+        "12 - 120mm"
+      ]
+    },
+    "Canon": {
+      "SC10x6.6": [
+        "6.6 - 66mm"
+      ],
+      "SC11x15": [
+        "11 - 165mm"
+      ],
+      "SC12x11.5": [
+        "11.5 - 138mm"
+      ],
+      "SC17x10.6": [
+        "10.6 - 180mm"
+      ],
+      "SC20x11": [
+        "11 - 220mm"
+      ],
+      "SC8x8": [
+        "8 - 64mm"
+      ],
+      "SC9x7": [
+        "7 - 63mm"
+      ]
+    },
+    "Century": {
+      "Canon / Optex": [
+        "11.5 - 210mm"
+      ]
+    },
+    "Cooke": {
+      "conversion": [
+        "10.4 - 52mm",
+        "10.6 - 52mm",
+        "10.8 - 60mm",
+        "9.5 - 53mm"
+      ],
+      "Varokinetal": [
+        "9 - 50mm"
+      ],
+      "Varopanchro": [
+        "10 - 30mm"
+      ]
+    },
+    "Fujinon": {
+      "Canon / Optex": [
+        "10 - 40mm"
+      ]
+    },
+    "Optex": {
+      "Canon / Optex": [
+        "10.3 - 216mm",
+        "10.5 - 210mm",
+        "14.5 - 480mm"
+      ]
+    }
+  },
+  "35mm Primes": {
+    "Arri / Zeiss": {
+      "B-Speeds": [
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Arri Macro": [
+        "100mm",
+        "16mm",
+        "200mm",
+        "24mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "60mm"
+      ],
+      "LDS Ultra Prime": [
+        "100mm",
+        "12mm",
+        "135mm",
+        "14mm",
+        "16mm",
+        "180mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "Master Macro": [
+        "100mm"
+      ],
+      "Master Prime": [
+        "100mm",
+        "12mm",
+        "135mm",
+        "14mm",
+        "150mm",
+        "16mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "27mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Standard Primes MKI": [
+        "100mm",
+        "135mm",
+        "16mm",
+        "24mm",
+        "32mm",
+        "50mm",
+        "85mm"
+      ],
+      "Standard Primes MKII": [
+        "100mm",
+        "10mm",
+        "12mm",
+        "135mm",
+        "14mm",
+        "16mm",
+        "180mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "300mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "85mm"
+      ],
+      "Super Speeds MKI": [
+        "18mm"
+      ],
+      "Super Speeds MKII/III": [
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "Ultra Prime": [
+        "100mm",
+        "10mm",
+        "12mm",
+        "135mm",
+        "14mm",
+        "16mm",
+        "180mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm",
+        "8mm"
+      ]
+    },
+    "Bausch & Lomb": {
+      "Super Baltar": [
+        "100mm",
+        "152mm",
+        "20mm",
+        "229mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "Super Speed Baltar": [
+        "55mm",
+        "85mm"
+      ]
+    },
+    "Canon": {
+      "K35 mkII": [
+        "18mm",
+        "24mm",
+        "55mm"
+      ],
+      "K35 mkIII": [
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Century": {
+      "Canon S2000": [
+        "200mm",
+        "300mm",
+        "400mm"
+      ],
+      "Kinoptic": [
+        "9.8mm"
+      ],
+      "Nikkor S2000": [
+        "8mm"
+      ]
+    },
+    "Cineovision": {
+      "Contax / Zeiss conversion": [
+        "28mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Olympus stills conversion": [
+        "20mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Clairmont": {
+      "Canon": [
+        "1000mm",
+        "14mm"
+      ]
+    },
+    "Cooke": {
+      "Cooke": [
+        "25mm"
+      ],
+      "Modern S2/3": [
+        "100mm",
+        "152mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "or earlier S4 version": [
+        "100mm",
+        "135mm",
+        "14mm",
+        "150mm",
+        "16mm",
+        "180mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "27mm",
+        "300mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Uncoated versions": [
+        "100mm",
+        "135mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "5/i": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Century S2000 Panchro": [
+        "100mm",
+        "152mm",
+        "18mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Deep Field Panchro": [
+        "100mm"
+      ],
+      "miniS4/i": [
+        "18mm"
+      ],
+      "Panchro/i Classic": [
+        "18mm"
+      ],
+      "S4/i": [
+        "12mm"
+      ],
+      "Speed Panchro (S1)": [
+        "108mm",
+        "24mm",
+        "28mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Speed Panchro (S2)": [
+        "18mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Speed Panchro (S3)": [
+        "18mm",
+        "25mm"
+      ],
+      "Telepanchro": [
+        "152mm",
+        "203mm",
+        "318mm",
+        "406mm",
+        "558mm"
+      ],
+      "TLS Speed Panchro": [
+        "100mm",
+        "152mm",
+        "18mm",
+        "203mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Duclos": {
+      "Entaniya HAL 220": [
+        "220 degree"
+      ],
+      "Entaniya HAL 250": [
+        "250 degree"
+      ]
+    },
+    "Gecko Cam": {
+      "recoated Zeiss Ultra": [
+        "100mm",
+        "135mm",
+        "16mm",
+        "180mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "Vintage Ultra Prime": [
+        "14mm"
+      ]
+    },
+    "GL Optics": {
+      "Canon": [
+        "135mm",
+        "200mm",
+        "300mm"
+      ],
+      "Canon Macro": [
+        "200mm"
+      ],
+      "Laowa": [
+        "12mm"
+      ],
+      "Sigma": [
+        "35mm",
+        "50mm"
+      ],
+      "Tokina": [
+        "100mm"
+      ]
+    },
+    "Kinoptik": {
+      "Aplanat": [
+        "500mm"
+      ],
+      "Apochromat": [
+        "100mm",
+        "150mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Grand angle": [
+        "18mm"
+      ],
+      "Kinoptar": [
+        "1000mm"
+      ],
+      "Spécial ciné": [
+        "210mm",
+        "300mm"
+      ],
+      "Tégéa": [
+        "9.8mm"
+      ]
+    },
+    "Kowa": {
+      "Cine Prominar": [
+        "100mm",
+        "15mm",
+        "20mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Leica": {
+      "Summicron-C": [
+        "100mm",
+        "135mm",
+        "15mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Summilux-C": [
+        "100mm",
+        "135mm",
+        "16mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ]
+    },
+    "Lomo": {
+      "Standard Speeds": [
+        "1000mm",
+        "100mm",
+        "10mm",
+        "12mm",
+        "14mm",
+        "150mm",
+        "16mm",
+        "18mm",
+        "200mm",
+        "22mm",
+        "250mm",
+        "28mm",
+        "300mm",
+        "35mm",
+        "500mm",
+        "50mm",
+        "750mm",
+        "75mm",
+        "8.5mm",
+        "9.5mm"
+      ],
+      "Standard Speeds SOFT": [
+        "100mm",
+        "50mm",
+        "75mm"
+      ],
+      "Super Speeds": [
+        "14mm",
+        "18mm",
+        "22mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "LumaTech": {
+      "Illumina Super 35": [
+        "135mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Meike": {
+      "Summicron-C": [
+        "105mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Oppenheimer": {
+      "OppCam / Nikkor": [
+        "8mm"
+      ],
+      "OppCam / Zeiss": [
+        "100mm",
+        "60mm"
+      ]
+    },
+    "Optar": {
+      "Illumina Super 35": [
+        "14mm"
+      ]
+    },
+    "Optex": {
+      "Canon FD": [
+        "100mm",
+        "135mm",
+        "14mm"
+      ],
+      "Leica macro": [
+        "60mm"
+      ],
+      "macro": [
+        "100mm"
+      ],
+      "Zeiss": [
+        "10.5mm"
+      ]
+    },
+    "Optica Elite": {
+      "S35": [
+        "100mm",
+        "12mm",
+        "135mm",
+        "14mm",
+        "16mm",
+        "18mm",
+        "200mm",
+        "20mm",
+        "22mm",
+        "24mm",
+        "28mm",
+        "300mm",
+        "35mm",
+        "50mm",
+        "75mm",
+        "9.6mm"
+      ],
+      "S35 Digital": [
+        "100mm",
+        "18mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Panavision": {
+      "Updated Ultra Speed II": [
+        "100mm",
+        "17mm",
+        "24mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Close Focus / Macro": [
+        "100mm",
+        "17mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "60mm",
+        "90mm"
+      ],
+      "Leitz macro": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "19mm",
+        "21mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "60mm",
+        "80mm",
+        "90mm"
+      ],
+      "Normal Speed MKII": [
+        "100mm",
+        "150mm",
+        "16mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "32mm",
+        "35mm",
+        "400mm",
+        "40mm",
+        "500mm",
+        "50mm",
+        "6mm fisheye",
+        "75mm",
+        "8mm",
+        "8mm distortion",
+        "9.8mm"
+      ],
+      "Panavision Macro": [
+        "100mm",
+        "200mm",
+        "50mm",
+        "90mm"
+      ],
+      "Primo": [
+        "100mm",
+        "10mm",
+        "125mm",
+        "14.5mm",
+        "150mm",
+        "17.5mm",
+        "21mm",
+        "27mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm",
+        "85mm"
+      ],
+      "Primo Classic": [
+        "100mm",
+        "125mm (SE)",
+        "21mm",
+        "24mm (SE)",
+        "27mm",
+        "30mm (SE)",
+        "35mm",
+        "50mm",
+        "65mm (SE)",
+        "85mm (SE)"
+      ],
+      "Primo Close Focus": [
+        "14.5mm",
+        "17.5mm",
+        "21mm",
+        "24mm",
+        "27mm",
+        "30mm",
+        "35mm"
+      ],
+      "Primo V (digital only)": [
+        "100mm",
+        "14.5mm",
+        "17.5mm",
+        "21mm",
+        "27mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "PVintage": [
+        "14mm"
+      ],
+      "Super Speed MKII": [
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "55mm"
+      ],
+      "Super Speed Zeiss": [
+        "100mm",
+        "135mm",
+        "14mm",
+        "180mm",
+        "24mm",
+        "29mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Ultra Speed MKII": [
+        "100mm",
+        "125mm",
+        "14mm",
+        "150mm",
+        "17mm",
+        "200mm",
+        "20mm",
+        "24mm",
+        "29mm",
+        "300mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Ultra Speed Zeiss": [
+        "100mm",
+        "135mm",
+        "14mm",
+        "180mm",
+        "24mm",
+        "29mm",
+        "35mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ]
+    },
+    "Peleng": {
+      "Tokina": [
+        "8mm"
+      ]
+    },
+    "Red": {
+      "Pro Primes": [
+        "100mm",
+        "18mm",
+        "25mm",
+        "300mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Schneider": {
+      "Cine-Tele-Xenar": [
+        "150mm",
+        "200mm",
+        "360mm"
+      ],
+      "Cine-Xenar MKI/II": [
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm",
+        "95mm"
+      ],
+      "Cine-Xenar MKIII": [
+        "14mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm",
+        "95mm"
+      ],
+      "Cine-Xenon": [
+        "100mm",
+        "125mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Cine-Xenotar": [
+        "150mm"
+      ],
+      "Cinegon": [
+        "20mm"
+      ]
+    },
+    "Sony": {
+      "PL Primes MKI": [
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "PL Primes MKII": [
+        "135mm",
+        "20mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "TLS": {
+      "NEO Super Baltar": [
+        "100mm",
+        "152mm",
+        "20mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Ultracam": {
+      "Zeiss stills conversion": [
+        "135mm",
+        "18mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Ultranon": [
+        "14mm"
+      ]
+    },
+    "Uniq Optics": {
+      "Signature Series": [
+        "100mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Van Diemen": {
+      "Canon macro": [
+        "100mm",
+        "135mm",
+        "200mm"
+      ],
+      "Canon tele": [
+        "135mm",
+        "200mm",
+        "300mm",
+        "400mm",
+        "500mm",
+        "600mm"
+      ],
+      "Leica": [
+        "15mm",
+        "19mm",
+        "24mm",
+        "50mm",
+        "60mm"
+      ],
+      "Leica compact macro": [
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "75mm",
+        "80mm"
+      ],
+      "Leica macro": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "60mm",
+        "80mm",
+        "90mm"
+      ],
+      "Nikkor tele": [
+        "300mm"
+      ],
+      "Pentax tele": [
+        "135mm",
+        "200mm",
+        "300mm",
+        "600mm"
+      ]
+    },
+    "Vantage": {
+      "Leica Macro": [
+        "135mm",
+        "180mm",
+        "19mm",
+        "21mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "60mm",
+        "90mm"
+      ],
+      "MiniHawk": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Vantage One": [
+        "120mm",
+        "17.5mm",
+        "21mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "90mm"
+      ]
+    },
+    "Whitepoint Optics": {
+      "Neo Super Baltar": [
+        "100mm",
+        "152mm",
+        "20mm",
+        "229mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    }
+  },
+  "35mm Zooms": {
+    "Angenieux": {
+      "EZ-1 S35": [
+        "30 - 90mm"
+      ],
+      "EZ-2 S35": [
+        "15 - 40mm"
+      ],
+      "EZ-3 S35": [
+        "45 - 165mm"
+      ],
+      "HP": [
+        "20 - 120mm",
+        "25 - 250mm",
+        "25 - 625mm",
+        "35 - 140mm"
+      ],
+      "HR": [
+        "17 - 102mm",
+        "25 - 250mm"
+      ],
+      "Optimo": [
+        "15 - 40mm",
+        "17 - 80mm",
+        "19.5 - 94mm",
+        "24 - 290mm",
+        "28 - 340mm",
+        "28 - 76mm",
+        "45 - 120mm"
+      ],
+      "Optimo DP": [
+        "16 - 42mm",
+        "30 - 80mm"
+      ],
+      "Optimo Style": [
+        "16 - 40mm",
+        "25 - 250mm",
+        "30 - 76mm",
+        "48 - 130mm"
+      ],
+      "Optimo Ultra 12x S35": [
+        "24 - 290mm"
+      ],
+      "Optimo Ultra 12x U35": [
+        "26 - 320mm"
+      ],
+      "Optimo Ultra Compact Standard": [
+        "28 - 76mm"
+      ],
+      "Optimo Ultra Compact Wide Angle": [
+        "16 - 42mm"
+      ]
+    },
+    "Arri / Fujinon": {
+      "Alura": [
+        "15.5 - 45mm",
+        "18 - 80mm",
+        "30 - 80mm",
+        "45 - 250mm"
+      ]
+    },
+    "Arri / Zeiss": {
+      "Master Zoom": [
+        "16.5 - 110mm"
+      ],
+      "Ultra Wide Zoom": [
+        "9.5 - 18mm"
+      ],
+      "Vario-Sonnar": [
+        "17 - 35mm",
+        "22 - 154mm"
+      ],
+      "VP1": [
+        "16 - 30mm"
+      ],
+      "VP2": [
+        "29 - 60mm"
+      ],
+      "VP3": [
+        "55 - 105mm"
+      ]
+    },
+    "Canon": {
+      "Cine-Servo": [
+        "11 - 55mm",
+        "15 - 120mm",
+        "17 - 120mm",
+        "25 - 250mm",
+        "40 - 1200mm",
+        "50 - 1000mm"
+      ],
+      "Compact Servo": [
+        "18 - 80mm",
+        "70 - 200mm"
+      ],
+      "Compact Zoom": [
+        "15.5 - 47mm",
+        "30 - 105mm"
+      ],
+      "Flex": [
+        "14 - 35mm",
+        "31.5 - 95mm"
+      ],
+      "K-35 K5x25": [
+        "25-120mm"
+      ],
+      "Zoom": [
+        "14.5 - 60mm",
+        "30 - 300mm"
+      ]
+    },
+    "Century": {
+      "Angenieux": [
+        "23 - 460mm"
+      ],
+      "S2000": [
+        "150 - 600mm"
+      ],
+      "S2000 Compact": [
+        "17 - 35mm",
+        "28 - 70mm"
+      ]
+    },
+    "Cinema Products": {
+      "Cine Pro": [
+        "24 - 480mm"
+      ]
+    },
+    "Clairmont": {
+      "Canon": [
+        "150 - 600mm"
+      ]
+    },
+    "Cooke": {
+      "Cine Varotal": [
+        "25 - 250mm"
+      ],
+      "Cinetal": [
+        "25 - 250mm"
+      ],
+      "Compact": [
+        "18 - 100mm"
+      ],
+      "CXX": [
+        "15 - 40mm"
+      ],
+      "Super Cine Varotal": [
+        "25 - 250mm"
+      ],
+      "Varopanchro": [
+        "20 - 60mm"
+      ],
+      "Varotal": [
+        "18 - 100mm",
+        "20 - 100mm"
+      ],
+      "WA Varotal": [
+        "14 - 70mm"
+      ]
+    },
+    "Duclos Lenses": {
+      "Nikkor": [
+        "70 - 200mm"
+      ],
+      "Tokina": [
+        "11 - 16mm"
+      ]
+    },
+    "DZO Film": {
+      "Pictor": [
+        "12 - 25mm",
+        "14 - 30mm",
+        "20 - 55mm",
+        "50 - 125mm"
+      ],
+      "Tango": [
+        "18 - 90mm",
+        "25 - 300mm",
+        "65 - 280mm"
+      ]
+    },
+    "Fujinon": {
+      "HK Premier": [
+        "14.5 - 45mm",
+        "18 - 85mm",
+        "24 - 180mm",
+        "75 - 400mm"
+      ],
+      "HZK Duvo": [
+        "14 - 100mm",
+        "24 - 300mm",
+        "25 - 1000mm"
+      ],
+      "XK Cabrio": [
+        "20 - 120mm"
+      ],
+      "ZK Cabrio": [
+        "14 - 35mm",
+        "19 - 90mm",
+        "25 - 300mm",
+        "85 - 300mm"
+      ]
+    },
+    "GL Optics": {
+      "Angenieux": [
+        "45 - 90mm"
+      ],
+      "Canon": [
+        "70 - 200mm"
+      ],
+      "Leica": [
+        "80 - 200mm"
+      ],
+      "Sigma": [
+        "18 - 35mm",
+        "50 - 100mm"
+      ],
+      "Tokina": [
+        "11 - 20mm",
+        "16 - 28mm"
+      ]
+    },
+    "Hawk": {
+      "Tokina": [
+        "10 - 24mm",
+        "150 - 450mm",
+        "17 - 35mm"
+      ]
+    },
+    "Laowa": {
+      "Nanomorph (1.5x squeeze)": [
+        "28 - 55mm",
+        "50 - 100mm"
+      ],
+      "OOOM": [
+        "20 - 85mm",
+        "25 - 100mm"
+      ],
+      "Ranger": [
+        "11 - 18mm",
+        "17 - 50mm",
+        "50 - 130mm"
+      ],
+      "Ultima": [
+        "12 - 120mm"
+      ]
+    },
+    "Lomo": {
+      "Nanomorph (1.5x squeeze)": [
+        "20 - 120mm",
+        "25 - 100mm",
+        "25 - 150mm",
+        "25 - 250mm",
+        "25 - 500mm",
+        "25 - 80mm"
+      ]
+    },
+    "Musashi": {
+      "Takumi": [
+        "23.9 - 195mm"
+      ]
+    },
+    "Optar Illumina": {
+      "Takumi": [
+        "25 - 80mm"
+      ]
+    },
+    "Optex": {
+      "Canon": [
+        "150 - 600mm"
+      ]
+    },
+    "Optica Elite": {
+      "Canon": [
+        "120 - 520mm",
+        "17 - 35mm",
+        "24 - 82mm"
+      ]
+    },
+    "Panavision": {
+      "LWZ": [
+        "27 - 68mm"
+      ],
+      "LWZ2": [
+        "17.5 - 34mm"
+      ],
+      "LWZ3": [
+        "85 - 200mm"
+      ],
+      "Nova": [
+        "15 - 40mm",
+        "27 - 75mm",
+        "60 - 125mm"
+      ],
+      "Pana-Angenieux": [
+        "20 - 120mm"
+      ],
+      "Pana-Canon": [
+        "150 - 600mm"
+      ],
+      "Pana-Cooke": [
+        "20 - 100mm",
+        "25 - 250mm"
+      ],
+      "Primo": [
+        "135 - 420mm",
+        "17.5 - 75mm",
+        "24 - 275mm"
+      ],
+      "Primo Compact": [
+        "19 - 90mm"
+      ],
+      "Primo Macro": [
+        "14.5 - 50mm"
+      ],
+      "Spherical Telephoto Zoom": [
+        "70 - 200mm"
+      ]
+    },
+    "Red": {
+      "Pro Zoom": [
+        "17 - 50mm",
+        "18 - 85mm",
+        "50 - 150mm"
+      ]
+    },
+    "Sigma": {
+      "Cine Lens": [
+        "18 - 35mm",
+        "50 - 100mm"
+      ]
+    },
+    "Sony": {
+      "SCL-P11X15": [
+        "11 - 16mm"
+      ]
+    },
+    "Technovision": {
+      "Techno-Cooke": [
+        "18 - 90mm",
+        "18.5 - 55.5mm",
+        "25 - 250mm"
+      ]
+    },
+    "Tokina": {
+      "Cinema ATX": [
+        "11 - 16mm",
+        "11 - 20mm",
+        "25 - 75mm",
+        "50 - 135mm"
+      ]
+    },
+    "Van Diemen": {
+      "Canon": [
+        "17 - 35mm"
+      ],
+      "Nikkor": [
+        "50 - 300mm"
+      ],
+      "Pentax": [
+        "250 - 600mm"
+      ]
+    },
+    "Zeiss": {
+      "LWZ.2": [
+        "15.5 - 45mm"
+      ],
+      "LWZ.3": [
+        "21 - 100mm"
+      ]
+    },
+    "Zunow": {
+      "LWZ.3": [
+        "14 - 25mm"
+      ]
+    }
+  },
+  "65mm Lenses": {
+    "ALPA": {
+      "macro": [
+        "120mm",
+        "140mm",
+        "210mm"
+      ],
+      "Switar": [
+        "24mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "80mm"
+      ]
+    },
+    "Arri / Fujinon": {
+      "Prime 65": [
+        "24mm"
+      ]
+    },
+    "Arri / IB/E": {
+      "Prime 65 S": [
+        "120mm",
+        "150mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "75mm",
+        "90mm"
+      ]
+    },
+    "Arri / Zeiss": {
+      "765 system": [
+        "30mm"
+      ]
+    },
+    "Arri Rental": {
+      "Prime DNA": [
+        "110mm",
+        "150mm",
+        "200mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "50mm",
+        "55mm",
+        "60mm",
+        "65mm",
+        "70mm",
+        "80mm"
+      ]
+    },
+    "Cooke": {
+      "Panchro 65/i": [
+        "100mm",
+        "152mm",
+        "30mm",
+        "40mm",
+        "55mm",
+        "75mm"
+      ]
+    },
+    "Gecko Cam": {
+      "Genesis G65": [
+        "110mm",
+        "145mm",
+        "24mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "80mm"
+      ]
+    },
+    "Hasselblad": {
+      "765 system": [
+        "100mm",
+        "110mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "80mm"
+      ],
+      "Cooke": [
+        "38 - 210mm"
+      ],
+      "macro": [
+        "120mm",
+        "150mm",
+        "250mm",
+        "350mm"
+      ],
+      "Prime 65": [
+        "100mm",
+        "150mm",
+        "28mm",
+        "300mm",
+        "35mm",
+        "50mm",
+        "80mm"
+      ],
+      "WPO TS70": [
+        "40mm"
+      ],
+      "Zoom 65": [
+        "35 - 90mm",
+        "50 - 110mm"
+      ]
+    },
+    "IB/E": {
+      "K70": [
+        "135mm",
+        "19mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Leica": {
+      "Thalia": [
+        "100mm",
+        "120mm",
+        "180mm",
+        "20mm",
+        "24mm",
+        "30mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "70mm",
+        "90mm"
+      ]
+    },
+    "Masterbuilt": {
+      "Ultra-65": [
+        "21mm",
+        "24mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "55mm"
+      ]
+    },
+    "Nisi": {
+      "65 Prime": [
+        "16mm"
+      ]
+    },
+    "Otto Nemenz": {
+      "Ottoblad": [
+        "100mm",
+        "110mm",
+        "120mm",
+        "150mm",
+        "180mm",
+        "250mm",
+        "30mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "80mm"
+      ]
+    },
+    "Panavision": {
+      "1.25x anamorphic": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "290mm",
+        "400mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "1.3x anamorphic": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "290mm",
+        "300mm",
+        "400mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm",
+        "85mm"
+      ],
+      "1.65x anamorphic": [
+        "100mm",
+        "150mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Auto Panatar": [
+        "35mm"
+      ],
+      "fisheye": [
+        "19mm",
+        "24mm"
+      ],
+      "lightweight": [
+        "100mm",
+        "150mm",
+        "180mm",
+        "300mm",
+        "400mm",
+        "75mm"
+      ],
+      "lightweight zoom": [
+        "35 - 68mm",
+        "50 - 150mm"
+      ],
+      "macro": [
+        "55mm"
+      ],
+      "slant focus": [
+        "35mm",
+        "45mm"
+      ],
+      "Sphero 65": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "24mm",
+        "300mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Super PV 70": [
+        "100mm",
+        "150mm",
+        "28mm",
+        "300mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "System 65": [
+        "24mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "System 65 zoom": [
+        "150 - 600mm",
+        "60 - 360mm"
+      ],
+      "Ultra Panatar": [
+        "35mm"
+      ],
+      "Ultra Panatar II": [
+        "35mm"
+      ],
+      "Ultra PV 70": [
+        "35mm"
+      ],
+      "Ultra Vista": [
+        "35mm"
+      ]
+    },
+    "Servicevision": {
+      "UltraScorpio 70": [
+        "105mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Vantage": {
+      "1.3x anamorphic": [
+        "120mm",
+        "150mm",
+        "200mm",
+        "280mm",
+        "45mm",
+        "50mm",
+        "60mm",
+        "70mm",
+        "80mm",
+        "95mm"
+      ],
+      "Hawk 65": [
+        "40mm"
+      ]
+    },
+    "Whitepoint Optics": {
+      "WPO TS70": [
+        "100mm",
+        "120mm",
+        "150mm",
+        "250mm",
+        "30mm",
+        "500mm",
+        "50mm",
+        "60mm",
+        "80mm"
+      ]
+    }
+  },
+  "Anamorphic": {
+    "Arri / Zeiss": {
+      "Master Anamorphic": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ]
+    },
+    "Arriscope": {
+      "AUWZ": [
+        "100mm",
+        "135mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Atlas": {
+      "Orion": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "200mm",
+        "21mm",
+        "25mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ]
+    },
+    "Caldwell": {
+      "1.79X squeeze": [
+        "100mm",
+        "150mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "Chameleon SC": [
+        "32mm"
+      ]
+    },
+    "Cineovision": {
+      "1.79X squeeze": [
+        "100mm",
+        "25mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Clairmont": {
+      "Kowa": [
+        "100mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Cooke": {
+      "Anamorphic/i": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "25mm",
+        "300mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ]
+    },
+    "DZO Film": {
+      "Pavo": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "55mm",
+        "65mm",
+        "75mm"
+      ]
+    },
+    "Hawk": {
+      "C-Series": [
+        "100mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "class-X": [
+        "110mm",
+        "140mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "55mm macro",
+        "65mm",
+        "80mm"
+      ],
+      "V-Lite": [
+        "110mm",
+        "140mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "65mm",
+        "80mm"
+      ],
+      "V-Lite 1.3x Squeeze": [
+        "110mm",
+        "140mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "65mm",
+        "80mm"
+      ],
+      "V-Lite 16 1.3x": [
+        "14mm",
+        "18mm",
+        "24mm",
+        "28mm",
+        "35mm"
+      ],
+      "V-Lite 16 2x": [
+        "14mm",
+        "18mm",
+        "24mm",
+        "28mm",
+        "35mm"
+      ],
+      "V-Plus": [
+        "100mm",
+        "120mm",
+        "135mm",
+        "150mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "65mm",
+        "75mm",
+        "85mm"
+      ],
+      "V-Series": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "250mm",
+        "25mm",
+        "30mm",
+        "350mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ]
+    },
+    "Kowa": {
+      "Prominar": [
+        "100mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Laowa": {
+      "1.5x squeeze": [
+        "35mm",
+        "50mm",
+        "60mm",
+        "65mm",
+        "80mm"
+      ],
+      "and": [
+        "35mm"
+      ],
+      "Nanomorph": [
+        "27mm"
+      ],
+      "Proteus": [
+        "28mm"
+      ],
+      "Proteus Flex": [
+        "100mm",
+        "45mm",
+        "60mm",
+        "85mm"
+      ]
+    },
+    "Lomo": {
+      "High Speed": [
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "Round Front": [
+        "100mm",
+        "150mm",
+        "300mm",
+        "35mm",
+        "500mm",
+        "50mm",
+        "75mm"
+      ],
+      "Square Front": [
+        "22mm",
+        "30mm",
+        "35mm",
+        "50mm",
+        "80mm"
+      ]
+    },
+    "Optica-Elite": {
+      "MKV": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "24.5mm",
+        "250mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "S-7": [
+        "100mm",
+        "135mm",
+        "24.5mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "P+S Technik": {
+      "Evolution 2X": [
+        "100mm",
+        "135mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Panavision": {
+      "JDC Millenium Anamorphic": [
+        "100mm",
+        "150mm",
+        "25mm",
+        "300mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "JDC Speedstar Anamorphic": [
+        "100mm",
+        "135mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "85mm"
+      ],
+      "Auto Panatar": [
+        "100mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "55mm",
+        "75mm"
+      ],
+      "B Series": [
+        "100mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "C Series": [
+        "1000mm",
+        "100mm",
+        "150mm",
+        "180mm",
+        "2000mm",
+        "20mm",
+        "30mm",
+        "35mm",
+        "360mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm",
+        "800mm"
+      ],
+      "Canon Telephoto": [
+        "1200mm",
+        "400mm",
+        "600mm"
+      ],
+      "Canon Xtal Express": [
+        "100mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Close Focus": [
+        "55mm"
+      ],
+      "Cooke Xtal Express": [
+        "18mm"
+      ],
+      "E Series": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm",
+        "85mm"
+      ],
+      "G Series": [
+        "100mm",
+        "25mm",
+        "30mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "Insert / Process": [
+        "100mm"
+      ],
+      "Macro Panatar": [
+        "150mm",
+        "200mm",
+        "250mm"
+      ],
+      "Nikon Telephoto": [
+        "400mm",
+        "600mm"
+      ],
+      "Primo": [
+        "100mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Primo Close Focus": [
+        "100mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Slant Focus": [
+        "90mm"
+      ],
+      "T Series": [
+        "100mm",
+        "135mm",
+        "150mm",
+        "180mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "Ultra Golden Panatar": [
+        "28mm",
+        "35mm",
+        "50mm"
+      ],
+      "Wide Angle Distortion": [
+        "25mm"
+      ],
+      "Zeiss Xtal Express": [
+        "25mm"
+      ]
+    },
+    "Powerscope": {
+      "Evolution 2X": [
+        "100mm",
+        "150mm",
+        "22mm",
+        "30mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "ServiceVision": {
+      "Scorpiolens": [
+        "100mm",
+        "135mm",
+        "150mm",
+        "200mm",
+        "20mm",
+        "250mm",
+        "25mm",
+        "300mm",
+        "30mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ]
+    },
+    "SLR Magic": {
+      "Anamorphot Cine (1.33x)": [
+        "35mm",
+        "50mm",
+        "70mm"
+      ]
+    },
+    "Technovision": {
+      "Cooke": [
+        "100mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ],
+      "Zeiss Standard Speed": [
+        "100mm",
+        "200mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "85mm"
+      ],
+      "Zeiss Superspeed": [
+        "20mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Todd-AO": {
+      "Canon": [
+        "24mm",
+        "35mm",
+        "55mm",
+        "85mm"
+      ],
+      "Zeiss Standard Speed": [
+        "100mm",
+        "200mm",
+        "28mm",
+        "35mm",
+        "38mm",
+        "50mm",
+        "55mm",
+        "75mm"
+      ]
+    },
+    "Zeiss": {
+      "Ultrascope": [
+        "135mm",
+        "40mm",
+        "50mm",
+        "85mm"
+      ]
+    }
+  },
+  "Effects lenses": {
+    "Clairmont": {
+      "Clairmont Blurtar": [
+        "28mm",
+        "40mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "V3 MOE lenses": {
+      "V3 MOE lenses": [
+        "135mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "80mm"
+      ]
+    }
+  },
+  "FF Anamorphic": {
+    "Arri Rental": {
+      "ALFA": [
+        "108mm",
+        "145mm",
+        "190mm",
+        "32mm",
+        "40mm",
+        "47mm",
+        "60mm",
+        "72mm",
+        "90mm"
+      ]
+    },
+    "Atlas": {
+      "1.5x squeeze": [
+        "138mm",
+        "27mm",
+        "36mm",
+        "42mm",
+        "54mm",
+        "72mm",
+        "95mm"
+      ],
+      "Mercury": [
+        "24mm"
+      ]
+    },
+    "Blazar": {
+      "1.33x squeeze": [
+        "100mm",
+        "135mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "1.5x squeeze": [
+        "100mm",
+        "125mm",
+        "35mm",
+        "45mm",
+        "50mm",
+        "65mm",
+        "75mm",
+        "85mm"
+      ],
+      "1.8x squeeze": [
+        "50mm",
+        "85mm"
+      ],
+      "2x squeeze": [
+        "125mm",
+        "55mm",
+        "85mm"
+      ],
+      "Cato": [
+        "40mm"
+      ],
+      "Great Joy": [
+        "35mm"
+      ],
+      "Mantis": [
+        "25mm"
+      ],
+      "Remus": [
+        "33mm"
+      ],
+      "Viper": [
+        "35mm"
+      ]
+    },
+    "Caldwell": {
+      "1.79X squeeze": [
+        "112mm",
+        "150mm",
+        "225mm",
+        "60mm",
+        "75mm",
+        "90mm"
+      ],
+      "Chameleon XC": [
+        "48mm"
+      ]
+    },
+    "Cooke": {
+      "1.8x Anamorphic/i FF": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "75mm",
+        "85mm"
+      ]
+    },
+    "DZO Film": {
+      "1.5x squeeze": [
+        "45mm",
+        "75mm"
+      ],
+      "Arcana": [
+        "32mm"
+      ]
+    },
+    "Glaswerk": {
+      "2x squeeze": [
+        "32mm"
+      ],
+      "also available in One+": [
+        "40mm"
+      ],
+      "blue flare versions)": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "Glaswerk One": [
+        "25mm"
+      ]
+    },
+    "Laowa": {
+      "1.5x squeeze": [
+        "42mm",
+        "55mm",
+        "85mm"
+      ],
+      "Nanomorph LF": [
+        "32mm"
+      ]
+    },
+    "P+S Technik": {
+      "1.5x squeeze": [
+        "100mm",
+        "135mm",
+        "150mm",
+        "200mm",
+        "50mm",
+        "75mm"
+      ],
+      "Technovision Classic": [
+        "40mm"
+      ]
+    },
+    "Rokinon": {
+      "Xeen Anamorphic": [
+        "50mm"
+      ]
+    },
+    "Second Reef": {
+      "1.5x squeeze": [
+        "120mm",
+        "50mm",
+        "75mm",
+        "90mm"
+      ],
+      "Coral Anamorphic": [
+        "35mm"
+      ]
+    },
+    "Servicevision": {
+      "1.65x squeeze": [
+        "100mm",
+        "135mm",
+        "150mm",
+        "180mm",
+        "200mm",
+        "250mm",
+        "300mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "2x squeeze": [
+        "100mm",
+        "135mm",
+        "150mm",
+        "200mm",
+        "250mm",
+        "25mm",
+        "300mm",
+        "30mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ],
+      "FFA Scorpiolens": [
+        "20mm"
+      ],
+      "Scorpiorama 70": [
+        "25mm"
+      ]
+    },
+    "Sirui": {
+      "1.5x squeeze": [
+        "100mm",
+        "135mm",
+        "45mm",
+        "60mm",
+        "75mm"
+      ],
+      "IronStar": [
+        "35mm"
+      ]
+    },
+    "Vazen": {
+      "1.8XFF": [
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Viltrox": {
+      "1.33x squeeze": [
+        "100mm",
+        "135mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Epic": [
+        "18mm"
+      ]
+    },
+    "Xelmus": {
+      "Apollo": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "24mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ]
+    }
+  },
+  "Anamorphic Zooms": {
+    "Angenieux": {
+      "A2S": [
+        "30 - 72mm",
+        "42 - 420mm",
+        "44 - 440mm",
+        "56 - 152mm"
+      ]
+    },
+    "Arri / Zeiss": {
+      "AUWZ": [
+        "19 - 36mm"
+      ]
+    },
+    "Clairmont": {
+      "Canon": [
+        "300 - 1200mm"
+      ]
+    },
+    "Cooke": {
+      "Anamorphic zoom": [
+        "35 - 140mm",
+        "45 - 450mm"
+      ]
+    },
+    "Hawk": {
+      "C-Series": [
+        "55 - 165mm"
+      ],
+      "class-X": [
+        "38 - 80mm",
+        "80 - 180mm"
+      ],
+      "V-Plus": [
+        "45 - 90mm",
+        "80 - 180mm"
+      ],
+      "V-Plus 1.3x Squeeze": [
+        "30 - 60mm"
+      ],
+      "V-Series": [
+        "300 - 900mm",
+        "46 - 230mm"
+      ]
+    },
+    "Laowa": {
+      "Proteus zoom": [
+        "26 - 45mm",
+        "45 - 85mm"
+      ],
+      "2x squeeze": [
+        "70 - 135mm"
+      ],
+      "Sunlight": [
+        "40 - 80mm"
+      ]
+    },
+    "Lomo": {
+      "Round Front": [
+        "40 - 120mm",
+        "40 - 240mm"
+      ],
+      "Square Front": [
+        "37 - 140mm"
+      ]
+    },
+    "Optica-Elite": {
+      "lightweight": [
+        "240 - 1040mm",
+        "50 - 160mm",
+        "50 - 500mm"
+      ]
+    },
+    "Panavision": {
+      "Angenieux": [
+        "34 - 204mm",
+        "48 - 580mm",
+        "50 - 500mm"
+      ],
+      "Cooke": [
+        "28 - 140mm",
+        "36 - 200mm",
+        "40 - 200mm",
+        "50 - 500mm"
+      ],
+      "Front Anamorphic Zoom": [
+        "40 - 80mm",
+        "70 - 200mm"
+      ],
+      "Primo Zoom": [
+        "270 - 840mm",
+        "48 - 550mm"
+      ],
+      "T Series Zoom": [
+        "37 - 85mm",
+        "42 - 425mm"
+      ]
+    },
+    "Powerscope": {
+      "Evolution 2X": [
+        "40 - 200mm"
+      ]
+    },
+    "ServiceVision": {
+      "Scorpio Zoom": [
+        "138 - 405mm"
+      ]
+    },
+    "Zeiss": {
+      "Ultrascope": [
+        "76 - 300mm"
+      ]
+    },
+    "P+S Technik": {
+      "1.5x squeeze": [
+        "40 - 70mm",
+        "70 -200mm"
+      ]
+    },
+    "Servicevision": {
+      "2x squeeze": [
+        "138 - 405mm"
+      ]
+    },
+    "Spirit Lab": {
+      "Pure First": [
+        "40 - 100mm"
+      ]
+    }
+  },
+  "FF Primes": {
+    "Angenieux": {
+      "Optimo": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "200mm",
+        "21mm",
+        "24mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "75mm"
+      ]
+    },
+    "Arri": {
+      "Ensō": [
+        "10.5mm",
+        "105mm",
+        "14mm",
+        "150mm",
+        "18mm",
+        "21mm",
+        "24mm",
+        "250mm",
+        "28mm",
+        "32mm",
+        "40mm",
+        "47mm",
+        "58mm",
+        "75mm"
+      ],
+      "Signature Primes": [
+        "125mm",
+        "12mm",
+        "150mm",
+        "15mm",
+        "18mm",
+        "200mm",
+        "21mm",
+        "25mm",
+        "280mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "47mm",
+        "58mm",
+        "75mm",
+        "95mm"
+      ]
+    },
+    "Arri Rental": {
+      "LF DNA": [
+        "100mm",
+        "135mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "50mm",
+        "75mm",
+        "85mm"
+      ],
+      "Moviecam": [
+        "100mm",
+        "135mm",
+        "16mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "60mm",
+        "85mm"
+      ]
+    },
+    "Bokkeh": {
+      "Bokkelux": [
+        "100mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Canon": {
+      "Cinema Primes": [
+        "135mm",
+        "14mm",
+        "20mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Sumire Primes": [
+        "135mm",
+        "14mm",
+        "20mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Celere": {
+      "HS Primes": [
+        "18.5mm",
+        "25mm",
+        "36mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Cinescope": {
+      "Leica R": [
+        "19mm"
+      ]
+    },
+    "Cooke": {
+      "Panchro/i Classic FF": [
+        "100mm",
+        "135mm",
+        "152mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "27mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "S7/i": [
+        "100mm",
+        "135mm",
+        "16mm",
+        "180mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "27mm",
+        "32mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "S7/i Macro": [
+        "150mm",
+        "60mm",
+        "90mm"
+      ],
+      "S8/i FF": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "27mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ]
+    },
+    "Dulens": {
+      "APO Miniprime": [
+        "120mm",
+        "21mm",
+        "25mm",
+        "31mm",
+        "43mm",
+        "58mm",
+        "85mm"
+      ]
+    },
+    "DZO Film": {
+      "Arles": [
+        "100mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "Gnosis (macro)": [
+        "32mm",
+        "65mm",
+        "90mm"
+      ],
+      "Vespid": [
+        "100mm",
+        "125mm",
+        "16mm",
+        "21mm",
+        "25mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm",
+        "90mm"
+      ],
+      "Vespid II": [
+        "105mm",
+        "18mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Gecko Cam": {
+      "recoated Zeiss Supreme": [
+        "100mm",
+        "29mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Genesis G35": [
+        "14.5mm",
+        "16mm",
+        "20mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "vintage macro": [
+        "100mm",
+        "135mm"
+      ],
+      "Vintage Supreme Prime": [
+        "25mm"
+      ]
+    },
+    "IB/E": {
+      "Raptor": [
+        "110mm",
+        "135mm",
+        "28mm",
+        "40mm",
+        "50mm",
+        "80mm"
+      ],
+      "Raptor (macro)": [
+        "100mm",
+        "150mm",
+        "180mm",
+        "60mm"
+      ]
+    },
+    "Irix": {
+      "Cine": [
+        "11mm",
+        "150mm",
+        "15mm",
+        "21mm",
+        "30mm",
+        "45mm",
+        "65mm"
+      ]
+    },
+    "Kinefinity": {
+      "MAVO": [
+        "100mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Laowa": {
+      "Macro APO Cine": [
+        "100mm"
+      ],
+      "Sword macro": [
+        "100mm",
+        "15mm",
+        "180mm",
+        "25mm",
+        "35mm",
+        "60mm"
+      ],
+      "VV Cine": [
+        "9mm"
+      ],
+      "Zero-D VV Cine": [
+        "10mm",
+        "12mm",
+        "14mm"
+      ]
+    },
+    "Leitz": {
+      "ELSIE": [
+        "100mm",
+        "125mm",
+        "150mm",
+        "15mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "Hugo": [
+        "135mm",
+        "18mm",
+        "21mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "75mm",
+        "90mm"
+      ],
+      "Hugo II": [
+        "66mm",
+        "75mm",
+        "90mm"
+      ],
+      "Leitz Prime": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "350mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ]
+    },
+    "Masterbuilt": {
+      "Anastigmat": [
+        "110mm",
+        "160mm"
+      ],
+      "and": [
+        "25mm"
+      ],
+      "Classic": [
+        "18mm"
+      ],
+      "Legacy": [
+        "135mm",
+        "21mm",
+        "25mm",
+        "32mm",
+        "55mm",
+        "90mm"
+      ],
+      "Portrait": [
+        "100mm",
+        "32mm",
+        "55mm"
+      ],
+      "Soft Flare": [
+        "105mm",
+        "135mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "Super Wide": [
+        "14.5mm"
+      ],
+      "SuperScope": [
+        "110mm",
+        "13mm",
+        "140mm",
+        "19mm",
+        "200mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "80mm"
+      ],
+      "Variable Prescription": [
+        "27mm",
+        "32mm",
+        "40mm",
+        "48mm"
+      ]
+    },
+    "Meike": {
+      "Variable Prescription": [
+        "105mm",
+        "135mm",
+        "16mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "NiSi": {
+      "T1 Primes": [
+        "35mm"
+      ]
+    },
+    "Nitecore": {
+      "Superior Prime": [
+        "100mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "Athena": [
+        "135mm",
+        "14mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "85mm"
+      ],
+      "Aureus": [
+        "18mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "F3 Primes": [
+        "18mm"
+      ],
+      "T1 Primes": [
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Panavision": {
+      "65mm Vintage": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "24mm",
+        "29mm",
+        "300mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ],
+      "H Series": [
+        "100mm",
+        "12mm",
+        "135mm",
+        "150mm",
+        "180mm",
+        "18mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "29mm",
+        "300mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "55mm",
+        "65mm",
+        "75mm",
+        "85mm"
+      ],
+      "Panaspeed": [
+        "100mm",
+        "135mm",
+        "17mm",
+        "24mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ],
+      "Primo 70": [
+        "100mm",
+        "125mm",
+        "14mm",
+        "150mm",
+        "200mm",
+        "24mm",
+        "250mm",
+        "27mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ],
+      "Primo 70 zoom": [
+        "200 - 400mm",
+        "28 - 80mm",
+        "70 - 185mm"
+      ],
+      "Primo Artiste": [
+        "100mm",
+        "125mm",
+        "150mm",
+        "200mm",
+        "250mm",
+        "27mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ],
+      "Primo X": [
+        "14mm",
+        "24 - 70mm",
+        "24mm"
+      ],
+      "VA": [
+        "100mm",
+        "135mm",
+        "14mm",
+        "21mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ]
+    },
+    "Rokinon": {
+      "Xeen": [
+        "135mm",
+        "14mm",
+        "16mm",
+        "20mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Xeen CF": [
+        "135mm",
+        "16mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Xeen Meister": [
+        "14mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Schneider": {
+      "Cine-Tilt": [
+        "100mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "Xenon FF": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "Servicevision": {
+      "NEW K35": [
+        "100mm",
+        "15mm",
+        "18mm"
+      ]
+    },
+    "Sigma": {
+      "Aizu Prime": [
+        "100mm",
+        "125mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "27mm",
+        "32mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "75mm"
+      ],
+      "FF Classic Art Prime": [
+        "105mm",
+        "135mm",
+        "14mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "FF High Speed Prime": [
+        "105mm",
+        "135mm",
+        "14mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ]
+    },
+    "Sirui": {
+      "Jupiter Macro": [
+        "100mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ]
+    },
+    "SLR Magic": {
+      "APO HyperPrime": [
+        "25mm",
+        "32mm",
+        "50mm",
+        "85mm"
+      ],
+      "APO MicroPrime": [
+        "25mm",
+        "32mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "Spirit Lab": {
+      "Cine Primes": [
+        "100mm",
+        "135mm",
+        "15mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "TLS": {
+      "Leica Noctilux": [
+        "50mm"
+      ],
+      "Petzval": [
+        "58mm",
+        "85mm"
+      ],
+      "Vega": [
+        "105mm",
+        "135mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ]
+    },
+    "TLS housings": {
+      "Leica R": [
+        "100mm",
+        "135mm",
+        "180mm",
+        "21mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "60mm",
+        "80mm",
+        "90mm"
+      ]
+    },
+    "Tokina Cinema ATX": {
+      "and": [
+        "21mm"
+      ],
+      "Macro": [
+        "100mm"
+      ],
+      "Vista": [
+        "18mm"
+      ],
+      "Vista-P (detuned)": [
+        "105mm",
+        "135mm",
+        "180mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ]
+    },
+    "Tribe 7": {
+      "Blackwing7": [
+        "107mm",
+        "137mm",
+        "20.7mm",
+        "23.7mm",
+        "27mm",
+        "37mm",
+        "47mm",
+        "57mm",
+        "77mm"
+      ]
+    },
+    "Vantage": {
+      "Hawk MHX": [
+        "105mm",
+        "135mm",
+        "180mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "65mm",
+        "85mm"
+      ],
+      "One4": [
+        "105mm",
+        "140mm",
+        "22mm",
+        "27mm",
+        "35mm",
+        "50mm",
+        "65mm",
+        "80mm"
+      ]
+    },
+    "Zeiss": {
+      "Aatma": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "25mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "Compact Prime (CP.2)": [
+        "100mm",
+        "135mm",
+        "15mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "50mm macro",
+        "85mm"
+      ],
+      "Compact Prime (CP.3)": [
+        "100mm",
+        "135mm",
+        "15mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "85mm"
+      ],
+      "Nano Prime": [
+        "100mm",
+        "18mm",
+        "24mm",
+        "35mm",
+        "50mm",
+        "75mm"
+      ],
+      "Super Speed": [
+        "50mm",
+        "85mm"
+      ],
+      "Supreme Prime": [
+        "100mm",
+        "135mm",
+        "150mm",
+        "15mm",
+        "18mm",
+        "200mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ],
+      "Supreme Prime Radiance": [
+        "100mm",
+        "135mm",
+        "18mm",
+        "21mm",
+        "25mm",
+        "29mm",
+        "35mm",
+        "40mm",
+        "50mm",
+        "65mm",
+        "85mm"
+      ]
+    },
+    "Zero Optik": {
+      "Noct-NIKKOR": [
+        "58mm"
+      ]
+    },
+    "ZY Optics": {
+      "Speedmaster": [
+        "50mm"
+      ]
+    }
+  },
+  "FF Zooms": {
+    "Angenieux": {
+      "EZ-1 FF": [
+        "45 - 135mm"
+      ],
+      "EZ-2 FF": [
+        "22 - 60mm"
+      ],
+      "EZ-3 FF": [
+        "68 - 250mm"
+      ],
+      "Optimo Ultra 12x FF": [
+        "36 - 435mm"
+      ],
+      "Optimo Ultra Compact Standard": [
+        "37 - 102mm"
+      ],
+      "Optimo Ultra Compact Wide Angle": [
+        "21 - 56mm"
+      ]
+    },
+    "Arri": {
+      "Signature Zoom": [
+        "16 - 32mm",
+        "24 - 75mm",
+        "45 - 135mm",
+        "65 - 300mm"
+      ]
+    },
+    "Canon": {
+      "Flex": [
+        "20 - 50mm",
+        "45 - 135mm"
+      ]
+    },
+    "Chiopt": {
+      "Extremer": [
+        "28 - 85mm"
+      ]
+    },
+    "Cooke": {
+      "Varotal/i FF": [
+        "19 - 40mm",
+        "30 - 95mm",
+        "85 - 215mm"
+      ]
+    },
+    "Duclos": {
+      "Leica": [
+        "70 - 180mm"
+      ]
+    },
+    "DZO Film": {
+      "Catta Ace": [
+        "18 - 35mm",
+        "35 - 80mm",
+        "70 - 135mm"
+      ]
+    },
+    "Focus Optics": {
+      "Ruby (Nikkor)": [
+        "14 - 24mm"
+      ]
+    },
+    "Fujinon": {
+      "Premista": [
+        "19 - 45mm",
+        "28 - 100mm",
+        "80 - 250mm"
+      ]
+    },
+    "Isco": {
+      "Catta Ace": [
+        "140 - 420mm"
+      ]
+    },
+    "Laowa": {
+      "Fisheye Zoom": [
+        "8 - 15mm"
+      ],
+      "Ranger": [
+        "16 - 30mm",
+        "28 - 75mm",
+        "75 - 180mm"
+      ]
+    },
+    "Leitz": {
+      "Leitz Zoom": [
+        "25 - 75mm",
+        "55 - 125mm"
+      ]
+    },
+    "Masterbuilt": {
+      "Zoom 5X": [
+        "25 - 125mm"
+      ],
+      "Zoom CFZ": [
+        "13 - 26mm",
+        "27 - 60mm"
+      ]
+    },
+    "Musashi": {
+      "Takumi": [
+        "29 - 120mm",
+        "40.6 - 332mm"
+      ]
+    },
+    "Sigma": {
+      "Takumi": [
+        "24 - 35mm",
+        "300 - 800mm"
+      ]
+    },
+    "Sirui": {
+      "Jupiter Macro zoom": [
+        "28 - 85mm"
+      ]
+    },
+    "Spirit Lab": {
+      "Jupiter Macro zoom": [
+        "20 - 50mm",
+        "70 - 300mm"
+      ]
+    },
+    "TLS": {
+      "Aurora (Nikon)": [
+        "14-24mm",
+        "24-70mm"
+      ],
+      "Morpheus (Nikon)": [
+        "80 - 200mm"
+      ]
+    },
+    "Tokina": {
+      "Cinema ATX": [
+        "16 - 28mm (mkI)",
+        "16 - 28mm (mkII)"
+      ]
+    },
+    "Viltrox": {
+      "Luna": [
+        "30 - 300mm"
+      ]
+    },
+    "Zeiss": {
+      "Supreme Zoom Radiance": [
+        "28 - 80mm",
+        "70 - 200mm"
+      ],
+      "CZ.2": [
+        "15 - 30mm",
+        "28 - 80mm",
+        "70 - 200mm"
+      ],
+      "SZR": [
+        "15 - 30mm"
+      ]
+    }
+  },
+  "PC / Tilt lenses": {
+    "Arri Shift & Tilt Bellows System": {
+      "Arri Shift & Tilt Bellows System": [
+        "110mm",
+        "150mm",
+        "18mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "60mm",
+        "80mm",
+        "90mm",
+        "bellows unit"
+      ]
+    },
+    "Arri Tilt Focus Lenses": {
+      "Arri Tilt Focus Lenses": [
+        "24mm",
+        "45mm",
+        "90mm"
+      ]
+    },
+    "Century": {
+      "Century Swing Tilt Bellows System": [
+        "105mm",
+        "135mm",
+        "14mm",
+        "150mm",
+        "18mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "75mm",
+        "90mm",
+        "bellows unit"
+      ],
+      "Century tilt focus": [
+        "17mm",
+        "24mm",
+        "45mm",
+        "90mm"
+      ]
+    },
+    "Clairmont": {
+      "Clairmont Swing / Shift (bellows) System": [
+        "110mm",
+        "120mm macro",
+        "135mm macro",
+        "150mm",
+        "18mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "50mm",
+        "60mm",
+        "80mm",
+        "bellows unit"
+      ]
+    },
+    "Kardan": {
+      "Kardan Swing Tilt Bellows": [
+        "bellows unit"
+      ]
+    },
+    "Laowa": {
+      "Laowa": [
+        "15mm",
+        "20mm"
+      ]
+    },
+    "Lensbaby": {
+      "Lensbaby 3G PL": [
+        "50mm"
+      ],
+      "Lensbaby Composer Pro / Muse PL": [
+        "12mm fisheye",
+        "35mm",
+        "50mm"
+      ]
+    },
+    "Panavision": {
+      "Panavision PVB swing / shift system": [
+        "105mm",
+        "135mm",
+        "14mm",
+        "150mm",
+        "18mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "55mm",
+        "75mm",
+        "90mm",
+        "bellows unit"
+      ],
+      "Panavision slant focus": [
+        "24mm",
+        "45mm"
+      ]
+    }
+  },
+  "Probe / Snorkel": {
+    "Cine Magic": {
+      "Cinewand": [
+        "12mm",
+        "16mm",
+        "20mm",
+        "24mm",
+        "35mm",
+        "40mm",
+        "60mm",
+        "relay unit"
+      ],
+      "Revolution Lens System": [
+        "12mm",
+        "16mm",
+        "20mm",
+        "24mm",
+        "32mm",
+        "40mm",
+        "60mm",
+        "9.8mm",
+        "Mini-PL Borescope",
+        "Mini-PL Hor Tracker",
+        "Mini-PL Swivel",
+        "PL 90° Snorkel",
+        "PL Borescope",
+        "PL Horizon Tracker",
+        "PL Snorkel",
+        "PL Swivel"
+      ]
+    },
+    "Cine Photo Tech": {
+      "Superscope": [
+        "10mm",
+        "15mm",
+        "25mm",
+        "32mm",
+        "40mm",
+        "60mm",
+        "8mm",
+        "Direct Module"
+      ],
+      "Supersnorkel": [
+        "10mm",
+        "15mm",
+        "18mm",
+        "20mm",
+        "24mm",
+        "32mm",
+        "360° Module",
+        "40mm",
+        "60mm",
+        "8mm"
+      ]
+    },
+    "DZO Film": {
+      "X-Tract Probe Zoom": [
+        "18 - 28mm"
+      ]
+    },
+    "Hyperion": {
+      "Microshot MKII": [
+        "10mm",
+        "15mm",
+        "180° attachment",
+        "24mm",
+        "35mm",
+        "45° attachment",
+        "50mm",
+        "75mm",
+        "Borescope Module"
+      ]
+    },
+    "Innovision": {
+      "16mm Primes for Probe I": [
+        "12.5mm",
+        "18mm",
+        "28mm",
+        "40mm",
+        "5mm",
+        "6.5mm",
+        "60mm",
+        "9mm"
+      ],
+      "16mm Primes for Probe II": [
+        "12.5mm",
+        "18mm",
+        "24mm",
+        "5mm",
+        "7mm",
+        "9.5mm"
+      ],
+      "35mm Primes for Probe I": [
+        "100mm",
+        "10mm",
+        "14mm",
+        "16mm",
+        "24mm",
+        "32mm",
+        "50mm",
+        "75mm"
+      ],
+      "35mm Primes for Probe II": [
+        "12mm",
+        "16mm",
+        "20mm",
+        "32mm",
+        "40mm",
+        "9mm"
+      ],
+      "HR Primes for Probe II": [
+        "12mm",
+        "20mm",
+        "28mm",
+        "40mm",
+        "55mm"
+      ],
+      "Probe I": [
+        "16mm Module",
+        "35mm Module",
+        "90° Module"
+      ],
+      "Probe II": [
+        "16mm Module",
+        "35mm Module"
+      ],
+      "Probe II+": [
+        "45° Module",
+        "90° Module",
+        "Direct Module"
+      ]
+    },
+    "Laowa": {
+      "Pro2be": [
+        "24mm"
+      ],
+      "Probe lens": [
+        "24mm"
+      ],
+      "Probe Zoom": [
+        "15 - 24mm",
+        "15 - 35mm",
+        "35 degree module",
+        "90 degree module",
+        "periscope module",
+        "probe module"
+      ]
+    },
+    "Optex": {
+      "Borescope": [
+        "10mm",
+        "14mm",
+        "24mm",
+        "35mm",
+        "Probe Extension",
+        "Probe Module"
+      ],
+      "Excellence": [
+        "10mm",
+        "14mm",
+        "20mm",
+        "28mm",
+        "40mm",
+        "5mm",
+        "7mm",
+        "90° Module",
+        "Motion Picture Relay",
+        "Probe Extension",
+        "Probe Module"
+      ]
+    },
+    "P&S Technik": {
+      "T-Rex Superscope": [
+        "17 - 36mm",
+        "20 - 44mm ball joint",
+        "35 - 75mm",
+        "5.5 - 20mm fish eye",
+        "60 - 125mm",
+        "8 - 18mm",
+        "Bore Scope",
+        "Standard Module",
+        "Super Scope",
+        "Zoom Module"
+      ]
+    },
+    "Panavision": {
+      "Frazier Lens System": [
+        "105mm",
+        "135mm",
+        "14mm",
+        "15mm",
+        "17mm",
+        "20mm",
+        "24mm",
+        "28mm",
+        "35mm",
+        "45mm",
+        "50mm",
+        "85mm",
+        "relay unit"
+      ]
+    }
+  },
+  "Secondary lenses": {
+    "Angenieux": {
+      "0.75x wide-angle adapter": [
+        "N/A"
+      ],
+      "Optimo 1.4x": [
+        "N/A"
+      ],
+      "Optimo 2x": [
+        "N/A"
+      ]
+    },
+    "Arri": {
+      "Signature Zoom 1.7x Extender": [
+        "N/A"
+      ]
+    },
+    "Arri / Fujinon": {
+      "Alura 1.4x": [
+        "N/A"
+      ],
+      "Alura 2x": [
+        "N/A"
+      ]
+    },
+    "Atlas": {
+      "Orion 1.6x Expander": [
+        "N/A"
+      ]
+    },
+    "Century": {
+      "1.4x": [
+        "N/A"
+      ],
+      "2x": [
+        "N/A"
+      ],
+      "4.5mm double asphere": [
+        "N/A"
+      ],
+      "fisheye attachment": [
+        "N/A"
+      ],
+      "low angle prism": [
+        "N/A"
+      ]
+    },
+    "Digitaloptik": {
+      "1.21x Expander": [
+        "N/A"
+      ]
+    },
+    "DIOPTERS": {
+      "0.75x Wide Angle Adapter": [
+        "N/A"
+      ]
+    },
+    "Duclos Optics": {
+      "1.7x Expander": [
+        "N/A"
+      ]
+    },
+    "DZO Film": {
+      "Marlin 1.6x Expander": [
+        "N/A"
+      ]
+    },
+    "Hawk": {
+      "0.7x": [
+        "N/A"
+      ]
+    },
+    "IB/E Optics": {
+      "LPLx2 Expander": [
+        "N/A"
+      ],
+      "PLx1.4 Extender": [
+        "N/A"
+      ],
+      "PLx2 Extender": [
+        "N/A"
+      ],
+      "PLx2 VV Extender": [
+        "N/A"
+      ],
+      "S35xFF Expander": [
+        "N/A"
+      ]
+    },
+    "IMAGE ROTATERS & LOW ANGLE PRISMS": {
+      "Spot Diopters +0.5, +1, +1.5": [
+        "N/A"
+      ]
+    },
+    "Kipon": {
+      "Cine Extender 2x": [
+        "N/A"
+      ]
+    },
+    "Kish Optics": {
+      "1.2x Expander": [
+        "N/A"
+      ]
+    },
+    "Laowa": {
+      "1.33x Front Anamorphic Adapter": [
+        "N/A"
+      ],
+      "1.33x Rear Anamorphic Adapter": [
+        "N/A"
+      ],
+      "1.4x Expander": [
+        "N/A"
+      ]
+    },
+    "Leica": {
+      "MacroLux +0.5": [
+        "N/A"
+      ],
+      "MacroLux +1": [
+        "N/A"
+      ],
+      "MacroLux +2": [
+        "N/A"
+      ]
+    },
+    "Musashi": {
+      "TL-FFX2 (2x Extender)": [
+        "N/A"
+      ],
+      "TL-OM14F (1.4x Expander)": [
+        "N/A"
+      ],
+      "TL-OMFF (1.7x Expander)": [
+        "N/A"
+      ],
+      "TL-PLX14 (1.4x Extender)": [
+        "N/A"
+      ],
+      "TL-PLX2 (2x Extender)": [
+        "N/A"
+      ]
+    },
+    "Optex": {
+      "2x": [
+        "N/A"
+      ]
+    },
+    "Panavision": {
+      "0.8x wide angle adapter": [
+        "N/A"
+      ],
+      "24mm inclining prism": [
+        "N/A"
+      ],
+      "In-line image rotater": [
+        "N/A"
+      ],
+      "Primo 1.4x": [
+        "N/A"
+      ],
+      "Primo 2x": [
+        "N/A"
+      ],
+      "Primo lens inverter": [
+        "N/A"
+      ]
+    },
+    "Schneider": {
+      "19 - 14.5mm wide angle adapter": [
+        "N/A"
+      ]
+    },
+    "Servicevision Scorpio": {
+      "0.8x Wide Angle Converter": [
+        "N/A"
+      ]
+    },
+    "Tokina": {
+      "1.6x Expander": [
+        "N/A"
+      ]
+    },
+    "Vantage": {
+      "0.75x wide-angle adapter": [
+        "N/A"
+      ],
+      "Slide Diopters +0.5, +1, +2": [
+        "N/A"
+      ],
+      "Spot Diopters +0.5, +1, +1.5": [
+        "N/A"
+      ],
+      "Squeeze Diopters +1, +2, +3": [
+        "N/A"
+      ],
+      "Strip Diopters +0.5, +1, +1.5": [
+        "N/A"
+      ]
+    },
+    "Whitepoint Optics": {
+      "0.7x Speed Converter": [
+        "N/A"
+      ],
+      "Tilt & Swing Adapter": [
+        "N/A"
+      ]
+    },
+    "Zeiss": {
+      "Master Diopters +0.5, +1, +2": [
+        "N/A"
+      ],
+      "Mutar 0.6x wide-angle adapter": [
+        "N/A"
+      ],
+      "Mutar 2x": [
+        "N/A"
+      ],
+      "Panspheron 0.78x wide-angle adapter": [
+        "N/A"
+      ]
+    },
+    "Zunow": {
+      "0.75x Wide Angle Adapter": [
+        "N/A"
+      ]
+    }
+  }
+}
