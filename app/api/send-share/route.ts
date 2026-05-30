@@ -11,7 +11,8 @@ export async function POST(request: Request) {
 
   const { data: list } = await supabase.from('gear_lists').select('*, rental_houses(name)').eq('id', listId).single()
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', listId).order('sort_order')
-  const { data: lenses } = await supabase.from('list_lenses').select('*, equipment_items(name), list_lens_zooms(*, equipment_items(name))').eq('list_id', listId).maybeSingle()
+  const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', listId).order('sort_order')
+  const { data: zoomControllers } = await supabase.from('list_items').select('*, equipment_items(name)').eq('list_id', listId).eq('section', 'zoom_controllers').order('sort_order')
   const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', listId).order('sort_order')
   const { data: sectionNotes } = await supabase.from('list_section_notes').select('*').eq('list_id', listId)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', listId).maybeSingle()
@@ -70,12 +71,17 @@ export async function POST(request: Request) {
     if (pNote) tableRows += row('Notes', pNote)
   }
 
-  if (lenses) {
+  if (lensRows && lensRows.length > 0) {
     tableRows += sectionHeader('Lenses')
-    if (lenses.equipment_items?.name) tableRows += row('Prime Set', lenses.equipment_items.name)
-    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths (approx)', lenses.focal_lengths.join(', '))
-    if (lenses.list_lens_zooms?.length > 0) tableRows += row('Zooms', lenses.list_lens_zooms.map((z: any) => z.equipment_items?.name).filter(Boolean).join('<br>'))
-    if (lenses.zoom_controller) tableRows += row('Controller', lenses.zoom_controller)
+    const lensLines = lensRows.map((l: any) => {
+      const name = [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')
+      return name + ownerLabel(l.source, viewMode)
+    }).join('<br>')
+    tableRows += row('Lenses', lensLines)
+    if (zoomControllers && zoomControllers.length > 0) {
+      const zcLines = zoomControllers.map((z: any) => z.equipment_items?.name || '').filter(Boolean).join('<br>')
+      tableRows += row('Zoom Controllers', zcLines)
+    }
     const lNote = getSectionNote('lenses')
     if (lNote) tableRows += row('Notes', lNote)
   }
