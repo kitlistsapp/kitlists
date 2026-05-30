@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -15,13 +15,12 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const [lists, setLists] = useState(initialLists)
   const [shares] = useState(initialShares)
   const [tab, setTab] = useState('active')
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('kitlist-theme')
-      return stored !== 'light'
-    }
-    return true
-  })
+  const [darkMode, setDarkMode] = useState(true)
+
+  useEffect(() => {
+    const stored = localStorage.getItem('kitlist-theme')
+    if (stored === 'light') setDarkMode(false)
+  }, [])
 
   const toggleTheme = () => {
     const next = !darkMode
