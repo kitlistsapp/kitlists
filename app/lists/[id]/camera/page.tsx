@@ -27,12 +27,19 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
   const filtered = items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
+  const filmOrder = ['65mm', '35mm', '16mm']
   const grouped = filtered.reduce((acc: Record<string, Item[]>, item) => {
     const key = item.brand || 'Other'
     if (!acc[key]) acc[key] = []
     acc[key].push(item)
     return acc
   }, {})
+  const sortedGroupKeys = Object.keys(grouped).sort((a, b) => {
+    const ai = filmOrder.indexOf(a); const bi = filmOrder.indexOf(b)
+    if (ai === -1 && bi === -1) return a.localeCompare(b)
+    if (ai === -1) return 1; if (bi === -1) return -1
+    return ai - bi
+  })
   return (
     <div ref={ref} className="relative">
       <input type="text" value={query}
@@ -50,7 +57,7 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
             </button>
           ) : (
             <>
-              {Object.entries(grouped).map(([brand, brandItems]) => (
+              {sortedGroupKeys.map(brand => { const brandItems = grouped[brand]; return (
                 <div key={brand}>
                   <div className="px-4 py-1.5 text-xs text-zinc-500 uppercase tracking-widest bg-zinc-950">{brand}</div>
                   {brandItems.map(item => (
@@ -60,7 +67,7 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
                     </button>
                   ))}
                 </div>
-              ))}
+              )})}
               {query && !filtered.find(i => i.name.toLowerCase() === query.toLowerCase()) && (
                 <button className="w-full text-left px-4 py-3 text-sm text-[#FFE135] hover:bg-zinc-800 border-t border-zinc-800"
                   onClick={() => { onChange('custom:' + query, query); setOpen(false) }}>
