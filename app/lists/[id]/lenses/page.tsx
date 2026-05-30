@@ -52,6 +52,43 @@ function lensKey(l: SelectedLens) {
 
 const MODULE_CATEGORIES = ['Secondary lenses', 'PC / Tilt lenses', 'Probe / Snorkel', 'Effects lenses']
 
+interface SimpleItem { id: string; name: string; brand: string | null; subcategory: string | null; category: string }
+function SearchablePicker({ items, value, onChange, placeholder }: {
+  items: SimpleItem[]; value: string; onChange: (id: string, name: string) => void; placeholder: string
+}) {
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const selected = items.find(i => i.id === value)
+  useEffect(() => { if (selected) setQuery(selected.name); else setQuery('') }, [value])
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+  const filtered = items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()))
+  return (
+    <div ref={ref} className="relative">
+      <input type="text" value={query}
+        onChange={e => { setQuery(e.target.value); setOpen(true) }}
+        onFocus={() => setOpen(true)}
+        placeholder={placeholder}
+        className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+      {value && <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>}
+      {open && filtered.length > 0 && (
+        <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl max-h-48 overflow-y-auto">
+          {filtered.map(item => (
+            <button key={item.id} className="w-full text-left px-4 py-2.5 text-sm text-zinc-200 hover:bg-zinc-800"
+              onClick={() => { onChange(item.id, item.name); setQuery(item.name); setOpen(false) }}>
+              {item.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function LensesPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient()
   const [listId, setListId] = useState('')
@@ -66,6 +103,10 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   const [selectedSeries, setSelectedSeries] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchFocused, setSearchFocused] = useState(false)
+  const [zoomControllers, setZoomControllers] = useState<Array<{id: string; itemId: string; itemName: string; quantity: number; source: string}>>([])
+  const [allZoomItems, setAllZoomItems] = useState<Array<{id: string; name: string}>>([])
+  const zoomControllersRef = useRef<Array<{id: string; itemId: string; itemName: string; quantity: number; source: string}>>([])
+  const userIdRef = useRef('')
   const searchRef = useRef<HTMLInputElement>(null)
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   const listIdRef = useRef('')
@@ -78,6 +119,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   useEffect(() => { savedLensesRef.current = savedLenses }, [savedLenses])
   useEffect(() => { pendingKitRef.current = pendingKit }, [pendingKit])
   useEffect(() => { notesRef.current = sectionNotes }, [sectionNotes])
+  useEffect(() => { zoomControllersRef.current = zoomControllers }, [zoomControllers])
   useEffect(() => { notesIdRef.current = notesId }, [notesId])
 
   useEffect(() => {
@@ -85,12 +127,22 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
   }, [])
 
   const loadData = async (lid: string) => {
-    const [{ data: existing }, { data: notesData }] = await Promise.all([
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) userIdRef.current = user.id
+    const [{ data: existing }, { data: notesData }, { data: zoomItems }, { data: existingZoom }] = await Promise.all([
       supabase.from('list_lenses').select('*').eq('list_id', lid).order('sort_order'),
-      supabase.from('list_section_notes').select('*').eq('list_id', lid).eq('section', 'lenses').maybeSingle()
+      supabase.from('list_section_notes').select('*').eq('list_id', lid).eq('section', 'lenses').maybeSingle(),
+      supabase.from('equipment_items').select('id, name').eq('category', 'lenses').eq('subcategory', 'zoom_controllers').order('name'),
+      supabase.from('list_items').select('*, equipment_items(name)').eq('list_id', lid).eq('section', 'zoom_controllers').order('sort_order')
     ])
     if (existing) setSavedLenses(existing)
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
+    if (zoomItems) setAllZoomItems(zoomItems)
+    if (existingZoom && existingZoom.length > 0) {
+      setZoomControllers(existingZoom.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
+    } else {
+      setZoomControllers([{ id: 'zc1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+    }
   }
 
   const searchResults = useMemo(() => {
@@ -170,6 +222,15 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, section: 'lenses', notes }).select().single()
       if (newNote) setNotesId(newNote.id)
     }
+    // Save zoom controllers
+    const zc = zoomControllersRef.current
+    const uid = userIdRef.current
+    await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'zoom_controllers')
+    const zcRows = zc.filter(e => e.itemId).map((e, i) => ({
+      list_id: lid, owner_id: uid, section: 'zoom_controllers',
+      item_id: e.itemId, quantity: e.quantity || 1, source: e.source, sort_order: i
+    }))
+    if (zcRows.length > 0) await supabase.from('list_items').insert(zcRows)
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
@@ -388,6 +449,50 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
             ))}
           </div>
         )}
+        {/* Zoom Controllers */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
+          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Zoom Controllers</h3>
+          <div className="space-y-3">
+            {zoomControllers.map(entry => (
+              <div key={entry.id}>
+                <div className="flex gap-2 items-center min-w-0">
+                  <div className="flex-1">
+                    <SearchablePicker
+                      items={allZoomItems.map(i => ({ id: i.id, name: i.name, brand: null, subcategory: null, category: 'lenses' }))}
+                      value={entry.itemId}
+                      onChange={(id, name) => {
+                        setZoomControllers(prev => prev.map(z => z.id === entry.id ? { ...z, itemId: id, itemName: name } : z))
+                        if (id) triggerAutoSave(600)
+                      }}
+                      placeholder="Search zoom controllers..."
+                    />
+                  </div>
+                  <input type="number" min="1"
+                    value={entry.quantity === 0 ? '' : entry.quantity}
+                    onChange={e => { setZoomControllers(prev => prev.map(z => z.id === entry.id ? { ...z, quantity: parseInt(e.target.value) || 0 } : z)); triggerAutoSave(1000) }}
+                    className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+                  <button onClick={() => setZoomControllers(prev => prev.filter(z => z.id !== entry.id).length > 0 ? prev.filter(z => z.id !== entry.id) : [{ id: 'zc_blank', itemId: '', itemName: '', quantity: 1, source: 'rental' }])}
+                    className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+                </div>
+                {entry.itemId && (
+                  <div className="flex gap-1 mt-1.5 ml-1">
+                    {['rental', 'dop_owned', 'ac_owned'].map(s => (
+                      <button key={s} onClick={() => { setZoomControllers(prev => prev.map(z => z.id === entry.id ? { ...z, source: s } : z)); triggerAutoSave(300) }}
+                        className={"px-2.5 py-1 rounded text-xs font-medium transition-colors " + (entry.source === s ? (s === 'rental' ? 'bg-zinc-600 text-white' : s === 'dop_owned' ? 'bg-[#FFE135] text-black' : 'bg-blue-500 text-white') : 'bg-zinc-800 text-zinc-500 hover:bg-zinc-700')}>
+                        {s === 'rental' ? 'Rental' : s === 'dop_owned' ? 'DOP owned' : 'AC owned'}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <button onClick={() => setZoomControllers(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' }])}
+            className="mt-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-2 rounded-lg transition-colors">
+            + Add another
+          </button>
+        </div>
+
         {/* Section notes */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Section notes</h3>
