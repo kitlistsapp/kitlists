@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [checkEmail, setCheckEmail] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -22,17 +23,21 @@ export default function LoginPage() {
     setMessage('')
 
     if (isSignUp) {
-      const { data, error } = await supabase.auth.signUp({ email, password })
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName.trim(),
+            phone: phone.trim(),
+            company_name: companyName.trim()
+          }
+        }
+      })
       if (error) {
         setMessage(error.message)
-      } else if (data.user) {
-        await supabase.from('profiles').update({
-          full_name: fullName.trim(),
-          phone: phone.trim(),
-          company_name: companyName.trim()
-        }).eq('id', data.user.id)
-        router.push('/profile')
-        router.refresh()
+      } else {
+        setCheckEmail(true)
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -45,6 +50,22 @@ export default function LoginPage() {
     }
     setLoading(false)
   }
+
+  if (checkEmail) return (
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-sm text-center">
+        <div className="mb-8">
+          <h1 className="text-white text-4xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
+        </div>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
+          <div className="text-4xl mb-4">📧</div>
+          <h2 className="text-white text-xl font-bold mb-2">Check your email</h2>
+          <p className="text-zinc-400 text-sm mb-4">We sent a confirmation link to <span className="text-white font-medium">{email}</span></p>
+          <p className="text-zinc-600 text-xs">Click the link in the email to confirm your account and get started.</p>
+        </div>
+      </div>
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4 py-8">
