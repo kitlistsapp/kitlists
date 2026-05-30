@@ -35,9 +35,16 @@ export default function DashboardClient({ user, initialLists, initialShares, col
       production_co: list.production_co,
       house_id: list.house_id,
       shoot_days: list.shoot_days,
+      shoot_start: list.shoot_start,
+      director_name: list.director_name,
+      testing_date: list.testing_date,
+      pre_light_date: list.pre_light_date,
+      gear_check_date: list.gear_check_date,
+      post_return_date: list.post_return_date,
       status: 'draft'
     }).select().single()
     if (newList) {
+      // Copy camera pages
       const { data: cameras } = await supabase.from('camera_pages').select('*').eq('list_id', list.id)
       if (cameras && cameras.length > 0) {
         for (const cam of cameras) {
@@ -57,24 +64,30 @@ export default function DashboardClient({ user, initialLists, initialShares, col
           }
         }
       }
-      const { data: lenses } = await supabase.from('list_lenses').select('*, list_lens_zooms(*)').eq('list_id', list.id).maybeSingle()
-      if (lenses) {
-        const { data: newLenses } = await supabase.from('list_lenses').insert({
-          list_id: newList.id, prime_set_id: lenses.prime_set_id,
-          focal_lengths: lenses.focal_lengths, zoom_controller: lenses.zoom_controller, source: lenses.source
-        }).select().single()
-        if (newLenses && lenses.list_lens_zooms?.length > 0) {
-          await supabase.from('list_lens_zooms').insert(lenses.list_lens_zooms.map((z: any) => ({
-            list_lens_id: newLenses.id, item_id: z.item_id, source: z.source
-          })))
-        }
-      }
-      const { data: misc } = await supabase.from('list_misc_items').select('*').eq('list_id', list.id)
-      if (misc && misc.length > 0) {
-        await supabase.from('list_misc_items').insert(misc.map((i: any) => ({
-          list_id: newList.id, item_id: i.item_id, custom_label: i.custom_label, source: i.source, notes: i.notes
+      // Copy lenses (multiple rows)
+      const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', list.id).order('sort_order')
+      if (lensRows && lensRows.length > 0) {
+        await supabase.from('list_lenses').insert(lensRows.map((l: any) => ({
+          list_id: newList.id, category: l.category, manufacturer: l.manufacturer,
+          series: l.series, focal_length: l.focal_length, source: l.source, sort_order: l.sort_order
         })))
       }
+      // Copy list_items (power, grip, filtration, aks, head_tripod, vtr, zoom_controllers)
+      const { data: listItems } = await supabase.from('list_items').select('*').eq('list_id', list.id).order('sort_order')
+      if (listItems && listItems.length > 0) {
+        await supabase.from('list_items').insert(listItems.map((i: any) => ({
+          list_id: newList.id, owner_id: newList.owner_id, section: i.section, item_id: i.item_id,
+          custom_label: i.custom_label, source: i.source, quantity: i.quantity, sort_order: i.sort_order
+        })))
+      }
+      // Copy section notes
+      const { data: sectionNotes } = await supabase.from('list_section_notes').select('*').eq('list_id', list.id)
+      if (sectionNotes && sectionNotes.length > 0) {
+        await supabase.from('list_section_notes').insert(sectionNotes.map((n: any) => ({
+          list_id: newList.id, owner_id: newList.owner_id, section: n.section, notes: n.notes
+        })))
+      }
+      // Copy shoot specs
       const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
       if (specs) {
         await supabase.from('shoot_specs').insert({
