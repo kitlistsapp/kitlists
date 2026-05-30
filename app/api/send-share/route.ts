@@ -19,9 +19,10 @@ export async function POST(request: Request) {
 
   const powerItems = (listItems || []).filter((i: any) => i.section === 'power')
   const headTripodItems = (listItems || []).filter((i: any) => i.section === 'head_tripod')
-  const gripItems = (listItems || []).filter((i: any) => i.section === 'grip')
+  const gimbalItems = (listItems || []).filter((i: any) => i.section === 'grip')
   const filtrationItems = (listItems || []).filter((i: any) => i.section === 'filtration')
   const aksItems = (listItems || []).filter((i: any) => i.section === 'aks')
+  const vtrItems = (listItems || []).filter((i: any) => i.section === 'vtr')
   const getSectionNote = (section: string) => (sectionNotes || []).find((n: any) => n.section === section)?.notes || ''
 
   const ownerLabel = (source: string, viewMode: string) => {
@@ -69,18 +70,14 @@ export async function POST(request: Request) {
     if (pNote) tableRows += row('Notes', pNote)
   }
 
-  if (headTripodItems.length > 0) {
-    tableRows += sectionHeader('Head & Tripod')
-    tableRows += row('Items', formatItems(headTripodItems, viewMode))
-    const htNote = getSectionNote('head_tripod')
-    if (htNote) tableRows += row('Notes', htNote)
-  }
-
-  if (gripItems.length > 0) {
-    tableRows += sectionHeader('Grip')
-    tableRows += row('Items', formatItems(gripItems, viewMode))
-    const gNote = getSectionNote('grip')
-    if (gNote) tableRows += row('Notes', gNote)
+  if (lenses) {
+    tableRows += sectionHeader('Lenses')
+    if (lenses.equipment_items?.name) tableRows += row('Prime Set', lenses.equipment_items.name)
+    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths (approx)', lenses.focal_lengths.join(', '))
+    if (lenses.list_lens_zooms?.length > 0) tableRows += row('Zooms', lenses.list_lens_zooms.map((z: any) => z.equipment_items?.name).filter(Boolean).join('<br>'))
+    if (lenses.zoom_controller) tableRows += row('Controller', lenses.zoom_controller)
+    const lNote = getSectionNote('lenses')
+    if (lNote) tableRows += row('Notes', lNote)
   }
 
   if (filtrationItems.length > 0) {
@@ -97,14 +94,25 @@ export async function POST(request: Request) {
     if (aNote) tableRows += row('Notes', aNote)
   }
 
-  if (lenses) {
-    tableRows += sectionHeader('Lenses')
-    if (lenses.equipment_items?.name) tableRows += row('Prime Set', lenses.equipment_items.name)
-    if (lenses.focal_lengths?.length > 0) tableRows += row('Focal Lengths (approx)', lenses.focal_lengths.join(', '))
-    if (lenses.list_lens_zooms?.length > 0) tableRows += row('Zooms', lenses.list_lens_zooms.map((z: any) => z.equipment_items?.name).filter(Boolean).join('<br>'))
-    if (lenses.zoom_controller) tableRows += row('Controller', lenses.zoom_controller)
-    const lNote = getSectionNote('lenses')
-    if (lNote) tableRows += row('Notes', lNote)
+  if (headTripodItems.length > 0) {
+    tableRows += sectionHeader('Head & Legs')
+    tableRows += row('Items', formatItems(headTripodItems, viewMode))
+    const htNote = getSectionNote('head_tripod')
+    if (htNote) tableRows += row('Notes', htNote)
+  }
+
+  if (gimbalItems.length > 0) {
+    tableRows += sectionHeader('Gimbals')
+    tableRows += row('Items', formatItems(gimbalItems, viewMode))
+    const gNote = getSectionNote('grip')
+    if (gNote) tableRows += row('Notes', gNote)
+  }
+
+  if (vtrItems.length > 0) {
+    tableRows += sectionHeader('VTR')
+    tableRows += row('Items', formatItems(vtrItems, viewMode))
+    const vNote = getSectionNote('vtr')
+    if (vNote) tableRows += row('Notes', vNote)
   }
 
   if (specs) {

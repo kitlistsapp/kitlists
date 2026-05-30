@@ -16,10 +16,12 @@ export async function POST(request: Request) {
 
   const { data: profile } = await supabase.from('profiles').select('full_name, company_name').eq('id', user.id).single()
 
+  const token = crypto.randomUUID()
+
   const { data: invite, error } = await supabase
     .from('list_collaborators')
-    .insert({ list_id: listId, invited_email: invitedEmail, invited_by: user.id })
-    .select()
+    .insert({ list_id: listId, invited_email: invitedEmail, invited_by: user.id, token })
+    .select('id, token')
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
