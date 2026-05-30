@@ -15,6 +15,11 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
   const [shootDays, setShootDays] = useState('')
   const [houseId, setHouseId] = useState('')
   const [rentalHouses, setRentalHouses] = useState<any[]>([])
+  const [directorName, setDirectorName] = useState('')
+  const [preLightDate, setPreLightDate] = useState('')
+  const [gearCheckDate, setGearCheckDate] = useState('')
+  const [testingDate, setTestingDate] = useState('')
+  const [postReturnDate, setPostReturnDate] = useState('')
 
   useEffect(() => {
     params.then(p => { setListId(p.id); loadData(p.id) })
@@ -31,6 +36,11 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
       setShootStart(list.shoot_start || '')
       setShootDays(String(list.shoot_days || ''))
       setHouseId(list.house_id || '')
+      setDirectorName(list.director_name || '')
+      setPreLightDate(list.pre_light_date || '')
+      setGearCheckDate(list.gear_check_date || '')
+      setTestingDate(list.testing_date || '')
+      setPostReturnDate(list.post_return_date || '')
     }
     if (houses) setRentalHouses(houses)
   }
@@ -43,7 +53,12 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
       production_co: productionCo.trim(),
       shoot_start: shootStart || null,
       shoot_days: shootDays ? parseInt(shootDays) : null,
-      house_id: houseId || null
+      house_id: houseId || null,
+      director_name: directorName.trim() || null,
+      pre_light_date: preLightDate || null,
+      gear_check_date: gearCheckDate || null,
+      testing_date: testingDate || null,
+      post_return_date: postReturnDate || null
     }).eq('id', listId)
     setSaving(false)
     router.push('/lists/' + listId)
@@ -89,6 +104,34 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
                 <option key={h.id} value={h.id}>{h.name}{h.city ? " — " + h.city : ""}</option>
               ))}
             </select>
+          </div>
+          <div>
+            <label className="text-zinc-400 text-sm mb-1.5 block">Director</label>
+            <input type="text" value={directorName} onChange={e => setDirectorName(e.target.value)}
+              placeholder="e.g. Sandy Doe"
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-zinc-400 text-sm mb-1.5 block">Pre-light date</label>
+              <input type="date" value={preLightDate} onChange={e => setPreLightDate(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+            </div>
+            <div>
+              <label className="text-zinc-400 text-sm mb-1.5 block">Gear check date</label>
+              <input type="date" value={gearCheckDate} onChange={e => setGearCheckDate(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+            </div>
+            <div>
+              <label className="text-zinc-400 text-sm mb-1.5 block">Testing date</label>
+              <input type="date" value={testingDate} onChange={e => setTestingDate(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+            </div>
+            <div>
+              <label className="text-zinc-400 text-sm mb-1.5 block">Post / return date</label>
+              <input type="date" value={postReturnDate} onChange={e => setPostReturnDate(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+            </div>
           </div>
           <button onClick={save} disabled={saving}
             className="w-full bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold rounded-lg py-3 text-sm disabled:opacity-50">

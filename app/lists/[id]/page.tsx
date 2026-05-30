@@ -104,8 +104,12 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <h2 className="text-2xl font-bold">{list.project_name}</h2>
               <p className="text-zinc-500 text-sm mt-1">{list.production_co}</p>
               <div className="flex gap-4 mt-2 text-xs text-zinc-600">
-                {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}</span>}
-                {list.shoot_days && <span>{list.shoot_days} days</span>}
+                {list.director_name && <span>Director: {list.director_name}</span>}
+                {list.shoot_start && <span>Shoot: {new Date(list.shoot_start).toLocaleDateString("en-AU")}{list.shoot_days ? ` (${list.shoot_days} days)` : ''}</span>}
+                {list.pre_light_date && <span>Pre-light: {new Date(list.pre_light_date).toLocaleDateString("en-AU")}</span>}
+                {list.gear_check_date && <span>Gear check: {new Date(list.gear_check_date).toLocaleDateString("en-AU")}</span>}
+                {list.testing_date && <span>Testing: {new Date(list.testing_date).toLocaleDateString("en-AU")}</span>}
+                {list.post_return_date && <span>Post/return: {new Date(list.post_return_date).toLocaleDateString("en-AU")}</span>}
               </div>
             </div>
             <span className={`text-xs px-3 py-1 rounded-full font-medium ${ list.status === "confirmed" ? "bg-green-900 text-green-400" : list.status === "sent" ? "bg-blue-900 text-blue-400" : "bg-zinc-800 text-zinc-400" }`}>{list.status}</span>

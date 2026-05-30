@@ -18,6 +18,7 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
   const [loadingPreview, setLoadingPreview] = useState(false)
   const [sent, setSent] = useState<string | null>(null)
   const [listName, setListName] = useState('')
+  const [listSchedule, setListSchedule] = useState<any>(null)
   const [dopName, setDopName] = useState('')
   const [companyName, setCompanyName] = useState('')
 
@@ -34,10 +35,10 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
     const [{ data: list }, { data: profile }] = await Promise.all([
-      supabase.from('gear_lists').select('project_name').eq('id', lid).single(),
+      supabase.from('gear_lists').select('project_name, production_co, director_name, shoot_start, shoot_days, pre_light_date, gear_check_date, testing_date, post_return_date').eq('id', lid).single(),
       supabase.from('profiles').select('full_name, company_name').eq('id', user.id).single()
     ])
-    if (list) setListName(list.project_name)
+    if (list) { setListName(list.project_name); setListSchedule(list) }
     if (profile) { setDopName(profile.full_name || ''); setCompanyName(profile.company_name || '') }
   }
 
@@ -98,7 +99,18 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
       </nav>
 
       <main className="max-w-2xl mx-auto px-4 py-6">
-        <h2 className="text-2xl font-bold mb-2">Share this list</h2>
+        <h2 className="text-2xl font-bold mb-1">Share — {listName}</h2>
+        {listSchedule?.production_co && <p className="text-zinc-500 text-sm mb-2">{listSchedule.production_co}</p>}
+        {listSchedule && (
+          <div className="flex flex-wrap gap-3 mb-4 text-xs text-zinc-500">
+            {listSchedule.director_name && <span>Director: {listSchedule.director_name}</span>}
+            {listSchedule.shoot_start && <span>Shoot: {new Date(listSchedule.shoot_start).toLocaleDateString("en-AU")}{listSchedule.shoot_days ? ` (${listSchedule.shoot_days} days)` : ''}</span>}
+            {listSchedule.pre_light_date && <span>Pre-light: {new Date(listSchedule.pre_light_date).toLocaleDateString("en-AU")}</span>}
+            {listSchedule.gear_check_date && <span>Gear check: {new Date(listSchedule.gear_check_date).toLocaleDateString("en-AU")}</span>}
+            {listSchedule.testing_date && <span>Testing: {new Date(listSchedule.testing_date).toLocaleDateString("en-AU")}</span>}
+            {listSchedule.post_return_date && <span>Post/return: {new Date(listSchedule.post_return_date).toLocaleDateString("en-AU")}</span>}
+          </div>
+        )}
         <p className="text-zinc-500 text-sm mb-8">Generate links to share with your rental house, focus puller, or production</p>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-6">

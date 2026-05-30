@@ -20,6 +20,11 @@ export default function NewListPage() {
   const [numCameras, setNumCameras] = useState("1")
   const [houseId, setHouseId] = useState("")
   const [rentalHouses, setRentalHouses] = useState<any[]>([])
+  const [directorName, setDirectorName] = useState("")
+  const [preLightDate, setPreLightDate] = useState("")
+  const [gearCheckDate, setGearCheckDate] = useState("")
+  const [testingDate, setTestingDate] = useState("")
+  const [postReturnDate, setPostReturnDate] = useState("")
 
   const cameraLabels = ["A cam", "B cam", "C cam", "D cam", "E cam", "F cam"]
 
@@ -51,7 +56,12 @@ export default function NewListPage() {
         shoot_start: shootStart || null,
         shoot_days: parseInt(shootDays),
         house_id: houseId || null,
-        status: "draft"
+        status: "draft",
+        director_name: directorName.trim() || null,
+        pre_light_date: preLightDate || null,
+        gear_check_date: gearCheckDate || null,
+        testing_date: testingDate || null,
+        post_return_date: postReturnDate || null
       })
       .select()
       .single()
@@ -164,17 +174,11 @@ export default function NewListPage() {
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            <div>
-              <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
-              <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)} min={new Date().toISOString().split("T")[0]}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
-            </div>
-            <div>
-              <label className="text-zinc-400 text-sm mb-1.5 block">Shoot days</label>
-              <input type="number" min="1" value={shootDays} onChange={e => setShootDays(e.target.value)}
-                className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
-            </div>
+          <div>
+            <label className="text-zinc-400 text-sm mb-1.5 block">Director</label>
+            <input type="text" value={directorName} onChange={e => setDirectorName(e.target.value)}
+              placeholder="e.g. Sandy Doe"
+              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
           </div>
 
           <div>
@@ -188,22 +192,61 @@ export default function NewListPage() {
             </select>
           </div>
 
-          {mode === 'scratch' && (
-            <div>
-              <label className="text-zinc-400 text-sm mb-3 block">Number of cameras</label>
-              <div className="flex gap-2 flex-wrap">
-                {[1,2,3,4,5,6].map(n => (
-                  <button key={n} onClick={() => setNumCameras(String(n))}
-                    className={"w-12 h-12 rounded-lg text-sm font-semibold transition-colors " + (numCameras === String(n) ? "bg-[#FFE135] text-black" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700")}>
-                    {n}
-                  </button>
-                ))}
+          <div className="border-t border-zinc-700 pt-5">
+            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Project dates</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Testing date</label>
+                <input type="date" value={testingDate} onChange={e => setTestingDate(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
               </div>
-              <p className="text-zinc-600 text-xs mt-2">
-                Creates: {Array.from({ length: parseInt(numCameras) }, (_, i) => cameraLabels[i]).join(", ")}
-              </p>
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Pre-light date</label>
+                <input type="date" value={preLightDate} onChange={e => setPreLightDate(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              </div>
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Gear check date</label>
+                <input type="date" value={gearCheckDate} onChange={e => setGearCheckDate(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              </div>
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
+                <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)} min={new Date().toISOString().split("T")[0]}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              </div>
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Shoot days</label>
+                <input type="number" min="1" value={shootDays} onChange={e => setShootDays(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              </div>
+              <div>
+                <label className="text-zinc-400 text-sm mb-1.5 block">Post / return date</label>
+                <input type="date" value={postReturnDate} onChange={e => setPostReturnDate(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
+              </div>
             </div>
-          )}
+          </div>
+
+          <div className="border-t border-zinc-700 pt-5">
+            <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Cameras</h3>
+            {mode === 'scratch' && (
+              <div>
+                <label className="text-zinc-400 text-sm mb-3 block">Number of cameras</label>
+                <div className="flex gap-2 flex-wrap">
+                  {[1,2,3,4,5,6].map(n => (
+                    <button key={n} onClick={() => setNumCameras(String(n))}
+                      className={"w-12 h-12 rounded-lg text-sm font-semibold transition-colors " + (numCameras === String(n) ? "bg-[#FFE135] text-black" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700")}>
+                      {n}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-zinc-600 text-xs mt-2">
+                  Creates: {Array.from({ length: parseInt(numCameras) }, (_, i) => cameraLabels[i]).join(", ")}
+                </p>
+              </div>
+            )}
+          </div>
 
           {error && <p className="text-red-400 text-sm">{error}</p>}
 
