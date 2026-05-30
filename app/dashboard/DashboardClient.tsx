@@ -4,11 +4,12 @@ import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
-export default function DashboardClient({ user, initialLists, initialShares, collaboratedLists }: {
+export default function DashboardClient({ user, initialLists, initialShares, collaboratedLists, inviteMap }: {
   user: any
   initialLists: any[]
   initialShares: Record<string, number>
   collaboratedLists: any[]
+  inviteMap: Record<string, { email: string, accepted: boolean }[]>
 }) {
   const supabase = createClient()
   const router = useRouter()
@@ -187,6 +188,11 @@ export default function DashboardClient({ user, initialLists, initialShares, col
                           <h3 className="font-semibold text-base">{list.project_name}</h3>
                           <span className={"text-xs px-2.5 py-0.5 rounded-full font-medium " + statusColor(list.status)}>{list.status}</span>
                           {shareCount > 0 && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-2.5 py-0.5 rounded-full font-medium">{shareCount} shared</span>}
+                          {inviteMap[list.id] && inviteMap[list.id].length > 0 && (
+                            <span className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-blue-950 text-blue-400">
+                              {inviteMap[list.id].some((i: any) => i.accepted) ? '1st AC ✓' : '1st AC invited'}
+                            </span>
+                          )}
                         </div>
                         <p className={"text-sm mt-0.5 " + mutedText}>{list.production_co}</p>
                         <div className={"flex gap-3 mt-1.5 text-xs flex-wrap " + dimText}>

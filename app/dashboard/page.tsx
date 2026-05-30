@@ -25,6 +25,20 @@ export default async function DashboardPage() {
   const shareCounts: Record<string, number> = {}
   if (shares) shares.forEach((s: any) => { shareCounts[s.list_id] = (shareCounts[s.list_id] || 0) + 1 })
 
+  // Invites sent by this user (1st AC invites)
+  const { data: invites } = await supabase
+    .from('list_collaborators')
+    .select('list_id, invited_email, accepted_at')
+    .eq('invited_by', user.id)
+
+  const inviteMap: Record<string, { email: string, accepted: boolean }[]> = {}
+  if (invites) {
+    invites.forEach((inv: any) => {
+      if (!inviteMap[inv.list_id]) inviteMap[inv.list_id] = []
+      inviteMap[inv.list_id].push({ email: inv.invited_email, accepted: !!inv.accepted_at })
+    })
+  }
+
   // Lists shared with this user as collaborator
   const { data: collaboratedLists } = await supabase
     .from('list_collaborators')
@@ -40,6 +54,7 @@ export default async function DashboardPage() {
       initialLists={lists || []}
       initialShares={shareCounts}
       collaboratedLists={collabListsData}
+      inviteMap={inviteMap}
     />
   )
 }
