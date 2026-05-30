@@ -241,7 +241,7 @@ export default function NewListPage() {
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
-                <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)} min={new Date().toISOString().split("T")[0]}
+                <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)}
                   className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
               </div>
               <div>
