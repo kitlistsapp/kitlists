@@ -24,3 +24,33 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ── Theme variables ── */
+:root, [data-theme="dark"] {
+  --bg-page:        #000000;
+  --bg-card:        #18181b;
+  --bg-input:       #27272a;
+  --border:         #3f3f46;
+  --text-primary:   #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted:     #71717a;
+  --nav-bg:         #000000;
+  --nav-border:     #27272a;
+}
+
+[data-theme="light"] {
+  --bg-page:        #f4f4f5;
+  --bg-card:        #ffffff;
+  --bg-input:       #f4f4f5;
+  --border:         #e4e4e7;
+  --text-primary:   #09090b;
+  --text-secondary: #52525b;
+  --text-muted:     #a1a1aa;
+  --nav-bg:         #ffffff;
+  --nav-border:     #e4e4e7;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}

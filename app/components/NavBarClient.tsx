@@ -21,6 +21,9 @@ export default function NavBarClient({ backHref, backLabel, rightContent }: NavB
       </div>
       <div className="flex items-center gap-4">
         {rightContent}
+        <a href="/dashboard" className="text-zinc-400 hover:text-white text-sm transition-colors hidden sm:block">Dashboard</a>
+        <a href="/profile" className="text-zinc-400 hover:text-white text-sm transition-colors hidden sm:block">My Profile</a>
+        <a href="/auth/signout" className="text-zinc-400 hover:text-white text-sm transition-colors">Sign out</a>
       </div>
     </nav>
   )

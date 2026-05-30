@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -15,19 +15,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const [lists, setLists] = useState(initialLists)
   const [shares] = useState(initialShares)
   const [tab, setTab] = useState('active')
-  const [darkMode, setDarkMode] = useState(true)
 
-  useEffect(() => {
-    const stored = localStorage.getItem('kitlist-theme')
-    if (stored === 'light') setDarkMode(false)
-  }, [])
-
-  const toggleTheme = () => {
-    const next = !darkMode
-    setDarkMode(next)
-    localStorage.setItem('kitlist-theme', next ? 'dark' : 'light')
-    document.documentElement.classList.toggle('dark', next)
-  }
 
   const updateStatus = async (id: string, status: string) => {
     await supabase.from('gear_lists').update({ status }).eq('id', id)
@@ -119,16 +107,16 @@ export default function DashboardClient({ user, initialLists, initialShares, col
     { key: 'archived', label: 'Archived', count: lists.filter(l => l.status === 'archived').length },
   ]
 
-  const bg = darkMode ? 'bg-black text-white' : 'bg-gray-50 text-zinc-900'
-  const navBg = darkMode ? 'border-zinc-800 bg-black' : 'border-gray-200 bg-white'
-  const cardBg = darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-gray-200 hover:border-gray-300'
+  const bg = 'bg-black text-white'
+  const navBg = 'border-zinc-800 bg-black'
+  const cardBg = 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'
   const tabActive = 'bg-[#FFE135] text-black'
-  const tabInactive = darkMode ? 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800' : 'bg-white text-zinc-500 hover:bg-gray-100 border border-gray-200'
-  const mutedText = darkMode ? 'text-zinc-500' : 'text-zinc-500'
-  const dimText = darkMode ? 'text-zinc-600' : 'text-zinc-400'
+  const tabInactive = 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
+  const mutedText = 'text-zinc-500'
+  const dimText = 'text-zinc-600'
 
   return (
-    <div className={"min-h-screen " + bg}>
+    <div className={"min-h-screen flex flex-col " + bg}>
       <nav className={"border-b px-4 py-4 flex items-center justify-between " + navBg}>
         <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
         <div className="flex items-center gap-3">
@@ -137,15 +125,13 @@ export default function DashboardClient({ user, initialLists, initialShares, col
               <img src={user.logo_url} alt="Logo" className="w-7 h-7 rounded-lg object-contain bg-zinc-800 p-0.5 border border-zinc-700" />
             )}
             <div className="text-right hidden sm:block">
-              {user?.full_name && <p className={"text-sm font-medium transition-colors " + (darkMode ? 'text-zinc-300 group-hover:text-white' : 'text-zinc-600 group-hover:text-zinc-900')}>{user.full_name}</p>}
-              {user?.company_name && <p className={"text-xs transition-colors " + (darkMode ? 'text-zinc-500 group-hover:text-zinc-400' : 'text-zinc-400 group-hover:text-zinc-600')}>{user.company_name}</p>}
+              {user?.full_name && <p className={"text-sm font-medium transition-colors " + ('text-zinc-300 group-hover:text-white')}>{user.full_name}</p>}
+              {user?.company_name && <p className={"text-xs transition-colors " + ('text-zinc-500 group-hover:text-zinc-400')}>{user.company_name}</p>}
             </div>
-            {!user?.full_name && <span className={"text-sm transition-colors " + (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900')}>My Profile</span>}
+            {!user?.full_name && <span className={"text-sm transition-colors " + ('text-zinc-400 hover:text-white')}>My Profile</span>}
           </a>
-          <button onClick={toggleTheme} className={"w-9 h-9 rounded-lg flex items-center justify-center transition-colors " + (darkMode ? 'bg-zinc-800 hover:bg-zinc-700' : 'bg-gray-100 hover:bg-gray-200')}>
-            {darkMode ? '☀️' : '🌙'}
-          </button>
-          <a href="/auth/signout" className={"text-sm transition-colors " + (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900')}>Sign out</a>
+
+          <a href="/auth/signout" className={"text-sm transition-colors " + ('text-zinc-400 hover:text-white')}>Sign out</a>
         </div>
       </nav>
 
@@ -163,13 +149,13 @@ export default function DashboardClient({ user, initialLists, initialShares, col
             <button key={t.key} onClick={() => setTab(t.key)}
               className={"px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 whitespace-nowrap sm:px-3 sm:py-2 sm:text-sm sm:gap-1.5 " + (tab === t.key ? tabActive : tabInactive)}>
               {t.label}
-              {t.count > 0 && <span className={"text-xs px-1.5 py-0.5 rounded-full " + (tab === t.key ? 'bg-black/20 text-black' : darkMode ? 'bg-zinc-800 text-zinc-500' : 'bg-gray-100 text-zinc-400')}>{t.count}</span>}
+              {t.count > 0 && <span className={"text-xs px-1.5 py-0.5 rounded-full " + (tab === t.key ? 'bg-black/20 text-black' : 'bg-zinc-800 text-zinc-500')}>{t.count}</span>}
             </button>
           ))}
         </div>
 
         {filtered.length === 0 ? (
-          <div className={"border border-dashed rounded-2xl p-16 text-center " + (darkMode ? 'border-zinc-700' : 'border-gray-300')}>
+          <div className={"border border-dashed rounded-2xl p-16 text-center " + ('border-zinc-700')}>
             <p className={"text-lg mb-2 " + mutedText}>No lists here</p>
             {tab === 'active' && <a href="/lists/new" className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-6 py-3 rounded-lg text-sm inline-block mt-4">Create your first list</a>}
           </div>
@@ -198,17 +184,17 @@ export default function DashboardClient({ user, initialLists, initialShares, col
                           {specs && <span>{[specs.format, specs.resolution].filter(Boolean).join(' · ')}</span>}
                         </div>
                       </div>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={darkMode ? 'text-zinc-700 mt-1' : 'text-gray-300 mt-1'}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={'text-zinc-700 mt-1'}>
                         <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   </a>
-                  <div className={"px-4 pb-3 flex gap-1.5 border-t flex-wrap pt-3 " + (darkMode ? 'border-zinc-800' : 'border-gray-100')}>
+                  <div className={"px-4 pb-3 flex gap-1.5 border-t flex-wrap pt-3 " + ('border-zinc-800')}>
                     {list.status === 'draft' && <button onClick={() => updateStatus(list.id, 'sent')} className="text-xs bg-blue-900 hover:bg-blue-800 text-blue-300 px-3 py-1.5 rounded-lg transition-colors">Mark sent</button>}
                     {list.status === 'sent' && <button onClick={() => updateStatus(list.id, 'confirmed')} className="text-xs bg-green-900 hover:bg-green-800 text-green-300 px-3 py-1.5 rounded-lg transition-colors">Mark confirmed</button>}
-                    {list.status !== 'archived' && <button onClick={() => updateStatus(list.id, 'archived')} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + (darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-400' : 'bg-gray-100 hover:bg-gray-200 text-zinc-500')}>Archive</button>}
-                    {list.status === 'archived' && <button onClick={() => updateStatus(list.id, 'draft')} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + (darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-400' : 'bg-gray-100 hover:bg-gray-200 text-zinc-500')}>Restore</button>}
-                    <button onClick={() => copyList(list)} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + (darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-400' : 'bg-gray-100 hover:bg-gray-200 text-zinc-500')}>Copy to new job</button>
+                    {list.status !== 'archived' && <button onClick={() => updateStatus(list.id, 'archived')} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + ('bg-zinc-800 hover:bg-zinc-700 text-zinc-400')}>Archive</button>}
+                    {list.status === 'archived' && <button onClick={() => updateStatus(list.id, 'draft')} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + ('bg-zinc-800 hover:bg-zinc-700 text-zinc-400')}>Restore</button>}
+                    <button onClick={() => copyList(list)} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + ('bg-zinc-800 hover:bg-zinc-700 text-zinc-400')}>Copy to new job</button>
                     <button onClick={() => deleteList(list.id)} className="text-xs bg-red-950 hover:bg-red-900 text-red-400 px-3 py-1.5 rounded-lg transition-colors">Delete</button>
                   </div>
                 </div>
@@ -237,7 +223,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
                           {list._invitedBy?.full_name && <span>DOP: {list._invitedBy.full_name}</span>}
                         </div>
                       </div>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={darkMode ? 'text-zinc-700 mt-1' : 'text-gray-300 mt-1'}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={'text-zinc-700 mt-1'}>
                         <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
@@ -248,6 +234,16 @@ export default function DashboardClient({ user, initialLists, initialShares, col
           </div>
         )}
       </main>
+      <footer className="border-t border-zinc-800 mt-auto px-4 py-5">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span className="text-sm font-semibold text-white">Kit<span className="text-[#FFE135]">Lists</span></span>
+          <div className="flex items-center gap-5">
+            <a href="/feedback" className="text-xs text-zinc-500 hover:text-white transition-colors">Share feedback</a>
+            <a href="/contact" className="text-xs text-zinc-500 hover:text-white transition-colors">Contact us</a>
+          </div>
+          <p className="text-xs text-zinc-600">© 2026 KitLists. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   )
 }
