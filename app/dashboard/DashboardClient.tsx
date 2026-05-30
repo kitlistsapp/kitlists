@@ -130,7 +130,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
 
   return (
     <div className={"min-h-screen flex flex-col " + bg}>
-      <nav className={"border-b px-4 py-4 flex items-center justify-between " + navBg}>
+      <nav className={"border-b px-4 py-4 flex items-center justify-between sticky top-0 z-40 " + navBg}>
         <h1 className="text-xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
         <div className="flex items-center gap-3">
           <a href="/profile" className="flex items-center gap-2 group">
@@ -148,7 +148,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+      <main className="max-w-5xl mx-auto px-4 py-6 flex-1 w-full">
         <div className="flex items-center justify-between mb-5">
           <div>
             <h2 className="text-xl font-bold">My Gear Lists</h2>
