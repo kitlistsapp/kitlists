@@ -67,11 +67,7 @@ export default function NewListPage() {
 
   useEffect(() => {
     const supabase2 = createClient()
-    Promise.all([
-      // rental houses removed
-      supabase2.from('templates').select('*').order('name')
-    ]).then(([{ data: houses }, { data: tmpls }]) => {
-      // rental houses removed
+    supabase2.from('templates').select('*').order('name').then(({ data: tmpls }) => {
       if (tmpls) setTemplates(tmpls)
     })
   }, [])
