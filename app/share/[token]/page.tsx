@@ -247,6 +247,14 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
             </div>
           )}
 
+          {/* Other Kit */}
+          {getSectionNote('other_kit') && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+              <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Other Kit</h3>
+              <p className="text-zinc-300 text-sm whitespace-pre-wrap">{getSectionNote('other_kit')}</p>
+            </div>
+          )}
+
           {/* Shoot Specs */}
           {specs && (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">

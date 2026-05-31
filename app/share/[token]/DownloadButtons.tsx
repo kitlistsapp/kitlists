@@ -60,29 +60,35 @@ export default function DownloadButtons({ listData, dopName, companyName, luts }
       newLine(4)
       doc.setFillColor(40, 40, 40)
       doc.roundedRect(margin, y - 3, pageW - margin * 2, 7, 1, 1, 'F')
-      addText(cam.label.toUpperCase(), margin + 3, 8, true, [255, 165, 0])
+      addText((cam.label || '').toUpperCase(), margin + 3, 8, true, [255, 165, 0])
       newLine(7)
-      if (cam.bodyName) { addText(cam.bodyName, margin, 11, true); newLine(6) }
-      const sections = [
-        { label: 'POWER', items: cam.items.filter((i: any) => i.section === 'power') },
-        { label: 'AKS', items: cam.items.filter((i: any) => i.section === 'aks') },
-        { label: 'GRIP', items: cam.items.filter((i: any) => i.section === 'grip') },
-        { label: 'FILTRATION', items: cam.items.filter((i: any) => i.section === 'filtration') },
-      ].filter(s => s.items.length > 0)
-      for (const section of sections) {
-        checkPage()
-        addText(section.label, margin, 8, true, [150, 150, 150])
+      const bodyName = cam.equipment_items?.name || ''
+      if (bodyName) { addText(bodyName, margin, 11, true); newLine(6) }
+      if (cam.notes) { addText('Notes: ' + cam.notes, margin, 8, false, [120, 120, 120]); newLine(5) }
+    }
+
+    const sharedSections = [
+      { label: 'POWER', items: listData.powerItems || [] },
+      { label: 'HEAD & TRIPOD', items: listData.headTripodItems || [] },
+      { label: 'GRIP', items: listData.gripItems || [] },
+      { label: 'FILTRATION', items: listData.filtrationItems || [] },
+      { label: 'AKS', items: listData.aksItems || [] },
+    ].filter(s => s.items.length > 0)
+
+    for (const section of sharedSections) {
+      checkPage()
+      newLine(4)
+      doc.setFillColor(40, 40, 40)
+      doc.roundedRect(margin, y - 3, pageW - margin * 2, 7, 1, 1, 'F')
+      addText(section.label, margin + 3, 8, true, [255, 165, 0])
+      newLine(7)
+      for (const item of section.items) {
+        const name = item.equipment_items?.name || item.custom_label || ''
+        const qty = item.quantity > 1 ? ` x${item.quantity}` : ''
+        addText('· ' + name + qty, margin + 3, 9)
         newLine(4)
-        for (const item of section.items) {
-          const name = item.equipment_items?.name || item.custom_label || ''
-          const qty = item.quantity > 1 ? ` x${item.quantity}` : ''
-          addText('· ' + name + qty, margin + 3, 9)
-          newLine(4)
-          checkPage()
-        }
-        newLine(2)
+        checkPage()
       }
-      if (cam.camera_notes) { addText('Notes: ' + cam.camera_notes, margin, 8, false, [120, 120, 120]); newLine(5) }
     }
 
     if (lenses) {
@@ -154,22 +160,30 @@ export default function DownloadButtons({ listData, dopName, companyName, luts }
     }
 
     for (const cam of cameras) {
-      summaryRows.push([cam.label.toUpperCase()])
-      if (cam.bodyName) summaryRows.push(['Camera Body', cam.bodyName])
-      const sections = ['power', 'aks', 'grip', 'filtration']
-      for (const section of sections) {
-        const items = cam.items.filter((i: any) => i.section === section)
-        if (items.length > 0) {
-          summaryRows.push([section.toUpperCase()])
-          for (const item of items) {
-            const name = item.equipment_items?.name || item.custom_label || ''
-            const qty = item.quantity > 1 ? item.quantity : ''
-            summaryRows.push(['', name, qty ? 'x' + qty : ''])
-          }
-        }
-      }
-      if (cam.camera_notes) summaryRows.push(['Notes', cam.camera_notes])
+      summaryRows.push([cam.label ? cam.label.toUpperCase() : ''])
+      const bodyName = cam.equipment_items?.name || ''
+      if (bodyName) summaryRows.push(['Camera Body', bodyName])
+      if (cam.notes) summaryRows.push(['Notes', cam.notes])
       summaryRows.push([])
+    }
+
+    const sharedSections = [
+      { label: 'POWER', items: listData.powerItems || [] },
+      { label: 'HEAD & TRIPOD', items: listData.headTripodItems || [] },
+      { label: 'GRIP', items: listData.gripItems || [] },
+      { label: 'FILTRATION', items: listData.filtrationItems || [] },
+      { label: 'AKS', items: listData.aksItems || [] },
+    ]
+    for (const section of sharedSections) {
+      if (section.items.length > 0) {
+        summaryRows.push([section.label])
+        for (const item of section.items) {
+          const name = item.equipment_items?.name || item.custom_label || ''
+          const qty = item.quantity > 1 ? item.quantity : ''
+          summaryRows.push(['', name, qty ? 'x' + qty : ''])
+        }
+        summaryRows.push([])
+      }
     }
 
     if (lenses) {
