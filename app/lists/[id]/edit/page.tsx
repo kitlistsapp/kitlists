@@ -156,19 +156,31 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Testing date</label>
+                <div className="relative">
                 <input type="date" value={testingDate} onChange={e => setTestingDate(e.target.value)} className={dateClass} />
+                {testingDate && <button type="button" onClick={() => setTestingDate('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-lg leading-none px-1">×</button>}
+              </div>
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Pre-light date</label>
+                <div className="relative">
                 <input type="date" value={preLightDate} onChange={e => setPreLightDate(e.target.value)} className={dateClass} />
+                {preLightDate && <button type="button" onClick={() => setPreLightDate('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-lg leading-none px-1">×</button>}
+              </div>
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Gear check date</label>
+                <div className="relative">
                 <input type="date" value={gearCheckDate} onChange={e => setGearCheckDate(e.target.value)} className={dateClass} />
+                {gearCheckDate && <button type="button" onClick={() => setGearCheckDate('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-lg leading-none px-1">×</button>}
+              </div>
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
+                <div className="relative">
                 <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)} className={dateClass} />
+                {shootStart && <button type="button" onClick={() => setShootStart('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-lg leading-none px-1">×</button>}
+              </div>
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot days</label>
@@ -176,7 +188,10 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Post / return date</label>
+                <div className="relative">
                 <input type="date" value={postReturnDate} onChange={e => setPostReturnDate(e.target.value)} className={dateClass} />
+                {postReturnDate && <button type="button" onClick={() => setPostReturnDate('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-lg leading-none px-1">×</button>}
+              </div>
               </div>
             </div>
           </div>
