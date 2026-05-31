@@ -116,9 +116,9 @@ export default function GettingStartedPage() {
         {/* CTA */}
         <div className="mt-16 pt-8 border-t border-zinc-800 text-center space-y-4">
           <p className="text-zinc-400 text-sm">Ready to get started?</p>
-          <a href="/lists/new"
+          <a href="/profile"
             className="inline-block bg-[#FFE135] hover:bg-yellow-300 text-black font-semibold px-8 py-3 rounded-lg text-sm transition-colors">
-            Create your first gear list
+            Create my profile
           </a>
           <div className="pt-2">
             <a href="/dashboard" className="text-zinc-600 hover:text-zinc-400 text-sm transition-colors">
