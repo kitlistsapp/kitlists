@@ -34,8 +34,8 @@ function SearchablePicker({ items, value, onChange, placeholder }: {
           onChange={e => { setQuery(e.target.value); setOpen(true) }}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
-        {value && <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3.5 text-xs text-zinc-500 hover:text-zinc-300">clear</button>}
+          className={"w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] " + (value ? "pr-12" : "")} />
+        {value && <button onClick={() => { onChange('', ''); setQuery('') }} className="absolute right-3 top-3 text-zinc-400 hover:text-white text-base leading-none">×</button>}
       </div>
       {open && (
         <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl max-h-64 overflow-y-auto">

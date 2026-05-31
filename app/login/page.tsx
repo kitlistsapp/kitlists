@@ -74,7 +74,7 @@ export default function LoginPage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
           {forgotSent ? (
             <div className="text-center">
-              <div className="text-4xl mb-4">📧</div>
+              
               <h2 className="text-white text-xl font-bold mb-2">Check your email</h2>
               <p className="text-zinc-400 text-sm mb-4">We sent a password reset link to <span className="text-white font-medium">{forgotEmail}</span></p>
               <button onClick={() => { setShowForgot(false); setForgotSent(false) }} className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">Back to sign in</button>
@@ -109,7 +109,7 @@ export default function LoginPage() {
           <h1 className="text-white text-4xl font-bold">Kit<span className="text-[#FFE135]">Lists</span></h1>
         </div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-          <div className="text-4xl mb-4">📧</div>
+          
           <h2 className="text-white text-xl font-bold mb-2">Check your email</h2>
           <p className="text-zinc-400 text-sm mb-4">We sent a confirmation link to <span className="text-white font-medium">{email}</span></p>
           <p className="text-zinc-600 text-xs">Click the link in the email to confirm your account and get started.</p>

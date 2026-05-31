@@ -19,14 +19,16 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const [showBanner, setShowBanner] = useState(false)
 
   useEffect(() => {
-    if (!localStorage.getItem('kitlists-guide-dismissed')) {
+    // Show banner if profile doesn't have guide_dismissed set
+    if (!user?.guide_dismissed) {
       setShowBanner(true)
     }
   }, [])
 
-  const dismissBanner = () => {
-    localStorage.setItem('kitlists-guide-dismissed', '1')
+  const dismissBanner = async () => {
     setShowBanner(false)
+    const supabase = createClient()
+    await supabase.from('profiles').update({ guide_dismissed: true }).eq('id', user.id)
   }
 
 

@@ -7,7 +7,7 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from('profiles').select('full_name, company_name, company_logo_url').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('full_name, company_name, company_logo_url, guide_dismissed').eq('id', user.id).single()
 
   let logoUrl = null
   if (profile?.company_logo_url) {
@@ -65,7 +65,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardClient
-      user={{ ...user, full_name: profile?.full_name, company_name: profile?.company_name, logo_url: logoUrl }}
+      user={{ ...user, full_name: profile?.full_name, company_name: profile?.company_name, logo_url: logoUrl, guide_dismissed: profile?.guide_dismissed }}
       initialLists={lists || []}
       initialShares={shareCounts}
       collaboratedLists={collabListsData}
