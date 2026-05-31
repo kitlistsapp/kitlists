@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -92,6 +92,17 @@ export default function ProfilePage() {
     }).eq('id', uid)
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
+
+  // Auto-save debounce
+  const autoSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (!userId) return
+    if (autoSaveRef.current) clearTimeout(autoSaveRef.current)
+    autoSaveRef.current = setTimeout(() => {
+      saveProfile()
+    }, 1500)
+    return () => { if (autoSaveRef.current) clearTimeout(autoSaveRef.current) }
+  }, [fullName, phone, companyName, street1, street2, suburb, state, postcode, country, abn, camPrefs])
 
   const uploadLogo = async (file: File) => {
     const uid = userIdRef.current || userId
