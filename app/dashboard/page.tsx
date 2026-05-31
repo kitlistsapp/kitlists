@@ -15,6 +15,16 @@ export default async function DashboardPage() {
     if (signed) logoUrl = signed.signedUrl
   }
 
+  // Auto-archive lists past their post_return_date
+  const today = new Date().toISOString().split('T')[0]
+  await supabase
+    .from('gear_lists')
+    .update({ status: 'archived' })
+    .eq('owner_id', user.id)
+    .in('status', ['draft', 'sent'])
+    .lt('post_return_date', today)
+    .not('post_return_date', 'is', null)
+
   const { data: lists } = await supabase
     .from("gear_lists")
     .select("*, rental_houses(name), camera_pages(id), shoot_specs(format, resolution)")

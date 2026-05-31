@@ -75,6 +75,8 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
       role: newRole,
       view_mode: newMode
     })
+    // Auto-set list status to sent when first share link is created
+    await supabase.from('gear_lists').update({ status: 'sent' }).eq('id', listId).eq('status', 'draft')
     setNewEmail('')
     await loadShares(listId)
     setCreating(false)

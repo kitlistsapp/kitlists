@@ -15,7 +15,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const router = useRouter()
   const [lists, setLists] = useState(initialLists)
   const [shares] = useState(initialShares)
-  const [tab, setTab] = useState('active')
+  const [tab, setTab] = useState('draft')
 
 
   const updateStatus = async (id: string, status: string) => {
@@ -101,7 +101,6 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   }
 
   const filtered = lists.filter(l => {
-    if (tab === 'active') return ['draft', 'sent', 'confirmed'].includes(l.status)
     if (tab === 'archived') return l.status === 'archived'
     return l.status === tab
   })
@@ -114,10 +113,8 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   }
 
   const tabs = [
-    { key: 'active', label: 'Active', count: lists.filter(l => ['draft','sent','confirmed'].includes(l.status)).length },
     { key: 'draft', label: 'Draft', count: lists.filter(l => l.status === 'draft').length },
     { key: 'sent', label: 'Sent', count: lists.filter(l => l.status === 'sent').length },
-    { key: 'confirmed', label: 'Confirmed', count: lists.filter(l => l.status === 'confirmed').length },
     { key: 'archived', label: 'Archived', count: lists.filter(l => l.status === 'archived').length },
   ]
 
@@ -209,7 +206,7 @@ export default function DashboardClient({ user, initialLists, initialShares, col
                     </div>
                   </a>
                   <div className={"px-4 pb-3 flex gap-1.5 border-t flex-wrap pt-3 " + ('border-zinc-800')}>
-                    {list.status === 'draft' && <button onClick={() => updateStatus(list.id, 'sent')} className="text-xs bg-blue-900 hover:bg-blue-800 text-blue-300 px-3 py-1.5 rounded-lg transition-colors">Mark sent</button>}
+                    
                     {list.status === 'sent' && <button onClick={() => updateStatus(list.id, 'confirmed')} className="text-xs bg-green-900 hover:bg-green-800 text-green-300 px-3 py-1.5 rounded-lg transition-colors">Mark confirmed</button>}
                     {list.status !== 'archived' && <button onClick={() => updateStatus(list.id, 'archived')} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + ('bg-zinc-800 hover:bg-zinc-700 text-zinc-400')}>Archive</button>}
                     {list.status === 'archived' && <button onClick={() => updateStatus(list.id, 'draft')} className={"text-xs px-3 py-1.5 rounded-lg transition-colors " + ('bg-zinc-800 hover:bg-zinc-700 text-zinc-400')}>Restore</button>}
