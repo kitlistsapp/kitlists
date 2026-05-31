@@ -20,7 +20,8 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
     { data: files },
     { data: listLuts },
     { data: listItems },
-    { data: sectionNotesList }
+    { data: sectionNotesList },
+    { data: acContacts }
   ] = await Promise.all([
     supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order"),
     supabase.from("list_lenses").select("*").eq("list_id", id).order("sort_order"),
@@ -28,7 +29,8 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
     supabase.from("list_files").select("*").eq("list_id", id).order("created_at"),
     supabase.from("list_lut_files").select("*").eq("list_id", id).order("created_at"),
     supabase.from("list_items").select("*, equipment_items(name, subcategory, category)").eq("list_id", id).order("sort_order"),
-    supabase.from("list_section_notes").select("*").eq("list_id", id)
+    supabase.from("list_section_notes").select("*").eq("list_id", id),
+    supabase.from("contacts").select("*").eq("owner_id", user.id).eq("role", "1st AC").order("full_name")
   ])
 
   const powerItems = (listItems || []).filter((i: any) => i.section === "power")
@@ -116,7 +118,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
           <div className="flex gap-2 flex-wrap mt-4">
             <a href={`/lists/${id}/share`} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm transition-colors">Share</a>
             <a href={`/lists/${id}/edit`} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-4 py-2 rounded-lg text-sm transition-colors">Edit details</a>
-            <InviteCollaborator listId={id} />
+            <InviteCollaborator listId={id} contacts={acContacts || []} />
             <SaveAsTemplate listId={id} />
           </div>
         </div>
