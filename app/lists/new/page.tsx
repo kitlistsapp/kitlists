@@ -286,21 +286,21 @@ export default function NewListPage() {
             <label className="text-zinc-400 text-sm mb-1.5 block">Project name <span className="text-[#FFE135]">*</span></label>
             <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)}
               placeholder="e.g. Heartbreak High S3"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+              className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Production company</label>
             <input type="text" value={productionCo} onChange={e => setProductionCo(e.target.value)}
               placeholder="e.g. Fremantle Australia"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+              className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
           </div>
 
           <div>
             <label className="text-zinc-400 text-sm mb-1.5 block">Director</label>
             <input type="text" value={directorName} onChange={e => setDirectorName(e.target.value)}
               placeholder="e.g. Sandy Doe"
-              className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+              className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
           </div>
 
           <div>
@@ -316,32 +316,32 @@ export default function NewListPage() {
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Testing date</label>
                 <input type="date" value={testingDate} onChange={e => setTestingDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+                  className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Pre-light date</label>
                 <input type="date" value={preLightDate} onChange={e => setPreLightDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+                  className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Gear check date</label>
                 <input type="date" value={gearCheckDate} onChange={e => setGearCheckDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+                  className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot start date</label>
                 <input type="date" value={shootStart} onChange={e => setShootStart(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+                  className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Shoot days</label>
                 <input type="number" min="1" value={shootDays} onChange={e => setShootDays(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+                  className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
               </div>
               <div>
                 <label className="text-zinc-400 text-sm mb-1.5 block">Post / return date</label>
                 <input type="date" value={postReturnDate} onChange={e => setPostReturnDate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark]" />
+                  className="w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none" />
               </div>
             </div>
           </div>

@@ -120,7 +120,7 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
   }
 
   const inputClass = "w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]"
-  const dateClass = inputClass + " [color-scheme:dark]"
+  const dateClass = "w-full min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFE135] [color-scheme:dark] appearance-none"
 
   return (
     <div className="min-h-screen bg-black text-white">
