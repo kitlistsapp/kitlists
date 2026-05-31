@@ -89,13 +89,13 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
   const [qtyWarning, setQtyWarning] = useState(false)
   const [allItems, setAllItems] = useState<Item[]>([])
   const [sectionEntries, setSectionEntries] = useState<Record<string, Entry[]>>({
-    'Camera Plates': [{ id: 'cp1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
-    'Onboard Monitors': [{ id: 'om1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
-    'Mattebox': [{ id: 'mb1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
-    'Lens Control': [{ id: 'lc1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
-    "Director's Viewfinder": [{ id: 'dv1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
-    'Rangefinder': [{ id: 'rf1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
-    'Misc': [{ id: 'mi1', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }],
+    'Camera Plates': [],
+    'Onboard Monitors': [],
+    'Mattebox': [],
+    'Lens Control': [],
+    "Director's Viewfinder": [],
+    'Rangefinder': [],
+    'Misc': [],
   })
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   const isSavingRef = useRef(false)
@@ -138,7 +138,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
         newSections[sec].push({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity || 1, source: i.source || 'rental', notes: i.notes || '' })
       }
       for (const sec of Object.keys(SECTION_SUBCATS)) {
-        if (newSections[sec].length === 0) newSections[sec] = [{ id: sec + '_blank', itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }]
+        if (!newSections[sec]) newSections[sec] = []
       }
       setSectionEntries(newSections)
     }
@@ -186,9 +186,7 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
   const removeEntry = (section: string, id: string) => {
     setSectionEntries(prev => ({
       ...prev,
-      [section]: prev[section].filter(e => e.id !== id).length > 0
-        ? prev[section].filter(e => e.id !== id)
-        : [{ id: section + '_blank_' + Date.now(), itemId: '', itemName: '', quantity: 1, source: 'rental', notes: '' }]
+      [section]: prev[section].filter(e => e.id !== id)
     }))
   }
   const addEntry = (section: string) => {
@@ -217,11 +215,13 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
                     onChange={(id, name) => { updateEntry(section, entry.id, 'itemId', id); updateEntry(section, entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
                     placeholder={"Search " + section.toLowerCase() + "..."} />
                 </div>
-                <input type="number" min="1"
-                  value={entry.quantity === 0 ? '' : entry.quantity}
-                  onChange={e => { updateEntry(section, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
-                  className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
-                <button onClick={() => removeEntry(section, entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+                {entry.itemId && (
+                  <input type="number" min="1"
+                    value={entry.quantity === 0 ? '' : entry.quantity}
+                    onChange={e => { updateEntry(section, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
+                    className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+                )}
+                <button onClick={() => removeEntry(section, entry.id)} className={"text-lg " + (entry.itemId ? "text-zinc-600 hover:text-red-400" : "text-zinc-700 hover:text-zinc-400")}>×</button>
               </div>
               {entry.itemId && (
                 <div className="ml-1 mt-1.5 space-y-1.5">
