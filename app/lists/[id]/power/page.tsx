@@ -111,9 +111,9 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     const ob = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
     const bl = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
     const ac = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'acdc').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
-    setOnboardEntries(ob.length > 0 ? ob : [{ id: 'ob1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-    setBlockEntries(bl.length > 0 ? bl : [{ id: 'bl1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-    setAcdcEntries(ac.length > 0 ? ac : [{ id: 'ac1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+    setOnboardEntries(ob)
+    setBlockEntries(bl)
+    setAcdcEntries(ac)
   }
 
   useEffect(() => { onboardRef.current = onboardEntries }, [onboardEntries])
@@ -184,11 +184,13 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
                   onChange={(id, name) => { updateEntry(setFn, entry.id, 'itemId', id); updateEntry(setFn, entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
                   placeholder={"Search " + label.toLowerCase() + "..."} />
               </div>
-              <input type="number" min="1" placeholder="Qty"
-                value={entry.quantity === 0 ? '' : entry.quantity}
-                onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
-                className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
-              <button onClick={() => removeEntry(setFn, entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+              {entry.itemId && (
+                <input type="number" min="1" placeholder="Qty"
+                  value={entry.quantity === 0 ? '' : entry.quantity}
+                  onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
+                  className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+              )}
+              <button onClick={() => removeEntry(setFn, entry.id)} className={"text-lg " + (entry.itemId ? "text-zinc-600 hover:text-red-400" : "text-zinc-700 hover:text-zinc-400")}>×</button>
             </div>
             {entry.itemId && (
               <div className="flex gap-1 mt-1.5 ml-1">

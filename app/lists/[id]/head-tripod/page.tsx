@@ -118,7 +118,7 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
     if (existing && existing.length > 0) {
       setEntries(existing.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })))
     } else {
-      setEntries([{ id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+      setEntries([])
     }
   }
 
@@ -183,11 +183,13 @@ export default function HeadTripodPage({ params }: { params: Promise<{ id: strin
                     onChange={(id, name) => { update(entry.id, 'itemId', id); update(entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
                     placeholder="Search heads & legs..." />
                 </div>
-                <input type="number" min="1" placeholder="Qty"
-                  value={entry.quantity === 0 ? '' : entry.quantity}
-                  onChange={e => { update(entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
-                  className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
-                <button onClick={() => remove(entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+                {entry.itemId && (
+                  <input type="number" min="1" placeholder="Qty"
+                    value={entry.quantity === 0 ? '' : entry.quantity}
+                    onChange={e => { update(entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
+                    className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+                )}
+                <button onClick={() => remove(entry.id)} className={"text-lg " + (entry.itemId ? "text-zinc-600 hover:text-red-400" : "text-zinc-700 hover:text-zinc-400")}>×</button>
               </div>
               {entry.itemId && (
                 <div className="mt-1.5 ml-1 space-y-1.5">

@@ -88,8 +88,8 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
   const [qtyWarning, setQtyWarning] = useState(false)
   const [psrItems, setPsrItems] = useState<Item[]>([])
   const [sixItems, setSixItems] = useState<Item[]>([])
-  const [psrEntries, setPsrEntries] = useState<Entry[]>([{ id: 'psr1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-  const [sixEntries, setSixEntries] = useState<Entry[]>([{ id: 'six1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+  const [psrEntries, setPsrEntries] = useState<Entry[]>([])
+  const [sixEntries, setSixEntries] = useState<Entry[]>([])
   const [sectionNotes, setSectionNotes] = useState('')
   const [notesId, setNotesId] = useState<string | null>(null)
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
@@ -130,8 +130,8 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
       const toEntry = (i: any): Entry => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })
       const psrRows = existing.filter((i: any) => psrCats.includes(i.equipment_items?.category)).map(toEntry)
       const sixRows = existing.filter((i: any) => sixCats.includes(i.equipment_items?.category)).map(toEntry)
-      setPsrEntries(psrRows.length > 0 ? psrRows : [{ id: 'psr1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-      setSixEntries(sixRows.length > 0 ? sixRows : [{ id: 'six1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+      setPsrEntries(psrRows)
+      setSixEntries(sixRows)
     }
   }
 
@@ -176,13 +176,10 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
   }
 
   const updateEntry = (setFn: any, id: string, field: string, value: any) => setFn((prev: Entry[]) => prev.map((e: Entry) => e.id === id ? { ...e, [field]: value } : e))
-  const removeEntry = (setFn: any, id: string, blankId: string) => setFn((prev: Entry[]) => {
-    const next = prev.filter((e: Entry) => e.id !== id)
-    return next.length > 0 ? next : [{ id: blankId, itemId: '', itemName: '', quantity: 1, source: 'rental' }]
-  })
+  const removeEntry = (setFn: any, id: string) => setFn((prev: Entry[]) => prev.filter((e: Entry) => e.id !== id))
   const addEntry = (setFn: any) => setFn((prev: Entry[]) => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' }])
 
-  const renderSection = (label: string, entries: Entry[], setFn: any, items: Item[], blankId: string) => (
+  const renderSection = (label: string, entries: Entry[], setFn: any, items: Item[]) => (
     <div className="mb-6 last:mb-0">
       <h4 className="text-zinc-500 text-xs uppercase tracking-widest mb-3">{label}</h4>
       <div className="space-y-3">
@@ -194,11 +191,13 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
                   onChange={(id, name) => { updateEntry(setFn, entry.id, 'itemId', id); updateEntry(setFn, entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
                   placeholder={"Search " + label + "..."} />
               </div>
-              <input type="number" min="1"
-                value={entry.quantity === 0 ? '' : entry.quantity}
-                onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
-                className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
-              <button onClick={() => removeEntry(setFn, entry.id, blankId + '_' + Date.now())} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+              {entry.itemId && (
+                <input type="number" min="1"
+                  value={entry.quantity === 0 ? '' : entry.quantity}
+                  onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
+                  className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+              )}
+              <button onClick={() => removeEntry(setFn, entry.id)} className={"text-lg " + (entry.itemId ? "text-zinc-600 hover:text-red-400" : "text-zinc-700 hover:text-zinc-400")}>×</button>
             </div>
             {entry.itemId && (
               <div className="flex gap-1 mt-1.5 ml-1">
@@ -214,7 +213,7 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
         ))}
       </div>
       <button onClick={() => addEntry(setFn)} className="mt-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-2 rounded-lg transition-colors">
-        + Add another
+        + Add filter
       </button>
     </div>
   )
@@ -236,8 +235,8 @@ export default function FiltrationPage({ params }: { params: Promise<{ id: strin
         <h2 className="text-2xl font-bold mb-2">Filtration</h2>
         <p className="text-zinc-500 text-sm mb-6">NDs, diffusion, polarisers and optical filters</p>
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-          {renderSection('4x5.65" / PSR', psrEntries, setPsrEntries, psrItems, 'psr')}
-          {renderSection('6x6"', sixEntries, setSixEntries, sixItems, 'six')}
+          {renderSection('4x5.65" / PSR', psrEntries, setPsrEntries, psrItems)}
+          {renderSection('6x6"', sixEntries, setSixEntries, sixItems)}
         </div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Section notes</h3>

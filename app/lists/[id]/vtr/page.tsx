@@ -67,9 +67,9 @@ export default function VTRPage({ params }: { params: Promise<{ id: string }> })
   const [qtyWarning, setQtyWarning] = useState(false)
   const [allItems, setAllItems] = useState<Item[]>([])
   const blankEntry = (): Entry => ({ id: Date.now().toString() + Math.random(), itemId: '', itemName: '', quantity: 1, source: 'rental' })
-  const [transmissionEntries, setTransmissionEntries] = useState<Entry[]>([{ id: 't1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-  const [monitorEntries, setMonitorEntries] = useState<Entry[]>([{ id: 'm1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-  const [recorderEntries, setRecorderEntries] = useState<Entry[]>([{ id: 'r1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+  const [transmissionEntries, setTransmissionEntries] = useState<Entry[]>([])
+  const [monitorEntries, setMonitorEntries] = useState<Entry[]>([])
+  const [recorderEntries, setRecorderEntries] = useState<Entry[]>([])
   const [sectionNotes, setSectionNotes] = useState('')
   const [notesId, setNotesId] = useState<string | null>(null)
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
@@ -109,9 +109,9 @@ export default function VTRPage({ params }: { params: Promise<{ id: string }> })
       const tr = existing.filter((i: any) => i.equipment_items?.subcategory === 'transmission').map(toEntry)
       const mo = existing.filter((i: any) => i.equipment_items?.subcategory === 'director_monitors').map(toEntry)
       const re = existing.filter((i: any) => i.equipment_items?.subcategory === 'recorders').map(toEntry)
-      setTransmissionEntries(tr.length > 0 ? tr : [{ id: 't1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-      setMonitorEntries(mo.length > 0 ? mo : [{ id: 'm1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
-      setRecorderEntries(re.length > 0 ? re : [{ id: 'r1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+      setTransmissionEntries(tr)
+      setMonitorEntries(mo)
+      setRecorderEntries(re)
     }
   }
 
@@ -177,11 +177,13 @@ export default function VTRPage({ params }: { params: Promise<{ id: string }> })
                   onChange={(id, name) => { updateEntry(setFn, entry.id, 'itemId', id); updateEntry(setFn, entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
                   placeholder={"Search " + label.toLowerCase() + "..."} />
               </div>
-              <input type="number" min="1"
-                value={entry.quantity === 0 ? '' : entry.quantity}
-                onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
-                className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
-              <button onClick={() => removeEntry(setFn, entry.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+              {entry.itemId && (
+                <input type="number" min="1"
+                  value={entry.quantity === 0 ? '' : entry.quantity}
+                  onChange={e => { updateEntry(setFn, entry.id, 'quantity', parseInt(e.target.value) || 0); triggerAutoSave(1000) }}
+                  className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+              )}
+              <button onClick={() => removeEntry(setFn, entry.id)} className={"text-lg " + (entry.itemId ? "text-zinc-600 hover:text-red-400" : "text-zinc-700 hover:text-zinc-400")}>×</button>
             </div>
             {entry.itemId && (
               <div className="flex gap-1 mt-1.5 ml-1">

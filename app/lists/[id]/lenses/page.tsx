@@ -141,7 +141,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     if (existingZoom && existingZoom.length > 0) {
       setZoomControllers(existingZoom.map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || '', quantity: i.quantity || 1, source: i.source || 'rental' })))
     } else {
-      setZoomControllers([{ id: 'zc1', itemId: '', itemName: '', quantity: 1, source: 'rental' }])
+      setZoomControllers([])
     }
   }
 
@@ -467,12 +467,14 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                       placeholder="Search zoom controllers..."
                     />
                   </div>
-                  <input type="number" min="1"
-                    value={entry.quantity === 0 ? '' : entry.quantity}
-                    onChange={e => { setZoomControllers(prev => prev.map(z => z.id === entry.id ? { ...z, quantity: parseInt(e.target.value) || 0 } : z)); triggerAutoSave(1000) }}
-                    className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
-                  <button onClick={() => setZoomControllers(prev => prev.filter(z => z.id !== entry.id).length > 0 ? prev.filter(z => z.id !== entry.id) : [{ id: 'zc_blank', itemId: '', itemName: '', quantity: 1, source: 'rental' }])}
-                    className="text-zinc-600 hover:text-red-400 text-lg">×</button>
+                  {entry.itemId && (
+                    <input type="number" min="1"
+                      value={entry.quantity === 0 ? '' : entry.quantity}
+                      onChange={e => { setZoomControllers(prev => prev.map(z => z.id === entry.id ? { ...z, quantity: parseInt(e.target.value) || 0 } : z)); triggerAutoSave(1000) }}
+                      className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
+                  )}
+                  <button onClick={() => setZoomControllers(prev => prev.filter(z => z.id !== entry.id))}
+                    className={"text-lg " + (entry.itemId ? "text-zinc-600 hover:text-red-400" : "text-zinc-700 hover:text-zinc-400")}>×</button>
                 </div>
                 {entry.itemId && (
                   <div className="flex gap-1 mt-1.5 ml-1">
@@ -489,7 +491,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
           </div>
           <button onClick={() => setZoomControllers(prev => [...prev, { id: Date.now().toString(), itemId: '', itemName: '', quantity: 1, source: 'rental' }])}
             className="mt-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-2 rounded-lg transition-colors">
-            + Add another
+            + Add zoom controller
           </button>
         </div>
 
