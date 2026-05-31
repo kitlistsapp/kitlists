@@ -149,11 +149,18 @@ export default function DashboardClient({ user, initialLists, initialShares, col
             {user?.logo_url && (
               <img src={user.logo_url} alt="Logo" className="w-7 h-7 rounded-lg object-contain bg-zinc-800 p-0.5 border border-zinc-700" />
             )}
-            <div className="text-right hidden sm:block">
-              {user?.full_name && <p className={"text-sm font-medium transition-colors " + ('text-zinc-300 group-hover:text-white')}>{user.full_name}</p>}
-              {user?.company_name && <p className={"text-xs transition-colors " + ('text-zinc-500 group-hover:text-zinc-400')}>{user.company_name}</p>}
+            <div className="text-right">
+              {user?.full_name
+                ? <>
+                    <p className={"text-sm font-medium transition-colors " + ('text-zinc-300 group-hover:text-white')}>
+                      <span className="hidden sm:inline">{user.full_name}</span>
+                      <span className="sm:hidden">My Profile</span>
+                    </p>
+                    {user?.company_name && <p className={"text-xs transition-colors hidden sm:block " + ('text-zinc-500 group-hover:text-zinc-400')}>{user.company_name}</p>}
+                  </>
+                : <span className={"text-sm transition-colors " + ('text-zinc-400 group-hover:text-white')}>My Profile</span>
+              }
             </div>
-            {!user?.full_name && <span className={"text-sm transition-colors " + ('text-zinc-400 hover:text-white')}>My Profile</span>}
           </a>
 
           <a href="/auth/signout" className={"text-sm transition-colors " + ('text-zinc-400 hover:text-white')}>Sign out</a>
