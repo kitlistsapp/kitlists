@@ -41,6 +41,58 @@ function RentalHousePicker({ houses, value, onChange }: {
   )
 }
 
+
+function TemplatePicker({ templates, value, onChange }: {
+  templates: any[]; value: string; onChange: (id: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const selected = templates.find(t => t.id === value)
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" onClick={() => setOpen(!open)}
+        className="w-full bg-zinc-800 border border-zinc-700 text-left rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] flex items-center justify-between">
+        <span className={selected ? 'text-white' : 'text-zinc-500'}>
+          {selected ? (() => {
+            const snap = selected.snapshot
+            const camCount = snap?.cameras?.length || 0
+            const lensCount = snap?.lensRows?.length || 0
+            const itemCount = snap?.listItems?.length || 0
+            return `${selected.name} — ${camCount} camera${camCount !== 1 ? 's' : ''}${lensCount > 0 ? `, ${lensCount} lenses` : ''}${itemCount > 0 ? `, ${itemCount} items` : ''}`
+          })() : 'Select a template...'}
+        </span>
+        <svg className="w-4 h-4 text-zinc-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden">
+          <button type="button" onClick={() => { onChange(''); setOpen(false) }}
+            className="w-full text-left px-4 py-2.5 text-sm text-zinc-500 hover:bg-zinc-800 border-b border-zinc-800">
+            Select a template...
+          </button>
+          {templates.map(t => {
+            const snap = t.snapshot
+            const camCount = snap?.cameras?.length || 0
+            const lensCount = snap?.lensRows?.length || 0
+            const itemCount = snap?.listItems?.length || 0
+            return (
+              <button type="button" key={t.id} onClick={() => { onChange(t.id); setOpen(false) }}
+                className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (value === t.id ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-800')}>
+                <span className="font-medium">{t.name}</span>
+                <span className="text-zinc-500 ml-2 text-xs">{camCount} camera{camCount !== 1 ? 's' : ''}{lensCount > 0 ? `, ${lensCount} lenses` : ''}{itemCount > 0 ? `, ${itemCount} items` : ''}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function NewListPage() {
   const router = useRouter()
   const supabase = createClient()
@@ -55,6 +107,7 @@ export default function NewListPage() {
   const [shootStart, setShootStart] = useState("")
   const [shootDays, setShootDays] = useState("")
   const [numCameras, setNumCameras] = useState("1")
+  const [extraCameras, setExtraCameras] = useState("0")
   const [rentalHouse, setRentalHouse] = useState("")
   // const [rentalHouses, setRentalHouses] = useState<any[]>([])
   const [directorName, setDirectorName] = useState("")
@@ -120,17 +173,24 @@ export default function NewListPage() {
             }
           }
         }
-        if (snap.lenses) {
-          const { data: newLenses } = await supabase.from('list_lenses').insert({
-            list_id: list.id, prime_set_id: snap.lenses.prime_set_id,
-            focal_lengths: snap.lenses.focal_lengths, zoom_controller: snap.lenses.zoom_controller,
-            source: snap.lenses.source
-          }).select().single()
-          if (newLenses && snap.lenses.list_lens_zooms?.length > 0) {
-            await supabase.from('list_lens_zooms').insert(snap.lenses.list_lens_zooms.map((z: any) => ({
-              list_lens_id: newLenses.id, item_id: z.item_id, source: z.source
-            })))
-          }
+        if (snap.lensRows?.length > 0) {
+          await supabase.from('list_lenses').insert(snap.lensRows.map((l: any) => ({
+            list_id: list.id, category: l.category, manufacturer: l.manufacturer,
+            series: l.series, focal_length: l.focal_length, source: l.source, sort_order: l.sort_order
+          })))
+        }
+        if (snap.listItems?.length > 0) {
+          const { data: { user } } = await supabase.auth.getUser()
+          await supabase.from('list_items').insert(snap.listItems.map((i: any) => ({
+            list_id: list.id, owner_id: user?.id, section: i.section, item_id: i.item_id,
+            custom_label: i.custom_label, source: i.source, quantity: i.quantity, sort_order: i.sort_order
+          })))
+        }
+        if (snap.sectionNotes?.length > 0) {
+          const { data: { user } } = await supabase.auth.getUser()
+          await supabase.from('list_section_notes').insert(snap.sectionNotes.map((n: any) => ({
+            list_id: list.id, owner_id: user?.id, section: n.section, notes: n.notes
+          })))
         }
         if (snap.misc?.length > 0) {
           await supabase.from('list_misc_items').insert(snap.misc.map((i: any) => ({
@@ -150,6 +210,16 @@ export default function NewListPage() {
         list_id: list.id, label: cameraLabels[i], sort_order: i
       }))
       await supabase.from("camera_pages").insert(cameras)
+    }
+
+    // Add extra cameras beyond template
+    if (mode === 'template' && selectedTemplate && parseInt(extraCameras) > 0) {
+      const tmpl = templates.find(t => t.id === selectedTemplate)
+      const templateCamCount = tmpl?.snapshot?.cameras?.length || 0
+      const extraCams = Array.from({ length: parseInt(extraCameras) }, (_, i) => ({
+        list_id: list.id, label: cameraLabels[templateCamCount + i], sort_order: templateCamCount + i
+      }))
+      await supabase.from('camera_pages').insert(extraCams)
     }
 
     router.push("/lists/" + list.id)
@@ -184,11 +254,30 @@ export default function NewListPage() {
                 </button>
               </div>
               {mode === 'template' && (
-                <select value={selectedTemplate} onChange={e => setSelectedTemplate(e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]">
-                  <option value="">Select a template...</option>
-                  {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                </select>
+                <div className="space-y-3">
+                  <TemplatePicker templates={templates} value={selectedTemplate} onChange={setSelectedTemplate} />
+                  {selectedTemplate && (() => {
+                    const tmpl = templates.find(t => t.id === selectedTemplate)
+                    const snap = tmpl?.snapshot
+                    if (!snap) return null
+                    const camCount = snap.cameras?.length || 0
+                    const lensCount = snap.lensRows?.length || 0
+                    const sections = ['power','filtration','aks','head_tripod','grip','vtr'].filter(s =>
+                      (snap.listItems || []).some((i: any) => i.section === s)
+                    )
+                    return (
+                      <div className="bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 space-y-1">
+                        <p className="text-xs text-zinc-400 uppercase tracking-widest mb-2">Template includes</p>
+                        {camCount > 0 && <p className="text-sm text-zinc-300">{camCount} camera{camCount !== 1 ? 's' : ''}</p>}
+                        {lensCount > 0 && <p className="text-sm text-zinc-300">{lensCount} lenses</p>}
+                        {sections.map(s => (
+                          <p key={s} className="text-sm text-zinc-300 capitalize">{s.replace('_', ' & ')}</p>
+                        ))}
+                        {snap.specs && <p className="text-sm text-zinc-300">Shoot specs</p>}
+                      </div>
+                    )
+                  })()}
+                </div>
               )}
             </div>
           )}
@@ -275,6 +364,33 @@ export default function NewListPage() {
                 </p>
               </div>
             )}
+            {mode === 'template' && selectedTemplate && (() => {
+              const tmpl = templates.find(t => t.id === selectedTemplate)
+              const templateCamCount = tmpl?.snapshot?.cameras?.length || 0
+              const totalCams = templateCamCount + parseInt(extraCameras || '0')
+              return (
+                <div>
+                  <p className="text-zinc-400 text-sm mb-3">
+                    Template includes <span className="text-white font-medium">{templateCamCount} camera{templateCamCount !== 1 ? 's' : ''}</span>
+                    {' '}({Array.from({ length: templateCamCount }, (_, i) => cameraLabels[i]).join(', ')})
+                  </p>
+                  <label className="text-zinc-400 text-sm mb-2 block">Add extra cameras?</label>
+                  <div className="flex gap-2 flex-wrap">
+                    {[0,1,2,3,4].map(n => (
+                      <button key={n} onClick={() => setExtraCameras(String(n))}
+                        className={"w-12 h-12 rounded-lg text-sm font-semibold transition-colors " + (extraCameras === String(n) ? "bg-[#FFE135] text-black" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700")}>
+                        {n === 0 ? 'None' : '+' + n}
+                      </button>
+                    ))}
+                  </div>
+                  {parseInt(extraCameras) > 0 && (
+                    <p className="text-zinc-600 text-xs mt-2">
+                      Extra: {Array.from({ length: parseInt(extraCameras) }, (_, i) => cameraLabels[templateCamCount + i]).join(', ')}
+                    </p>
+                  )}
+                </div>
+              )
+            })()}
           </div>
 
           {error && <p className="text-red-400 text-sm">{error}</p>}

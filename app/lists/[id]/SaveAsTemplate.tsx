@@ -17,16 +17,17 @@ export default function SaveAsTemplate({ listId }: { listId: string }) {
     if (!user) return
 
     const { data: list } = await supabase.from('gear_lists').select('*').eq('id', listId).single()
-    const { data: cameras } = await supabase.from('camera_pages').select('*').eq('list_id', listId)
+    const { data: cameras } = await supabase.from('camera_pages').select('*').eq('list_id', listId).order('sort_order')
     const camData = await Promise.all((cameras || []).map(async (cam: any) => {
       const { data: items } = await supabase.from('camera_page_items').select('*').eq('page_id', cam.id)
       return { ...cam, items: items || [] }
     }))
-    const { data: lenses } = await supabase.from('list_lenses').select('*, list_lens_zooms(*)').eq('list_id', listId).maybeSingle()
-    const { data: misc } = await supabase.from('list_misc_items').select('*').eq('list_id', listId)
+    const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', listId).order('sort_order')
+    const { data: listItems } = await supabase.from('list_items').select('*').eq('list_id', listId).order('sort_order')
+    const { data: sectionNotes } = await supabase.from('list_section_notes').select('*').eq('list_id', listId)
     const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', listId).maybeSingle()
 
-    const snapshot = { list, cameras: camData, lenses, misc, specs }
+    const snapshot = { list, cameras: camData, lensRows: lensRows || [], listItems: listItems || [], sectionNotes: sectionNotes || [], specs }
 
     const { error } = await supabase.from('templates').insert({
       owner_id: user.id,
