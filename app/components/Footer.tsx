@@ -13,6 +13,7 @@ export default async function Footer() {
           Kit<span className="text-[#FFE135]">Lists</span>
         </span>
         <div className="flex items-center gap-5">
+          <a href="/getting-started" className="text-xs text-zinc-500 hover:text-white transition-colors">Getting started</a>
           <a href="/feedback" className="text-xs text-zinc-500 hover:text-white transition-colors">Share feedback</a>
           <a href="/contact" className="text-xs text-zinc-500 hover:text-white transition-colors">Contact us</a>
         </div>

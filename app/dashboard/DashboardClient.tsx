@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -16,6 +16,18 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const [lists, setLists] = useState(initialLists)
   const [shares] = useState(initialShares)
   const [tab, setTab] = useState('draft')
+  const [showBanner, setShowBanner] = useState(false)
+
+  useEffect(() => {
+    if (!localStorage.getItem('kitlists-guide-dismissed')) {
+      setShowBanner(true)
+    }
+  }, [])
+
+  const dismissBanner = () => {
+    localStorage.setItem('kitlists-guide-dismissed', '1')
+    setShowBanner(false)
+  }
 
 
   const updateStatus = async (id: string, status: string) => {
@@ -147,6 +159,25 @@ export default function DashboardClient({ user, initialLists, initialShares, col
       </nav>
 
       <main className="max-w-5xl mx-auto px-4 py-6 flex-1 w-full">
+
+        {showBanner && (
+          <div className="mb-6 bg-zinc-900 border border-[#FFE135]/30 rounded-xl px-5 py-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div>
+                <p className="text-white text-sm font-medium">New to KitLists?</p>
+                <p className="text-zinc-400 text-xs mt-0.5">Check out the quick start guide to get up and running in minutes.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <a href="/getting-started" className="bg-[#FFE135] hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-lg text-xs transition-colors">
+                View guide
+              </a>
+              <button onClick={dismissBanner} className="text-zinc-600 hover:text-zinc-400 text-xs transition-colors">
+                Dismiss
+              </button>
+            </div>
+          </div>
+        )}
         <div className="flex items-center justify-between mb-5">
           <div>
             <h2 className="text-xl font-bold">My Gear Lists</h2>
