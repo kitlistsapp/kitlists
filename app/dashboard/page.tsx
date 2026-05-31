@@ -15,31 +15,43 @@ export default async function DashboardPage() {
     if (signed) logoUrl = signed.signedUrl
   }
 
-  // Auto-archive lists past their post_return_date
+  // Auto-archive lists past their post_return_date (fire and forget)
   const today = new Date().toISOString().split('T')[0]
-  await supabase
+  supabase
     .from('gear_lists')
     .update({ status: 'archived' })
     .eq('owner_id', user.id)
     .in('status', ['draft', 'sent'])
     .lt('post_return_date', today)
     .not('post_return_date', 'is', null)
+    .then(() => {})
 
-  const { data: lists } = await supabase
-    .from("gear_lists")
-    .select("*, rental_houses(name), camera_pages(id), shoot_specs(format, resolution)")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: false })
+  // Fetch all dashboard data in parallel
+  const [
+    { data: lists },
+    { data: shares },
+    { data: invites },
+    { data: collaboratedLists }
+  ] = await Promise.all([
+    supabase
+      .from("gear_lists")
+      .select("*, rental_houses(name), camera_pages(id), shoot_specs(format, resolution)")
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: false }),
+    supabase.from('list_shares').select('list_id'),
+    supabase
+      .from('list_collaborators')
+      .select('list_id, invited_email, accepted_at')
+      .eq('invited_by', user.id),
+    supabase
+      .from('list_collaborators')
+      .select('*, gear_lists(*, rental_houses(name), camera_pages(id), shoot_specs(format, resolution), profiles(full_name, company_name))')
+      .eq('collaborator_id', user.id)
+      .not('accepted_at', 'is', null)
+  ])
 
-  const { data: shares } = await supabase.from('list_shares').select('list_id')
   const shareCounts: Record<string, number> = {}
   if (shares) shares.forEach((s: any) => { shareCounts[s.list_id] = (shareCounts[s.list_id] || 0) + 1 })
-
-  // Invites sent by this user (1st AC invites)
-  const { data: invites } = await supabase
-    .from('list_collaborators')
-    .select('list_id, invited_email, accepted_at')
-    .eq('invited_by', user.id)
 
   const inviteMap: Record<string, { email: string, accepted: boolean }[]> = {}
   if (invites) {
@@ -48,13 +60,6 @@ export default async function DashboardPage() {
       inviteMap[inv.list_id].push({ email: inv.invited_email, accepted: !!inv.accepted_at })
     })
   }
-
-  // Lists shared with this user as collaborator
-  const { data: collaboratedLists } = await supabase
-    .from('list_collaborators')
-    .select('*, gear_lists(*, rental_houses(name), camera_pages(id), shoot_specs(format, resolution), profiles(full_name, company_name))')
-    .eq('collaborator_id', user.id)
-    .not('accepted_at', 'is', null)
 
   const collabListsData = (collaboratedLists || []).map((c: any) => ({ ...c.gear_lists, _collab: true, _invitedBy: c.gear_lists?.profiles }))
 
