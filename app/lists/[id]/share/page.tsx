@@ -1,6 +1,39 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+function ContactPicker({ contacts, onSelect }: { contacts: any[], onSelect: (c: any) => void }) {
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState<any>(null)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" onClick={() => setOpen(!open)}
+        className="w-full bg-zinc-800 border border-zinc-700 text-left rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] flex items-center justify-between">
+        <span className={selected ? 'text-white' : 'text-zinc-500'}>
+          {selected ? `${selected.full_name}${selected.email ? ' — ' + selected.email : ''}` : 'Pick from saved contacts…'}
+        </span>
+        <svg className="w-4 h-4 text-zinc-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl overflow-hidden">
+          {contacts.map(c => (
+            <button type="button" key={c.id} onClick={() => { setSelected(c); onSelect(c); setOpen(false) }}
+              className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (selected?.id === c.id ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-800')}>
+              <span className="font-medium">{c.full_name}</span>
+              {c.email && <span className="text-zinc-500 ml-2 text-xs">{c.email}</span>}
+              {c.role && <span className="text-zinc-600 ml-2 text-xs">({c.role})</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 import { createClient } from "@/lib/supabase/client"
 
 export default function SharePage({ params }: { params: Promise<{ id: string }> }) {
@@ -19,11 +52,19 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
   const [sent, setSent] = useState<string | null>(null)
   const [listName, setListName] = useState('')
   const [listSchedule, setListSchedule] = useState<any>(null)
+  const [contacts, setContacts] = useState<any[]>([])
   const [dopName, setDopName] = useState('')
   const [companyName, setCompanyName] = useState('')
 
   useEffect(() => {
     params.then(p => { setListId(p.id); loadShares(p.id); loadListInfo(p.id) })
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        supabase.from('contacts').select('*').eq('owner_id', data.user.id).order('full_name').then(({ data: c }) => {
+          if (c) setContacts(c)
+        })
+      }
+    })
   }, [])
 
   const loadShares = async (lid: string) => {
@@ -119,8 +160,16 @@ export default function SharePage({ params }: { params: Promise<{ id: string }> 
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Create new share link</h3>
 
           <div className="space-y-4">
-            <div>
-              <label className="text-zinc-400 text-sm mb-1.5 block">Recipient email (optional)</label>
+            <div className="space-y-2">
+              <label className="text-zinc-400 text-sm block">Recipient email (optional)</label>
+              {contacts.length > 0 && (
+                <ContactPicker contacts={contacts} onSelect={(contact: any) => {
+                  setNewEmail(contact.email || '')
+                  if (contact.role === 'Rental House') { setNewRole('rental'); setNewMode('full') }
+                  else if (contact.role === '1st AC') { setNewRole('ac'); setNewMode('full') }
+                  else if (contact.role === 'Production') { setNewRole('production'); setNewMode('production_clean') }
+                }} />
+              )}
               <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)}
                 placeholder="e.g. rentals@southerncrosscameras.com"
                 className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135]" />
