@@ -77,7 +77,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
         <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
           {items.map((i: any) => (
             <div key={i.id} className="flex items-center gap-1.5">
-              <span className="text-zinc-400 text-xs">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ""}{i.notes ? ` · ${i.notes}` : ""}</span>
+              <span className="text-zinc-400 text-xs">{i.custom_label || i.equipment_items?.name}{i.quantity > 1 ? ` x${i.quantity}` : ""}{i.notes ? ` · ${i.notes}` : ""}</span>
               {badge(i.source)}
             </div>
           ))}

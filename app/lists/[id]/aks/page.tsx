@@ -6,14 +6,26 @@ import { createClient } from "@/lib/supabase/client"
 interface Item { id: string; name: string; brand: string | null; subcategory: string | null; category: string; notes: string | null }
 interface Entry { id: string; itemId: string; itemName: string; quantity: number; source: string; notes: string }
 
-const SECTION_SUBCATS: Record<string, string[]> = {
+const AKS_SUBCATS: Record<string, string[]> = {
   'Camera Plates': ['Alexa 35', 'Mini LF', 'Handheld Handles', 'Camera Handles'],
   'Onboard Monitors': ['Onboard Monitors', 'Camera Control Monitor', 'Recording Onboard Monitor'],
   'Mattebox': ['Clamp-on', 'Studio'],
-  'Lens Control': ['Manual', 'Digital Control', 'Wireless'],
+  'Lens Control': ['Manual', 'Digital Control'],
   "Director's Viewfinder": ['Digital', 'Analog'],
-  'Rangefinder': ['Rangefinder'],
   'Misc': [],
+}
+
+const FOCUS_SUBCATS: Record<string, string[]> = {
+  'Focus Monitors': ['Focus Monitors'],
+  'Lens Control Wireless': ['Wireless'],
+  'Rangefinder': ['Rangefinder'],
+}
+
+const SECTION_SUBCATS: Record<string, string[]> = { ...AKS_SUBCATS, ...FOCUS_SUBCATS }
+
+const SECTION_PREFIX: Record<string, string> = {
+  'Onboard Monitors': 'Onboard',
+  'Focus Monitors': 'Focus',
 }
 
 function SearchablePicker({ items, value, onChange, placeholder }: {
@@ -94,8 +106,10 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
     'Mattebox': [],
     'Lens Control': [],
     "Director's Viewfinder": [],
-    'Rangefinder': [],
     'Misc': [],
+    'Focus Monitors': [],
+    'Lens Control Wireless': [],
+    'Rangefinder': [],
   })
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   const isSavingRef = useRef(false)
@@ -163,13 +177,18 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
     await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'aks')
     const rows: any[] = []
     let offset = 0
-    for (const entries of Object.values(sections)) {
-      entries.filter(e => e.itemId).forEach((e, i) => rows.push({
-        list_id: lid, owner_id: uid, section: 'aks',
-        item_id: e.itemId.startsWith('custom:') ? null : e.itemId,
-        custom_label: e.itemId.startsWith('custom:') ? e.itemName : null,
-        quantity: e.quantity || 1, source: e.source, notes: e.notes, sort_order: offset + i
-      }))
+    for (const [sectionName, entries] of Object.entries(sections)) {
+      entries.filter(e => e.itemId).forEach((e, i) => {
+        const isCustom = e.itemId.startsWith('custom:')
+        const prefix = SECTION_PREFIX[sectionName]
+        const customLabel = isCustom ? e.itemName : (prefix ? e.itemName : null)
+        rows.push({
+          list_id: lid, owner_id: uid, section: 'aks',
+          item_id: isCustom ? null : e.itemId,
+          custom_label: customLabel,
+          quantity: e.quantity || 1, source: e.source, notes: e.notes, sort_order: offset + i
+        })
+      })
       offset += 100
     }
     if (rows.length > 0) await supabase.from('list_items').insert(rows)
@@ -212,7 +231,13 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
               <div className="flex gap-2 items-center min-w-0">
                 <div className="flex-1">
                   <SearchablePicker items={items} value={entry.itemId}
-                    onChange={(id, name) => { updateEntry(section, entry.id, 'itemId', id); updateEntry(section, entry.id, 'itemName', name); if (id) triggerAutoSave(600) }}
+                    onChange={(id, name) => {
+                      const prefix = SECTION_PREFIX[section]
+                      const displayName = prefix && name ? `${prefix} — ${name}` : name
+                      updateEntry(section, entry.id, 'itemId', id)
+                      updateEntry(section, entry.id, 'itemName', displayName)
+                      if (id) triggerAutoSave(600)
+                    }}
                     placeholder={"Search " + section.toLowerCase() + "..."} />
                 </div>
                 {entry.itemId && (
@@ -267,7 +292,14 @@ export default function AKSPage({ params }: { params: Promise<{ id: string }> })
         <h2 className="text-2xl font-bold mb-2">AKS</h2>
         <p className="text-zinc-500 text-sm mb-6">Camera accessories, wireless systems, monitors and other kit</p>
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-          {Object.keys(SECTION_SUBCATS).map(section => renderSection(section))}
+          <h3 className="text-white font-semibold mb-4">AKS</h3>
+          {Object.keys(AKS_SUBCATS).map(section => renderSection(section))}
+        </div>
+
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
+          <h3 className="text-white font-semibold mb-1">Focus Gear</h3>
+          <p className="text-zinc-500 text-sm mb-4">Focus monitors, wireless lens control and rangefinders</p>
+          {Object.keys(FOCUS_SUBCATS).map(section => renderSection(section))}
         </div>
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
           <a href={"/lists/" + listId + "/filtration"}
