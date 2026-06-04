@@ -184,7 +184,7 @@ export default function CameraPageEditor({ params }: { params: Promise<{ id: str
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Camera notes</h3>
           <textarea value={cameraNotes} onChange={e => setCameraNotes(e.target.value)}
-            placeholder="e.g. Steadicam, Ronin, handheld, operator notes..."
+            placeholder="e.g. Steadicam, Ronin, Handheld, Operator notes, request additional mags etc."
             rows={3}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
         </div>
