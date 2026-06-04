@@ -147,7 +147,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     if (nid) {
       await supabase.from('list_section_notes').update({ notes }).eq('id', nid)
     } else if (notes.trim()) {
-      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, section: 'lenses', notes }).select().single()
+      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'lenses', notes }).select().single()
       if (newNote) setNotesId(newNote.id)
     }
     await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'zoom_controllers')
@@ -176,7 +176,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     if (notesId) {
       await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
     } else if (sectionNotes.trim()) {
-      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, section: 'lenses', notes: sectionNotes }).select().single()
+      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'lenses', notes: sectionNotes }).select().single()
       if (newNote) setNotesId(newNote.id)
     }
     await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'zoom_controllers')

@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   }
 
   const formatItems = (items: any[], viewMode: string, showQty = true) =>
-    items.map((i: any) => `${i.equipment_items?.name || i.custom_label}${showQty && i.quantity > 1 ? ' x' + i.quantity : ''}${ownerLabel(i.source, viewMode)}`).join('<br>')
+    items.map((i: any) => `${i.equipment_items?.name || i.custom_label}${showQty && i.quantity > 1 ? ' x' + i.quantity : ''}${ownerLabel(i.source, viewMode)}${i.notes ? ' <span style="color:#71717a;font-size:11px;">· ' + i.notes + '</span>' : ''}`).join('<br>')
 
   const row = (label: string, value: string) => value ? `
     <tr>

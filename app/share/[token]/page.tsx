@@ -119,7 +119,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <div className="space-y-2">
                 {powerItems.map((i: any) => (
                   <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}{i.notes ? <span className="text-zinc-500 text-xs ml-1">· {i.notes}</span> : null}</span>
                     {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                     {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                     {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
@@ -165,7 +165,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <div className="space-y-2">
                 {filtrationItems.map((i: any) => (
                   <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}{i.notes ? <span className="text-zinc-500 text-xs ml-1">· {i.notes}</span> : null}</span>
                     {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                     {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                     {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
@@ -183,7 +183,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <div className="space-y-2">
                 {aksItems.map((i: any) => (
                   <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}{i.notes ? <span className="text-zinc-500 text-xs ml-1">· {i.notes}</span> : null}</span>
                     {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                     {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                     {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
@@ -201,7 +201,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <div className="space-y-2">
                 {headTripodItems.map((i: any) => (
                   <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}{i.notes ? <span className="text-zinc-500 text-xs ml-1">· {i.notes}</span> : null}</span>
                     {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                     {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                     {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
@@ -219,7 +219,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <div className="space-y-2">
                 {gimbalItems.map((i: any) => (
                   <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}{i.notes ? <span className="text-zinc-500 text-xs ml-1">· {i.notes}</span> : null}</span>
                     {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                     {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                     {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
@@ -237,7 +237,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <div className="space-y-2">
                 {vtrItems.map((i: any) => (
                   <div key={i.id} className="flex items-center gap-2">
-                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}</span>
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? ` x${i.quantity}` : ''}{i.notes ? <span className="text-zinc-500 text-xs ml-1">· {i.notes}</span> : null}</span>
                     {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                     {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                     {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
