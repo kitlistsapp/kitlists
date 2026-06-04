@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -12,6 +12,8 @@ export default function LoginPage() {
   const [phone, setPhone] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
+  const searchParams = useSearchParams()
+  useEffect(() => { if (searchParams.get('signup') === 'true') setIsSignUp(true) }, [])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [checkEmail, setCheckEmail] = useState(false)
@@ -122,17 +124,13 @@ export default function LoginPage() {
     <div className="min-h-screen bg-black flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
-          <h1 className="text-white text-4xl font-bold tracking-tight">
-            Kit<span className="text-[#FFE135]">Lists</span>
-          </h1>
+          <a href="/" className="inline-block">
+            <h1 className="text-white text-4xl font-bold tracking-tight">
+              Kit<span className="text-[#FFE135]">Lists</span>
+            </h1>
+          </a>
           <p className="text-zinc-500 text-sm mt-2 tracking-widest uppercase">
             Camera Equipment Platform
-          </p>
-          <p className="text-zinc-400 text-xs mt-3 tracking-widest uppercase">
-            Create · Edit · Collaborate · Share
-          </p>
-          <p className="text-zinc-600 text-xs mt-3 leading-relaxed max-w-xs mx-auto">
-            The smarter way to manage your camera kit. Build lists, collaborate with your team and share with rental houses from anywhere — no more back-and-forth emails or clunky spreadsheets.
           </p>
         </div>
 

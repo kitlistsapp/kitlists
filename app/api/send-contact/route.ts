@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { createClient } from '@/lib/supabase/server'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const { name, email, message } = await request.json()
 
     if (!name || !email || !message) {
@@ -20,8 +13,8 @@ export async function POST(request: Request) {
 
     await resend.emails.send({
       from: 'KitLists Contact <noreply@kitlists.app>',
-      to: 'crewflowapps@gmail.com',
-      replyTo: email,
+      to: ['crewflowapps@gmail.com'],
+      replyTo: [email],
       subject: '[KitLists Contact] Message from ' + name,
       html:
         '<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">' +

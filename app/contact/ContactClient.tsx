@@ -29,6 +29,7 @@ export default function ContactClient({
     setError('')
 
     try {
+      console.log('[contact] submitting', { name, email, message })
       const res = await fetch('/api/send-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
