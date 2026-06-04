@@ -219,14 +219,6 @@ function LoginPageInner() {
   )
 }
 
-function LoginPageInner() {
-  return (
-    <Suspense>
-      <LoginPageInner />
-    </Suspense>
-  )
-}
-
 export default function LoginPage() {
   return (
     <Suspense>
