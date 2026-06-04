@@ -144,9 +144,12 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                     <div>
                       <p className="text-white text-sm font-medium group-hover:text-[#FFE135] transition-colors">{cam.label}</p>
                       {bodyName ? (
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-zinc-500 text-xs">{bodyName}</span>
-                          {badge(cam.camera_body_source)}
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-zinc-500 text-xs">{bodyName}</span>
+                            {badge(cam.camera_body_source)}
+                          </div>
+                          {cam.camera_notes && <p className="text-zinc-600 text-xs">{cam.camera_notes}</p>}
                         </div>
                       ) : (
                         <p className="text-zinc-700 text-xs">No camera selected</p>
@@ -216,7 +219,10 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
                 <div>
                   <h3 className="text-white font-semibold group-hover:text-[#FFE135] transition-colors">Shoot specs</h3>
                   {specs ? (
-                    <p className="text-zinc-500 text-xs mt-0.5">{[specs.format, specs.resolution, specs.fps, specs.aspect_ratio, ...(listLuts && listLuts.length > 0 ? [listLuts.map((l: any) => l.name).join(", ")] : [])].filter(Boolean).join(" · ")}</p>
+                    <>
+                      <p className="text-zinc-500 text-xs mt-0.5">{[specs.format, specs.resolution, specs.fps, specs.aspect_ratio, ...(listLuts && listLuts.length > 0 ? [listLuts.map((l: any) => l.name).join(", ")] : [])].filter(Boolean).join(" · ")}</p>
+                      {specs.job_notes && <p className="text-zinc-600 text-xs mt-0.5">{specs.job_notes}</p>}
+                    </>
                   ) : (
                     <p className="text-zinc-700 text-xs mt-0.5">Not configured</p>
                   )}
