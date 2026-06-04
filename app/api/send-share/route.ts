@@ -74,7 +74,7 @@ export async function POST(request: Request) {
   if (lensRows && lensRows.length > 0) {
     tableRows += sectionHeader('Lenses')
     const lensLines = lensRows.map((l: any) => {
-      const name = [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')
+      const name = l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')
       return name + ownerLabel(l.source, viewMode)
     }).join('<br>')
     tableRows += row('Lenses', lensLines)

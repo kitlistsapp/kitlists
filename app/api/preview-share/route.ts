@@ -97,12 +97,13 @@ export async function POST(request: Request) {
   if ((lensRows || []).length > 0) {
     tableRows += sectionHeader('Lenses')
     const byCategory = (lensRows || []).reduce((acc: Record<string, any[]>, l: any) => {
-      if (!acc[l.category]) acc[l.category] = []
-      acc[l.category].push(l)
+      const key = l.manufacturer || l.category || 'Lenses'
+      if (!acc[key]) acc[key] = []
+      acc[key].push(l)
       return acc
     }, {})
     for (const [cat, lenses] of Object.entries(byCategory)) {
-      tableRows += row(cat, (lenses as any[]).map((l: any) => `${l.manufacturer} ${l.series} ${l.focal_length}`).join('<br>'))
+      tableRows += row(cat, (lenses as any[]).map((l: any) => l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')).join('<br>'))
     }
     const lNote = getSectionNote('lenses')
     if (lNote) tableRows += row('Notes', lNote)
