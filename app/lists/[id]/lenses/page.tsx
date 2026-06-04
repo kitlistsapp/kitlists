@@ -147,8 +147,14 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     if (nid) {
       await supabase.from('list_section_notes').update({ notes }).eq('id', nid)
     } else if (notes.trim()) {
-      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'lenses', notes }).select().single()
-      if (newNote) setNotesId(newNote.id)
+      const { data: existing } = await supabase.from('list_section_notes').select('id').eq('list_id', lid).eq('section', 'lenses').maybeSingle()
+      if (existing) {
+        await supabase.from('list_section_notes').update({ notes }).eq('id', existing.id)
+        setNotesId(existing.id); notesIdRef.current = existing.id
+      } else {
+        const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'lenses', notes }).select().single()
+        if (newNote) { setNotesId(newNote.id); notesIdRef.current = newNote.id }
+      }
     }
     await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'zoom_controllers')
     const zcRows = zc.filter(e => e.itemId).map((e, i) => ({
@@ -176,8 +182,14 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
     if (notesId) {
       await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
     } else if (sectionNotes.trim()) {
-      const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'lenses', notes: sectionNotes }).select().single()
-      if (newNote) setNotesId(newNote.id)
+      const { data: existing } = await supabase.from('list_section_notes').select('id').eq('list_id', lid).eq('section', 'lenses').maybeSingle()
+      if (existing) {
+        await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', existing.id)
+        setNotesId(existing.id)
+      } else {
+        const { data: newNote } = await supabase.from('list_section_notes').insert({ list_id: lid, owner_id: uid, section: 'lenses', notes: sectionNotes }).select().single()
+        if (newNote) setNotesId(newNote.id)
+      }
     }
     await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'zoom_controllers')
     const zcRows = zoomControllers.filter(e => e.itemId).map((e, i) => ({
