@@ -191,7 +191,7 @@ export default function CameraPage({ params }: { params: Promise<{ id: string }>
                 <div className="mt-4">
                   <h4 className="text-zinc-500 text-xs uppercase tracking-widest mb-2">Camera notes</h4>
                   <textarea value={cam.notes} onChange={e => { updateCamera(cam.id, 'notes', e.target.value); triggerAutoSave(1000) }}
-                    placeholder="e.g. Steadicam, Ronin, handheld, operator notes..."
+                    placeholder="e.g. Steadicam, Ronin, Handheld, Operator notes, request additional mags etc."
                     rows={2}
                     className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
                 </div>
