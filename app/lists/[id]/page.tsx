@@ -34,6 +34,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
   ])
 
   const powerItems = (listItems || []).filter((i: any) => i.section === "power")
+  const zoomControllerItems = (listItems || []).filter((i: any) => i.section === "zoom_controllers")
   const headTripodItems = (listItems || []).filter((i: any) => i.section === "head_tripod")
   const gripItems = (listItems || []).filter((i: any) => i.section === "grip")
   const filtrationItems = (listItems || []).filter((i: any) => i.section === "filtration")
@@ -180,8 +181,14 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
                 {(lensRows || []).map((l: any) => (
                   <div key={l.id} className="flex items-center gap-1.5">
-                    <span className="text-zinc-400 text-xs">{l.manufacturer} {l.series} <span className="text-[#FFE135]">{l.focal_length}</span></span>
-                    {badge(l.source)}
+                    <span className="text-zinc-400 text-xs">{l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}</span>
+                    {l.source && l.source !== 'rental' && badge(l.source)}
+                  </div>
+                ))}
+                {zoomControllerItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-1.5">
+                    <span className="text-zinc-400 text-xs">Zoom: {i.equipment_items?.name || i.custom_label}</span>
+                    {i.source && i.source !== 'rental' && badge(i.source)}
                   </div>
                 ))}
               </div>
