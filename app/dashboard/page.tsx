@@ -9,12 +9,6 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase.from('profiles').select('full_name, company_name, company_logo_url, guide_dismissed').eq('id', user.id).single()
 
-  let logoUrl = null
-  if (profile?.company_logo_url) {
-    const { data: signed } = await supabase.storage.from('logos').createSignedUrl(profile.company_logo_url, 3600)
-    if (signed) logoUrl = signed.signedUrl
-  }
-
   // Auto-archive lists past their post_return_date (fire and forget)
   const today = new Date().toISOString().split('T')[0]
   supabase
@@ -26,12 +20,13 @@ export default async function DashboardPage() {
     .not('post_return_date', 'is', null)
     .then(() => {})
 
-  // Fetch all dashboard data in parallel
+  // Fetch all dashboard data in parallel including logo signed URL
   const [
     { data: lists },
     { data: shares },
     { data: invites },
-    { data: collaboratedLists }
+    { data: collaboratedLists },
+    signedLogoResult
   ] = await Promise.all([
     supabase
       .from("gear_lists")
@@ -47,8 +42,13 @@ export default async function DashboardPage() {
       .from('list_collaborators')
       .select('*, gear_lists(*, rental_houses(name), camera_pages(id), shoot_specs(format, resolution), profiles(full_name, company_name))')
       .eq('collaborator_id', user.id)
-      .not('accepted_at', 'is', null)
+      .not('accepted_at', 'is', null),
+    profile?.company_logo_url
+      ? supabase.storage.from('logos').createSignedUrl(profile.company_logo_url, 3600)
+      : Promise.resolve({ data: null })
   ])
+
+  const logoUrl = signedLogoResult?.data?.signedUrl || null
 
   const shareCounts: Record<string, number> = {}
   if (shares) shares.forEach((s: any) => { shareCounts[s.list_id] = (shareCounts[s.list_id] || 0) + 1 })
