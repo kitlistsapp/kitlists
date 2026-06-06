@@ -22,7 +22,7 @@ function AddToHomeScreenBanner() {
   if (!show) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4">
+    <div className="px-0 pt-4 pb-2">
       <div className="bg-zinc-900 border border-zinc-700 rounded-2xl p-4 flex items-start gap-3 shadow-xl max-w-sm mx-auto">
         <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
           <img src="/icon-192.png" alt="KitLists" className="w-full h-full object-cover" />
@@ -245,11 +245,11 @@ function LoginPageInner() {
           </button>
         </div>
 
-        <p className="text-zinc-700 text-xs text-center mt-8">
+        <AddToHomeScreenBanner />
+        <p className="text-zinc-700 text-xs text-center mt-4">
           KitLists · Built for DOPs, ACs, Rental Houses and Production
         </p>
       </div>
-      <AddToHomeScreenBanner />
     </div>
   )
 }
