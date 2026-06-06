@@ -19,6 +19,7 @@ export default async function NavBar({ backHref, backLabel, rightContent }: NavB
       backHref={backHref}
       backLabel={backLabel}
       rightContent={rightContent}
+      isLoggedIn={!!user}
     />
   )
 }
