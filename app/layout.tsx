@@ -24,8 +24,9 @@ export const metadata: Metadata = {
   description: "Build, collaborate and share professional camera gear lists. Built for DOPs, ACs, Rental Houses and Production.",
   icons: {
     icon: "/favicon.ico",
-    apple: "/icon.png",
+    apple: "/apple-touch-icon.png",
   },
+
 };
 
 export default function RootLayout({

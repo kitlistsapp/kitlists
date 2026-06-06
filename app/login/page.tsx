@@ -4,6 +4,52 @@ import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 
+function AddToHomeScreenBanner() {
+  const [show, setShow] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
+
+  useEffect(() => {
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
+    const standalone = (window.navigator as any).standalone === true
+    const android = /android/i.test(navigator.userAgent)
+    const dismissed = localStorage.getItem('pwa_banner_dismissed')
+    if (!standalone && !dismissed && (ios || android)) {
+      setIsIOS(ios)
+      setShow(true)
+    }
+  }, [])
+
+  if (!show) return null
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-4">
+      <div className="bg-zinc-900 border border-zinc-700 rounded-2xl p-4 flex items-start gap-3 shadow-xl max-w-sm mx-auto">
+        <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
+          <img src="/icon-192.png" alt="KitLists" className="w-full h-full object-cover" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-white text-sm font-semibold mb-0.5">Add to Home Screen</p>
+          {isIOS ? (
+            <p className="text-zinc-400 text-xs leading-relaxed">
+              Tap the <span className="text-white">Share</span> button in Safari then tap <span className="text-white">Add to Home Screen</span>
+            </p>
+          ) : (
+            <p className="text-zinc-400 text-xs leading-relaxed">
+              Tap <span className="text-white">Add to Home Screen</span> in your browser menu for quick access
+            </p>
+          )}
+        </div>
+        <button
+          onClick={() => { localStorage.setItem('pwa_banner_dismissed', '1'); setShow(false) }}
+          className="text-zinc-600 hover:text-zinc-400 flex-shrink-0 mt-0.5"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function LoginPageInner() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -215,6 +261,7 @@ function LoginPageInner() {
           KitLists · Built for DOPs, ACs, Rental Houses and Production
         </p>
       </div>
+      <AddToHomeScreenBanner />
     </div>
   )
 }
