@@ -28,23 +28,11 @@ function AddToHomeScreenBanner() {
           <img src="/icon-192.png" alt="KitLists" className="w-full h-full object-cover" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-white text-sm font-semibold mb-0.5">Add to Home Screen</p>
-          {isIOS ? (
-            <p className="text-zinc-400 text-xs leading-relaxed">
-              Tap the <span className="text-white">Share</span> button in Safari then tap <span className="text-white">Add to Home Screen</span>
-            </p>
-          ) : (
-            <p className="text-zinc-400 text-xs leading-relaxed">
-              Tap <span className="text-white">Add to Home Screen</span> in your browser menu for quick access
-            </p>
-          )}
+          <p className="text-white text-sm font-semibold mb-0.5">How to add to home screen</p>
+          <p className="text-zinc-400 text-xs leading-relaxed">
+            Tap the <span className="text-white">Share</span> button in your browser and select <span className="text-white">Add to Home Screen</span>
+          </p>
         </div>
-        <button
-          onClick={() => { localStorage.setItem('pwa_banner_dismissed', '1'); setShow(false) }}
-          className="text-zinc-600 hover:text-zinc-400 flex-shrink-0 mt-0.5"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
       </div>
     </div>
   )
