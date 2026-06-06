@@ -39,6 +39,8 @@ export default function ProfilePage() {
   const [savingContact, setSavingContact] = useState(false)
   const [lutUploading, setLutUploading] = useState(false)
   const [camPrefs, setCamPrefs] = useState<any>({ notes: '' })
+  const [isListening, setIsListening] = useState(false)
+  const recognitionRef = useRef<any>(null)
 
   const roles = ['Production', 'Rental House', '1st AC', 'Director', 'Other']
 
@@ -236,7 +238,37 @@ export default function ProfilePage() {
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-          <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Camera user preferences</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-zinc-400 text-xs uppercase tracking-widest">Camera user preferences</h3>
+            <button
+              onClick={() => {
+                if (isListening) {
+                  recognitionRef.current?.stop()
+                  setIsListening(false)
+                  return
+                }
+                const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+                if (!SpeechRecognition) { alert('Voice not supported in this browser. Try Chrome or Safari.'); return }
+                const recognition = new SpeechRecognition()
+                recognition.continuous = true
+                recognition.interimResults = false
+                recognition.lang = 'en-AU'
+                recognition.onresult = (e: any) => {
+                  const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join(' ')
+                  setCamPrefs((p: any) => ({ ...p, notes: (p.notes ? p.notes + ' ' : '') + transcript }))
+                }
+                recognition.onerror = () => { setIsListening(false) }
+                recognition.onend = () => { setIsListening(false) }
+                recognitionRef.current = recognition
+                recognition.start()
+                setIsListening(true)
+              }}
+              className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors ${isListening ? 'bg-red-500/20 border-red-500 text-red-400 animate-pulse' : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500'}`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill={isListening ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+              {isListening ? 'Listening...' : 'Dictate'}
+            </button>
+          </div>
           <textarea value={camPrefs.notes || ''} onChange={e => setCamPrefs((p: any) => ({ ...p, notes: e.target.value }))} placeholder="Add any personal preferences, notes or defaults you want to remember across jobs..." rows={4} className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFE135] resize-none" />
           <div className="flex items-center gap-3 mt-4">
             <button onClick={saveProfile} disabled={saving} className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-semibold px-6 py-2.5 rounded-lg text-sm disabled:opacity-50">{saving ? 'Saving...' : 'Save preferences'}</button>
