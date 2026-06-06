@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user && request.nextUrl.pathname !== '/' && !request.nextUrl.pathname.startsWith('/login') && !request.nextUrl.pathname.startsWith('/auth') && !request.nextUrl.pathname.startsWith('/invite') && !request.nextUrl.pathname.startsWith('/share') && !request.nextUrl.pathname.startsWith('/contact-public')) {
+  if (!user && request.nextUrl.pathname !== '/' && !request.nextUrl.pathname.startsWith('/login') && !request.nextUrl.pathname.startsWith('/auth') && !request.nextUrl.pathname.startsWith('/invite') && !request.nextUrl.pathname.startsWith('/share') && !request.nextUrl.pathname.startsWith('/contact-public') && !request.nextUrl.pathname.startsWith('/api/send-welcome')) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
