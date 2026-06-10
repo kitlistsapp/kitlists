@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createClient } from "@/lib/supabase/client"
 
 interface LensLibrary { id: string; manufacturer: string; category: string | null; sub_category: string | null; lens_name: string }
-interface SavedLens { id: string; lens_library_id: string; lens_name: string; source: string }
+interface SavedLens { id: string; lens_library_id: string; lens_name: string; source: string; quantity: number }
 
 interface SimpleItem { id: string; name: string; brand: string | null; subcategory: string | null; category: string }
 function SearchablePicker({ items, value, onChange, placeholder }: {
@@ -108,7 +108,8 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
         id: l.id,
         lens_library_id: l.lens_library_id || '',
         lens_name: l.lens_name || `${l.manufacturer || ''} ${l.series || ''} ${l.focal_length || ''}`.trim(),
-        source: l.source || 'rental'
+        source: l.source || 'rental',
+        quantity: l.quantity || 1
       })))
     }
     if (notesData) { setSectionNotes(notesData.notes || ''); setNotesId(notesData.id) }
@@ -142,7 +143,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       if (toDelete.length > 0) await supabase.from('list_lenses').delete().in('id', toDelete)
     }
     for (const lens of savedL) {
-      if (lens.id) await supabase.from('list_lenses').update({ source: lens.source }).eq('id', lens.id)
+      if (lens.id) await supabase.from('list_lenses').update({ source: lens.source, quantity: lens.quantity || 1 }).eq('id', lens.id)
     }
     if (nid) {
       await supabase.from('list_section_notes').update({ notes }).eq('id', nid)
@@ -177,7 +178,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       if (toDelete.length > 0) await supabase.from('list_lenses').delete().in('id', toDelete)
     }
     for (const lens of savedLenses) {
-      if (lens.id) await supabase.from('list_lenses').update({ source: lens.source }).eq('id', lens.id)
+      if (lens.id) await supabase.from('list_lenses').update({ source: lens.source, quantity: lens.quantity || 1 }).eq('id', lens.id)
     }
     if (notesId) {
       await supabase.from('list_section_notes').update({ notes: sectionNotes }).eq('id', notesId)
@@ -211,7 +212,7 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
       sort_order: savedLenses.length
     }).select().single()
     if (inserted) {
-      setSavedLenses(prev => [...prev, { id: inserted.id, lens_library_id: lens.id, lens_name: lens.lens_name, source: 'rental' }])
+      setSavedLenses(prev => [...prev, { id: inserted.id, lens_library_id: lens.id, lens_name: lens.lens_name, source: 'rental', quantity: 1 }])
     }
   }
 
@@ -397,6 +398,10 @@ export default function LensesPage({ params }: { params: Promise<{ id: string }>
                         <div className="flex-1 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 text-sm">
                           {lens.lens_name}
                         </div>
+                        <input type="number" min="1"
+                          value={lens.quantity === 0 ? '' : lens.quantity}
+                          onChange={e => { setSavedLenses(prev => prev.map(l => l.id === lens.id ? { ...l, quantity: parseInt(e.target.value) || 1 } : l)); triggerAutoSave(800) }}
+                          className="w-12 min-w-0 bg-zinc-800 border border-zinc-700 text-white rounded-lg px-2 py-3 text-sm focus:outline-none focus:border-[#FFE135] text-center" />
                         <button onClick={() => removeSaved(lens.id)} className="text-zinc-600 hover:text-red-400 text-lg">×</button>
                       </div>
                       <div className="flex gap-1 mt-1.5 ml-1">
