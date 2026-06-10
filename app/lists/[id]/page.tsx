@@ -78,7 +78,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
         <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
           {items.map((i: any) => (
             <div key={i.id} className="flex items-center gap-1.5">
-              <span className="text-zinc-400 text-xs">{i.custom_label || i.equipment_items?.name}{i.quantity > 1 ? ` x${i.quantity}` : ""}{i.notes ? ` · ${i.notes}` : ""}</span>
+              <span className="text-zinc-400 text-xs">{i.custom_label || i.equipment_items?.name}{i.quantity > 1 ? <span className="text-white font-semibold"> x{i.quantity}</span> : ""}{i.notes ? ` · ${i.notes}` : ""}</span>
               {badge(i.source)}
             </div>
           ))}
@@ -184,7 +184,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
                 {(lensRows || []).map((l: any) => (
                   <div key={l.id} className="flex items-center gap-1.5">
-                    <span className="text-zinc-400 text-xs">{l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}</span>
+                    <span className="text-zinc-400 text-xs">{l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}{l.quantity > 1 ? <span className="text-white font-semibold"> x{l.quantity}</span> : ""}</span>
                     {l.source && l.source !== 'rental' && badge(l.source)}
                   </div>
                 ))}
