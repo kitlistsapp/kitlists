@@ -81,6 +81,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const [onboardEntries, setOnboardEntries] = useState<Entry[]>([])
   const [blockEntries, setBlockEntries] = useState<Entry[]>([])
   const [acdcEntries, setAcdcEntries] = useState<Entry[]>([])
+  const [monitorEntries, setMonitorEntries] = useState<Entry[]>([])
   const [sectionNotes, setSectionNotes] = useState('')
   const [notesId, setNotesId] = useState<string | null>(null)
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
@@ -88,6 +89,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const onboardRef = useRef<Entry[]>([])
   const blockRef = useRef<Entry[]>([])
   const acdcRef = useRef<Entry[]>([])
+  const monitorRef = useRef<Entry[]>([])
   const listIdRef = useRef('')
   const userIdRef = useRef('')
   const notesRef = useRef('')
@@ -111,14 +113,17 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     const ob = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'onboard').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
     const bl = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'block').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
     const ac = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'acdc').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
+    const mo = existing ? existing.filter((i: any) => i.equipment_items?.subcategory === 'monitor').map((i: any) => ({ id: i.id, itemId: i.item_id || '', itemName: i.equipment_items?.name || i.custom_label || '', quantity: i.quantity ?? 1, source: i.source || 'rental' })) : []
     setOnboardEntries(ob)
     setBlockEntries(bl)
     setAcdcEntries(ac)
+    setMonitorEntries(mo)
   }
 
   useEffect(() => { onboardRef.current = onboardEntries }, [onboardEntries])
   useEffect(() => { blockRef.current = blockEntries }, [blockEntries])
   useEffect(() => { acdcRef.current = acdcEntries }, [acdcEntries])
+  useEffect(() => { monitorRef.current = monitorEntries }, [monitorEntries])
   useEffect(() => { notesRef.current = sectionNotes }, [sectionNotes])
   useEffect(() => { notesIdRef.current = notesId }, [notesId])
   useEffect(() => { listIdRef.current = listId }, [listId])
@@ -135,6 +140,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     const ob = onboardRef.current
     const bl = blockRef.current
     const ac = acdcRef.current
+    const mo = monitorRef.current
     const lid = listIdRef.current
     const uid = userIdRef.current
     const notes = notesRef.current
@@ -143,15 +149,16 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
     setSaving(true)
     await supabase.from('list_items').delete().eq('list_id', lid).eq('section', 'power')
     const rows: any[] = []
-    const addRows = (entries: Entry[], idx_offset: number) => entries.filter(e => e.itemId).forEach((e, i) => rows.push({
+    const addRows = (entries: Entry[], idx_offset: number, prefix?: string) => entries.filter(e => e.itemId).forEach((e, i) => rows.push({
       list_id: lid, owner_id: uid, section: 'power',
       item_id: e.itemId.startsWith('custom:') ? null : e.itemId,
-      custom_label: e.itemId.startsWith('custom:') ? e.itemName : null,
+      custom_label: e.itemId.startsWith('custom:') ? e.itemName : (prefix ? `${prefix} — ${e.itemName}` : null),
       quantity: e.quantity || 1, source: e.source, sort_order: idx_offset + i
     }))
-    addRows(ob, 0)
+    addRows(ob, 0, 'Onboard')
     addRows(bl, 100)
     addRows(ac, 200)
+    addRows(mo, 300, 'Monitor')
     if (rows.length > 0) await supabase.from('list_items').insert(rows)
     if (nid) {
       await supabase.from('list_section_notes').update({ notes }).eq('id', nid)
@@ -171,6 +178,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
   const onboardItems = allItems.filter(i => i.subcategory === 'onboard')
   const blockItems = allItems.filter(i => i.subcategory === 'block')
   const acdcItems = allItems.filter(i => i.subcategory === 'acdc')
+  const monitorItems = allItems.filter(i => i.subcategory === 'monitor')
 
   const renderEntries = (entries: Entry[], setFn: any, items: Item[], label: string, color: string) => (
     <div className="mb-6">
@@ -230,6 +238,7 @@ export default function PowerPage({ params }: { params: Promise<{ id: string }> 
           {renderEntries(onboardEntries, setOnboardEntries, onboardItems, 'Onboard', 'blue')}
           {renderEntries(blockEntries, setBlockEntries, blockItems, 'Block batteries', 'amber')}
           {renderEntries(acdcEntries, setAcdcEntries, acdcItems, 'AC/DC', 'purple')}
+          {renderEntries(monitorEntries, setMonitorEntries, monitorItems, 'Monitor', 'green')}
         </div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mt-4">
           <h3 className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Section notes</h3>
