@@ -15,6 +15,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   if (!share) notFound()
 
   const list = share.gear_lists as any
+  if (!list) notFound()
   const dop = list.profiles as any
   const isProduction = share.view_mode === 'production_clean'
 

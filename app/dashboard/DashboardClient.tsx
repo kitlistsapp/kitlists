@@ -15,7 +15,8 @@ export default function DashboardClient({ user, initialLists, initialShares, col
   const router = useRouter()
   const [lists, setLists] = useState(initialLists)
   const [shares] = useState(initialShares)
-  const [tab, setTab] = useState('draft')
+  const hasSent = initialLists.some((l: any) => l.status === 'sent')
+  const [tab, setTab] = useState(hasSent ? 'sent' : 'draft')
   const [showBanner, setShowBanner] = useState(false)
 
   useEffect(() => {
