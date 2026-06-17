@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
   const { data: list } = await supabase.from('gear_lists').select('*, rental_houses(name)').eq('id', listId).single()
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', listId).order('sort_order')
-  const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', listId).order('sort_order')
+  const { data: lensRows } = await supabase.from('list_lenses').select('*, lens_library(manufacturer, category)').eq('list_id', listId).order('sort_order')
   const { data: zoomControllers } = await supabase.from('list_items').select('*, equipment_items(name)').eq('list_id', listId).eq('section', 'zoom_controllers').order('sort_order')
   const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', listId).order('sort_order')
   const { data: sectionNotes } = await supabase.from('list_section_notes').select('*').eq('list_id', listId)
@@ -73,11 +73,19 @@ export async function POST(request: Request) {
 
   if (lensRows && lensRows.length > 0) {
     tableRows += sectionHeader('Lenses')
-    const lensLines = lensRows.map((l: any) => {
-      const name = l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')
-      return name + ownerLabel(l.source, viewMode)
-    }).join('<br>')
-    tableRows += row('Lenses', lensLines)
+    const lensGrouped = lensRows.reduce((acc: Record<string, any[]>, l: any) => {
+      const mfr = l.lens_library?.manufacturer || l.manufacturer || 'Lenses'
+      if (!acc[mfr]) acc[mfr] = []
+      acc[mfr].push(l)
+      return acc
+    }, {})
+    for (const [mfr, lenses] of Object.entries(lensGrouped) as [string, any[]][]) {
+      const lensLines = lenses.map((l: any) => {
+        const name = l.lens_library_id ? [l.lens_library?.manufacturer, l.lens_library?.category, l.lens_name].filter(Boolean).join(' · ') : [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')
+        return name + ownerLabel(l.source, viewMode)
+      }).join('<br>')
+      tableRows += row(mfr, lensLines)
+    }
     if (zoomControllers && zoomControllers.length > 0) {
       const zcLines = zoomControllers.map((z: any) => z.equipment_items?.name || '').filter(Boolean).join('<br>')
       tableRows += row('Zoom Controllers', zcLines)

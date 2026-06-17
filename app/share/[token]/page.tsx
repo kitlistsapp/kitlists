@@ -25,7 +25,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   }
 
   const { data: cameras } = await supabase.from('camera_pages').select('*, equipment_items(name)').eq('list_id', list.id).order('sort_order')
-  const { data: lensRows } = await supabase.from('list_lenses').select('*').eq('list_id', list.id).order('sort_order')
+  const { data: lensRows } = await supabase.from('list_lenses').select('*, lens_library(manufacturer, category)').eq('list_id', list.id).order('sort_order')
   const { data: listItems } = await supabase.from('list_items').select('*, equipment_items(name, subcategory, category)').eq('list_id', list.id).order('sort_order')
   const { data: sectionNotesList } = await supabase.from('list_section_notes').select('*').eq('list_id', list.id)
   const { data: specs } = await supabase.from('shoot_specs').select('*').eq('list_id', list.id).maybeSingle()
@@ -136,7 +136,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
               <h3 className="font-semibold text-lg mb-4">Lenses</h3>
               <div className="space-y-2">
                 {Object.entries((lensRows || []).reduce((acc: Record<string, any[]>, l: any) => {
-                  const key = l.manufacturer || l.category || 'Lenses'
+                  const key = l.lens_library?.manufacturer || l.manufacturer || l.category || 'Lenses'
                   if (!acc[key]) acc[key] = []
                   acc[key].push(l)
                   return acc
@@ -145,7 +145,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                     <p className="text-zinc-500 text-xs uppercase tracking-widest mb-2">{cat}</p>
                     {lenses.map((l: any) => (
                       <div key={l.id} className="flex items-center gap-2 mb-1">
-                        <span className="text-zinc-300 text-sm">{l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}</span>
+                        <span className="text-zinc-300 text-sm">{l.lens_library_id ? [l.lens_library?.manufacturer, l.lens_library?.category, l.lens_name].filter(Boolean).join(' · ') : [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}{l.quantity > 1 ? <span className="text-white font-semibold"> x{l.quantity}</span> : ''}</span>
                         {!isProduction && l.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
                         {!isProduction && l.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
                         {isProduction && (l.source === 'dop_owned' || l.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}

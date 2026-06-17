@@ -24,7 +24,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
     { data: acContacts }
   ] = await Promise.all([
     supabase.from("camera_pages").select("*, equipment_items(name)").eq("list_id", id).order("sort_order"),
-    supabase.from("list_lenses").select("*").eq("list_id", id).order("sort_order"),
+    supabase.from("list_lenses").select("*, lens_library(manufacturer, category)").eq("list_id", id).order("sort_order"),
     supabase.from("shoot_specs").select("*").eq("list_id", id).maybeSingle(),
     supabase.from("list_files").select("*").eq("list_id", id).order("created_at"),
     supabase.from("list_lut_files").select("*").eq("list_id", id).order("created_at"),
@@ -184,7 +184,7 @@ export default async function ListPage({ params }: { params: Promise<{ id: strin
               <div className="px-6 pb-4 border-t border-zinc-800 pt-3 space-y-0.5">
                 {(lensRows || []).map((l: any) => (
                   <div key={l.id} className="flex items-center gap-1.5">
-                    <span className="text-zinc-400 text-xs">{l.lens_name || [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}{l.quantity > 1 ? <span className="text-white font-semibold"> x{l.quantity}</span> : ""}</span>
+                    <span className="text-zinc-400 text-xs">{l.lens_library_id ? [l.lens_library?.manufacturer, l.lens_library?.category, l.lens_name].filter(Boolean).join(' · ') : [l.manufacturer, l.series, l.focal_length].filter(Boolean).join(' ')}{l.quantity > 1 ? <span className="text-white font-semibold"> x{l.quantity}</span> : ""}</span>
                     {l.source && l.source !== 'rental' && badge(l.source)}
                   </div>
                 ))}
