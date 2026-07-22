@@ -38,6 +38,7 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
   const vtrItems = (listItems || []).filter((i: any) => i.section === 'vtr')
   const filtrationItems = (listItems || []).filter((i: any) => i.section === 'filtration')
   const aksItems = (listItems || []).filter((i: any) => i.section === 'aks')
+  const zoomControllerItems = (listItems || []).filter((i: any) => i.section === 'zoom_controllers')
   const getSectionNote = (section: string) => (sectionNotesList || []).find((n: any) => n.section === section)?.notes || ''
 
   const { data: listLuts } = await supabase.from('list_lut_files').select('*, user_luts(file_url)').eq('list_id', list.id)
@@ -156,6 +157,23 @@ export default async function SharePage({ params }: { params: Promise<{ token: s
                 ))}
               </div>
               {getSectionNote('lenses') && <p className="text-zinc-500 text-sm mt-3 pt-3 border-t border-zinc-800">{getSectionNote('lenses')}</p>}
+            </div>
+          )}
+
+          {/* Zoom Controllers */}
+          {zoomControllerItems.length > 0 && (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+              <h3 className="font-semibold text-lg mb-4">Zoom Controllers</h3>
+              <div className="space-y-2">
+                {zoomControllerItems.map((i: any) => (
+                  <div key={i.id} className="flex items-center gap-2">
+                    <span className="text-zinc-300 text-sm">{i.equipment_items?.name || i.custom_label}{i.quantity > 1 ? <span className="text-white font-semibold"> x{i.quantity}</span> : ''}</span>
+                    {!isProduction && i.source === 'dop_owned' && <span className="text-xs bg-[#2a1f00] text-[#FFE135] px-1.5 py-0.5 rounded-full">DOP owned</span>}
+                    {!isProduction && i.source === 'ac_owned' && <span className="text-xs bg-blue-950 text-blue-400 px-1.5 py-0.5 rounded-full">AC owned</span>}
+                    {isProduction && (i.source === 'dop_owned' || i.source === 'ac_owned') && <span className="text-xs bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-full">Supplied</span>}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
