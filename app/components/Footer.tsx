@@ -9,6 +9,7 @@ export default async function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
         <span className="text-sm font-semibold text-white">Kit<span className="text-[#FFE135]">Lists</span></span>
         <div className="flex items-center gap-5">
+          <a href="/#features" className="text-xs text-zinc-500 hover:text-white transition-colors">What is it?</a>
           <a href="/about" className="text-xs text-zinc-500 hover:text-white transition-colors">About</a>
           <a href="/privacy" className="text-xs text-zinc-500 hover:text-white transition-colors">Privacy</a>
           <a href="https://www.instagram.com/kitlists.app" target="_blank" rel="noopener noreferrer" className="text-xs text-zinc-500 hover:text-[#FFE135] transition-colors flex items-center gap-1.5">
