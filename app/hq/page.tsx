@@ -1,9 +1,15 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient, isAdminEmail } from '@/lib/supabase/admin'
 import HQClient from './HQClient'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'KitLists HQ',
+  robots: { index: false, follow: false },
+}
 
 export default async function HQPage() {
   // Gate: logged-in + email on the ADMIN_EMAILS allowlist, otherwise 404
