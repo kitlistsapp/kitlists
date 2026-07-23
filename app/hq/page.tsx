@@ -123,6 +123,7 @@ export default async function HQPage() {
     sentLists: (lists || []).filter((l: any) => l.status === 'sent').length,
     listsThisWeek: (lists || []).filter((l: any) => l.created_at && withinDays(l.created_at, 7)).length,
     totalShares: (shares || []).length,
+    sharesThisMonth: (shares || []).filter((s: any) => s.created_at && withinDays(s.created_at, 30)).length,
     dormantUsers: users.filter(u => u.dormant).length,
     invitesSent: outreachRows.filter(o => o.template === 'invite').length,
     invitesConverted: outreachRows.filter(o => o.template === 'invite' && o.signedUp).length,
