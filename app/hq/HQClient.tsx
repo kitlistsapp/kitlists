@@ -38,6 +38,7 @@ type Stats = {
   sentLists: number
   listsThisWeek: number
   totalShares: number
+  sharesThisMonth: number
   dormantUsers: number
   invitesSent: number
   invitesConverted: number
@@ -223,7 +224,8 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
                 <StatCard label="Total lists" value={stats.totalLists} />
                 <StatCard label="Sent lists" value={stats.sentLists} />
                 <StatCard label="Created this week" value={stats.listsThisWeek} />
-                <StatCard label="Share links" value={stats.totalShares} />
+                <StatCard label="Shared this month" value={stats.sharesThisMonth} sub="share links created, last 30 days" />
+                <StatCard label="Share links" value={stats.totalShares} sub="all time" />
               </div>
             </div>
             <div>
