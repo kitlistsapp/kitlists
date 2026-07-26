@@ -37,15 +37,30 @@ export async function POST(request: Request) {
   const user = await requireAdmin()
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const { recipients, template: templateKey, test, testEmail } = await request.json() as {
+  const { recipients, template: templateKey, test, testEmail, scheduledAt } = await request.json() as {
     recipients?: { email: string; name?: string }[]
     template: TemplateKey
     test?: boolean
     testEmail?: string
+    scheduledAt?: string
   }
 
   const template = TEMPLATES[templateKey]
   if (!template) return NextResponse.json({ error: 'Unknown template' }, { status: 400 })
+
+  // Optional scheduling (Resend supports up to 30 days ahead)
+  let schedIso: string | undefined
+  if (scheduledAt) {
+    const d = new Date(scheduledAt)
+    if (isNaN(d.getTime())) return NextResponse.json({ error: 'Invalid schedule time' }, { status: 400 })
+    if (d.getTime() < Date.now() + 2 * 60_000) {
+      return NextResponse.json({ error: 'Schedule time must be at least 2 minutes in the future' }, { status: 400 })
+    }
+    if (d.getTime() > Date.now() + 29 * 24 * 60 * 60_000) {
+      return NextResponse.json({ error: 'Resend allows scheduling up to 30 days ahead' }, { status: 400 })
+    }
+    schedIso = d.toISOString()
+  }
 
   // ── Test send: one email, [TEST] subject, not recorded in outreach_invites ──
   if (test) {
@@ -84,11 +99,12 @@ export async function POST(request: Request) {
     const firstName = (r.name || '').trim().split(' ')[0] || null
 
     try {
-      const { error } = await resend.emails.send({
+      const { data, error } = await resend.emails.send({
         from: 'Charlie at KitLists <hello@kitlists.app>',
         to: email,
         subject: template.subject(),
         html: template.html(firstName),
+        scheduledAt: schedIso,
       })
       if (error) {
         failed.push({ email, error: typeof error === 'object' ? JSON.stringify(error) : String(error) })
@@ -99,6 +115,9 @@ export async function POST(request: Request) {
           name: r.name?.trim() || null,
           template: templateKey,
           sent_by: user.email,
+          scheduled_for: schedIso || null,
+          resend_email_id: data?.id || null,
+          status: schedIso ? 'scheduled' : 'sent',
         })
       }
     } catch {
@@ -109,5 +128,31 @@ export async function POST(request: Request) {
     await new Promise(res => setTimeout(res, 600))
   }
 
-  return NextResponse.json({ sent, failed })
+  return NextResponse.json({ sent, failed, scheduledFor: schedIso || null })
+}
+
+// PATCH /api/hq/outreach - { rowId } cancels a scheduled send (before it fires)
+export async function PATCH(request: Request) {
+  const user = await requireAdmin()
+  if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  const { rowId } = await request.json() as { rowId: string }
+  if (!rowId) return NextResponse.json({ error: 'Missing rowId' }, { status: 400 })
+
+  const admin = createAdminClient()
+  const { data: row } = await admin.from('outreach_invites').select('*').eq('id', rowId).single()
+  if (!row) return NextResponse.json({ error: 'Row not found' }, { status: 404 })
+  if (row.status !== 'scheduled' || !row.resend_email_id) {
+    return NextResponse.json({ error: 'This send is not cancellable' }, { status: 400 })
+  }
+
+  try {
+    const { error } = await resend.emails.cancel(row.resend_email_id)
+    if (error) return NextResponse.json({ error: 'Resend refused the cancel - it may have already gone out' }, { status: 400 })
+  } catch {
+    return NextResponse.json({ error: 'Cancel failed' }, { status: 500 })
+  }
+
+  await admin.from('outreach_invites').update({ status: 'canceled' }).eq('id', rowId)
+  return NextResponse.json({ success: true })
 }

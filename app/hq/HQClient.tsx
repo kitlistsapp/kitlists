@@ -26,6 +26,8 @@ type OutreachRow = {
   name: string | null
   template: string
   sentAt: string
+  scheduledFor: string | null
+  status: string
   signedUp: boolean
 }
 
@@ -46,6 +48,17 @@ type Stats = {
 
 const fmtDate = (iso: string | null) =>
   iso ? new Date(iso).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
+
+const fmtDateTime = (iso: string | null) =>
+  iso ? new Date(iso).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '—'
+
+// Default schedule: tomorrow at 11:00 local time, as a datetime-local value
+const defaultScheduleValue = () => {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T11:00`
+}
 
 function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
   return (
@@ -73,10 +86,14 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
   const [preview, setPreview] = useState<{ subject: string; html: string } | null>(null)
   const [previewLoading, setPreviewLoading] = useState(false)
   const [sending, setSending] = useState(false)
-  const [result, setResult] = useState<{ sent: string[]; failed: { email: string; error: string }[] } | null>(null)
+  const [result, setResult] = useState<{ sent: string[]; failed: { email: string; error: string }[]; scheduledFor?: string | null } | null>(null)
   const [testEmail, setTestEmail] = useState('whitakerleebo@gmail.com')
   const [testSending, setTestSending] = useState(false)
   const [testResult, setTestResult] = useState<string | null>(null)
+  const [timing, setTiming] = useState<'now' | 'schedule'>('now')
+  const [scheduleAt, setScheduleAt] = useState(defaultScheduleValue)
+  const [canceledIds, setCanceledIds] = useState<Set<string>>(new Set())
+  const [cancelingId, setCancelingId] = useState<string | null>(null)
 
   const dormantUsers = users.filter(u => u.dormant)
 
@@ -85,6 +102,7 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
     const seen = new Map<string, OutreachRow>()
     for (const o of outreach) {
       if (o.signedUp) continue
+      if (o.status === 'canceled' || canceledIds.has(o.id)) continue
       if (o.template !== 'invite' && o.template !== 'followup') continue
       const key = o.email.toLowerCase()
       if (!seen.has(key)) seen.set(key, o) // outreach is sorted newest-first
@@ -154,14 +172,19 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
 
   const send = async () => {
     if (recipients.length === 0) return
-    if (!confirm(`Send "${template}" email to ${recipients.length} recipient${recipients.length === 1 ? '' : 's'}?`)) return
+    const when = timing === 'schedule' ? ` scheduled for ${fmtDateTime(new Date(scheduleAt).toISOString())}` : ' now'
+    if (!confirm(`Send "${template}" email to ${recipients.length} recipient${recipients.length === 1 ? '' : 's'}${when}?`)) return
     setSending(true)
     setResult(null)
     try {
       const res = await fetch('/api/hq/outreach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipients, template }),
+        body: JSON.stringify({
+          recipients,
+          template,
+          scheduledAt: timing === 'schedule' ? new Date(scheduleAt).toISOString() : undefined,
+        }),
       })
       const data = await res.json()
       if (res.ok) {
@@ -174,6 +197,26 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
       }
     } finally {
       setSending(false)
+    }
+  }
+
+  const cancelScheduled = async (rowId: string) => {
+    if (!confirm('Cancel this scheduled email? It cannot be rescheduled - you would need to send it again.')) return
+    setCancelingId(rowId)
+    try {
+      const res = await fetch('/api/hq/outreach', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rowId }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setCanceledIds(new Set([...canceledIds, rowId]))
+      } else {
+        alert(data.error || 'Cancel failed')
+      }
+    } finally {
+      setCancelingId(null)
     }
   }
 
@@ -417,10 +460,38 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
                   )}
                 </div>
 
+                {/* Send now or schedule */}
+                <div className="mt-4">
+                  <label className="text-zinc-400 text-sm mb-1.5 block">Timing</label>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button onClick={() => setTiming('now')}
+                      className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${timing === 'now' ? 'bg-[#FFE135] text-black' : 'bg-zinc-800 text-zinc-400 hover:text-white'}`}>
+                      Send now
+                    </button>
+                    <button onClick={() => setTiming('schedule')}
+                      className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${timing === 'schedule' ? 'bg-[#FFE135] text-black' : 'bg-zinc-800 text-zinc-400 hover:text-white'}`}>
+                      Schedule
+                    </button>
+                    {timing === 'schedule' && (
+                      <input
+                        type="datetime-local"
+                        value={scheduleAt}
+                        onChange={e => setScheduleAt(e.target.value)}
+                        className="bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#FFE135] transition-colors [color-scheme:dark]"
+                      />
+                    )}
+                  </div>
+                  {timing === 'schedule' && (
+                    <p className="text-zinc-600 text-xs mt-1.5">Queued at Resend - fires even if HQ is closed. Cancellable from the history below until it goes out. Max 30 days ahead.</p>
+                  )}
+                </div>
+
                 <div className="flex items-center gap-3 mt-4">
                   <button onClick={send} disabled={sending || recipients.length === 0}
                     className="bg-[#FFE135] hover:bg-[#FFD700] text-black font-bold px-6 py-2.5 rounded-lg text-sm transition-colors disabled:opacity-40">
-                    {sending ? 'Sending…' : `Send to ${recipients.length || 0}`}
+                    {sending ? (timing === 'schedule' ? 'Scheduling…' : 'Sending…')
+                      : timing === 'schedule' ? `Schedule ${recipients.length || 0} for ${fmtDateTime(new Date(scheduleAt).toISOString())}`
+                      : `Send to ${recipients.length || 0}`}
                   </button>
                   <button onClick={loadPreview} disabled={previewLoading}
                     className="text-zinc-400 hover:text-white text-sm transition-colors">
@@ -430,7 +501,11 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
 
                 {result && (
                   <div className="mt-4 text-sm">
-                    <p className="text-[#FFE135]">✓ Sent {result.sent.length} email{result.sent.length === 1 ? '' : 's'}</p>
+                    <p className="text-[#FFE135]">
+                      ✓ {result.scheduledFor
+                        ? `Scheduled ${result.sent.length} email${result.sent.length === 1 ? '' : 's'} for ${fmtDateTime(result.scheduledFor)}`
+                        : `Sent ${result.sent.length} email${result.sent.length === 1 ? '' : 's'}`}
+                    </p>
                     {result.failed.length > 0 && (
                       <div className="text-red-400 mt-1">
                         {result.failed.map(f => <p key={f.email}>✗ {f.email} — {f.error}</p>)}
@@ -446,19 +521,37 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
                   <p className="text-zinc-500 text-sm">Nothing sent yet.</p>
                 ) : (
                   <div className="max-h-96 overflow-y-auto divide-y divide-zinc-800/60">
-                    {outreach.map(o => (
-                      <div key={o.id} className="py-2.5 flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="text-white text-sm truncate">{o.name || o.email}</p>
-                          <p className="text-zinc-500 text-xs truncate">{o.email} · {o.template} · {fmtDate(o.sentAt)}</p>
+                    {outreach.map(o => {
+                      const status = canceledIds.has(o.id) ? 'canceled' : o.status
+                      const pending = status === 'scheduled' && o.scheduledFor && new Date(o.scheduledFor) > new Date()
+                      return (
+                        <div key={o.id} className="py-2.5 flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-white text-sm truncate">{o.name || o.email}</p>
+                            <p className="text-zinc-500 text-xs truncate">
+                              {o.email} · {o.template} · {pending ? `sends ${fmtDateTime(o.scheduledFor)}` : fmtDate(o.sentAt)}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {status === 'canceled' ? (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-600">CANCELED</span>
+                            ) : pending ? (
+                              <>
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFE135]/15 text-[#FFE135] border border-[#FFE135]/30">SCHEDULED</span>
+                                <button onClick={() => cancelScheduled(o.id)} disabled={cancelingId === o.id}
+                                  className="text-[10px] font-bold text-zinc-500 hover:text-red-400 transition-colors disabled:opacity-40">
+                                  {cancelingId === o.id ? 'CANCELLING…' : 'CANCEL'}
+                                </button>
+                              </>
+                            ) : o.template === 'invite' && (
+                              o.signedUp
+                                ? <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFE135]/15 text-[#FFE135]">SIGNED UP</span>
+                                : <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-500">NO ACCOUNT</span>
+                            )}
+                          </div>
                         </div>
-                        {o.template === 'invite' && (
-                          o.signedUp
-                            ? <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFE135]/15 text-[#FFE135] flex-shrink-0">SIGNED UP</span>
-                            : <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-500 flex-shrink-0">NO ACCOUNT</span>
-                        )}
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 )}
               </div>
