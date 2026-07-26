@@ -115,6 +115,8 @@ export default async function HQPage() {
     name: o.name,
     template: o.template,
     sentAt: o.sent_at,
+    scheduledFor: o.scheduled_for || null,
+    status: o.status || 'sent',
     signedUp: userEmails.has((o.email || '').toLowerCase()),
   }))
 
@@ -131,8 +133,8 @@ export default async function HQPage() {
     totalShares: (shares || []).length,
     sharesThisMonth: (shares || []).filter((s: any) => s.created_at && withinDays(s.created_at, 30)).length,
     dormantUsers: users.filter(u => u.dormant).length,
-    invitesSent: outreachRows.filter(o => o.template === 'invite').length,
-    invitesConverted: outreachRows.filter(o => o.template === 'invite' && o.signedUp).length,
+    invitesSent: outreachRows.filter(o => o.template === 'invite' && o.status !== 'canceled').length,
+    invitesConverted: outreachRows.filter(o => o.template === 'invite' && o.status !== 'canceled' && o.signedUp).length,
   }
 
   return <HQClient stats={stats} users={users} outreach={outreachRows} adminEmail={user.email || ''} />
