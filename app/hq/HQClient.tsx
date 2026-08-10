@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type UserRow = {
   id: string
@@ -76,6 +77,7 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
   outreach: OutreachRow[]
   adminEmail: string
 }) {
+  const router = useRouter()
   const [tab, setTab] = useState<'overview' | 'users' | 'outreach'>('overview')
 
   // Outreach state
@@ -86,7 +88,7 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
   const [preview, setPreview] = useState<{ subject: string; html: string } | null>(null)
   const [previewLoading, setPreviewLoading] = useState(false)
   const [sending, setSending] = useState(false)
-  const [result, setResult] = useState<{ sent: string[]; failed: { email: string; error: string }[]; scheduledFor?: string | null } | null>(null)
+  const [result, setResult] = useState<{ sent: string[]; failed: { email: string; error: string }[]; scheduledFor?: string | null; notRecorded?: string[] } | null>(null)
   const [testEmail, setTestEmail] = useState('whitakerleebo@gmail.com')
   const [testSending, setTestSending] = useState(false)
   const [testResult, setTestResult] = useState<string | null>(null)
@@ -192,6 +194,7 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
         setRawRecipients('')
         setSelectedDormant(new Set())
         setSelectedPending(new Set())
+        router.refresh() // re-pull history and stats from the server
       } else {
         alert(data.error || 'Send failed')
       }
@@ -212,6 +215,7 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
       const data = await res.json()
       if (res.ok) {
         setCanceledIds(new Set([...canceledIds, rowId]))
+        router.refresh()
       } else {
         alert(data.error || 'Cancel failed')
       }
@@ -508,8 +512,13 @@ export default function HQClient({ stats, users, outreach, adminEmail }: {
                     </p>
                     {result.failed.length > 0 && (
                       <div className="text-red-400 mt-1">
-                        {result.failed.map(f => <p key={f.email}>✗ {f.email} — {f.error}</p>)}
+                        {result.failed.map(f => <p key={f.email}>✗ {f.email} - {f.error}</p>)}
                       </div>
+                    )}
+                    {(result.notRecorded?.length || 0) > 0 && (
+                      <p className="text-amber-400 mt-1 text-xs">
+                        ⚠ {result.notRecorded!.length} sent but NOT recorded in history - the outreach_invites table is missing columns. Run supabase/hq_schedule_update.sql.
+                      </p>
                     )}
                   </div>
                 )}
