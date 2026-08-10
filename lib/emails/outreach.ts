@@ -96,7 +96,7 @@ export function followupHtml(firstName?: string | null) {
     <table style="width: 100%; border-collapse: collapse; margin: 0 0 20px;">
       ${featureRow('1', 'First list in about 10 minutes', 'tap through 4,000+ lenses and every prep section - no typing, no spreadsheet.')}
       ${featureRow('2', 'DOP and 1st AC prep together', 'both on the same live list, kit badged DOP or AC owned.')}
-      ${featureRow('3', 'One share, right views', 'rental house gets full detail, production gets a clean list, PDF/Excel included.')}
+      ${featureRow('3', 'Share with control', 'rental house sees full detail with DOP/AC ownership. Production sees a clean "Supplied" view.')}
     </table>
 
     <p style="color: #a1a1aa; font-size: 14px; line-height: 1.65; margin: 0 0 24px;">
