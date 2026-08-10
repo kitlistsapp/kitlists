@@ -89,6 +89,7 @@ export async function POST(request: Request) {
   const admin = createAdminClient()
   const sent: string[] = []
   const failed: { email: string; error: string }[] = []
+  const notRecorded: string[] = []
 
   for (const r of recipients) {
     const email = (r.email || '').trim().toLowerCase()
@@ -110,7 +111,7 @@ export async function POST(request: Request) {
         failed.push({ email, error: typeof error === 'object' ? JSON.stringify(error) : String(error) })
       } else {
         sent.push(email)
-        await admin.from('outreach_invites').insert({
+        const { error: insertError } = await admin.from('outreach_invites').insert({
           email,
           name: r.name?.trim() || null,
           template: templateKey,
@@ -119,6 +120,7 @@ export async function POST(request: Request) {
           resend_email_id: data?.id || null,
           status: schedIso ? 'scheduled' : 'sent',
         })
+        if (insertError) notRecorded.push(email)
       }
     } catch {
       failed.push({ email, error: 'Send failed' })
@@ -128,7 +130,7 @@ export async function POST(request: Request) {
     await new Promise(res => setTimeout(res, 600))
   }
 
-  return NextResponse.json({ sent, failed, scheduledFor: schedIso || null })
+  return NextResponse.json({ sent, failed, scheduledFor: schedIso || null, notRecorded })
 }
 
 // PATCH /api/hq/outreach - { rowId } cancels a scheduled send (before it fires)
